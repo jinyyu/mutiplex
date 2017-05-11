@@ -9,17 +9,17 @@ set(CMAKE_MODULE_PATH
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-set(sflow_SRCS
+set(libnet_SRCS
         src/Status.cpp
         src/Logger.cpp
-        )
+        src/ByteBuffer.cpp)
 
-add_library(libnet ${sflow_SRCS})
+add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})
 
 
 add_executable(main
-        ${sflow_SRCS}
+        ${libnet_SRCS}
         src/main.cpp)
 
 
