@@ -15,21 +15,17 @@ class ByteBuffer : NonCopyable {
     limit_ = buff_.size();
   }
   void put(char* data, uint32_t len);
-  int remaining() { return limit_ - position_; }
-  bool has_remaining() { return limit_ > position_ ; }
-  void reset() { position_ = mark_; }
-  void rewind() {position_ = mark_ = 0; }
+  int remaining() const { return limit_ - position_; }
+  bool has_remaining() const { return limit_ > position_ ; }
+  void reset() const { position_ = mark_; }
+  void rewind() { position_ = mark_ = 0; }
+  void clear() { rewind(); limit_ = buff_.size(); }
 
   void flip()
   {
     limit_ = position_;
     position_ = 0;
   }
-
-
-
-
-
 
  private:
   uint32_t position_;
