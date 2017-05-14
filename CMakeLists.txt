@@ -12,7 +12,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 set(libnet_SRCS
         src/Status.cpp
         src/Logger.cpp
-        src/ByteBuffer.cpp)
+        src/ByteBuffer.cpp include/Exception.h)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})
