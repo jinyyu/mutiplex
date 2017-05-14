@@ -12,14 +12,22 @@ namespace net
 class Logger
 {
  public:
+
   explicit Logger(int fd);
+
   Status open(const char* file);
+
   void log(const char* format, ...);
+
   ~Logger();
 
  private:
+
   void append(char* data, uint32_t len);
+
   void flush();
+
+ private:
 
   int fd_;
   std::vector<char> buffer_;

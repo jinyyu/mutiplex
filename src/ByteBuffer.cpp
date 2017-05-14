@@ -1,8 +1,23 @@
 #include <string.h>
 #include "ByteBuffer.h"
 #include "Exception.h"
+#include <assert.h>
 namespace net
 {
+
+ByteBuffer::ByteBuffer(int capacity)
+    : position_(0),
+      limit_(capacity),
+      capacity_(capacity),
+      mark_(-1)
+{
+  data_ = (char*) malloc(capacity);
+}
+
+ByteBuffer::~ByteBuffer()
+{
+  free(data_);
+}
 
 void ByteBuffer::position(int p)
 {
@@ -17,7 +32,7 @@ void ByteBuffer::position(int p)
 }
 
 void ByteBuffer::limit(int limit) {
-  if (limit <= buff_.size() && limit >= 0) {
+  if (limit <= capacity_ && limit >= 0) {
     limit_ = limit;
     if (position_ > limit_) {
       position_ = limit_;
@@ -43,7 +58,7 @@ void ByteBuffer::reset()
 void ByteBuffer::clear()
 {
   position_ = 0;
-  limit_ = buff_.size();
+  limit_ = capacity_;
   mark_ = -1;
 }
 
@@ -60,14 +75,26 @@ void ByteBuffer::rewind()
   mark_ = -1;
 }
 
-void ByteBuffer::skip_bytes(int n)
+void ByteBuffer::put(void* data, int len)
 {
-  if (remaining() < n) {
+  if (len > remaining()) {
     throw Exception::invalid_argument(nullptr);
+  }  else {
+    memcpy(this->data(), data, len);
+    position_ += len;
   }
-  position_ += n;
+  assert(position_ <= limit_);
+}
 
-
+void ByteBuffer::get(void* buffer, int len)
+{
+  if (len > remaining()) {
+    throw Exception::invalid_argument(nullptr);
+  } else {
+    memcpy(buffer, data(), len);
+    position_ += len;
+  }
+  assert(position_ <= limit_);
 }
 
 

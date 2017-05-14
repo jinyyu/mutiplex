@@ -4,9 +4,12 @@
 
 namespace net {
 
-class NonCopyable {
+class NonCopyable
+{
  public:
+
   NonCopyable(const NonCopyable &instance) = delete;
+
   NonCopyable &operator=(const NonCopyable &) = delete;
 
  protected:

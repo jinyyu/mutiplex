@@ -1,7 +1,5 @@
 #ifndef LIBNET_DISTRIBUTION_BYTEBUFFER_H
 #define LIBNET_DISTRIBUTION_BYTEBUFFER_H
-#include <inttypes.h>
-#include <vector>
 #include "NonCopyable.h"
 
 namespace net
@@ -10,17 +8,21 @@ namespace net
 class ByteBuffer : NonCopyable
 {
  public:
-  ByteBuffer() : position_(0), mark_(-1), limit_(buff_.size()) {}
-  ByteBuffer(int init_size) : position_(0), mark_(-1), limit_(init_size), buff_(init_size) {}
+  explicit ByteBuffer(int capacity);
+
+  ~ByteBuffer();
+
+  //Returns this buffer's capacity
+  int capacity() const { return capacity_; }
 
   //Returns this buffer's position
-  int position() { return position_; }
+  int position() const { return position_; }
 
   //Sets this buffer's position
   void position(int p);
 
   //Returns this buffer's limit
-  int limit() { return limit_; }
+  int limit()  const { return limit_; }
 
   //Sets this buffer's limit
   void limit(int limit );
@@ -48,16 +50,21 @@ class ByteBuffer : NonCopyable
   //Tells whether there are any elements between the current position and the limit
   bool has_remaining() { return position_ < limit_; }
 
-  const void* data() { return buff_.data() + position_; }
+  const void* data() const { return data_ + position_; }
 
-  void skip_bytes(int n);
+  void* data() { return data_ + position_; }
+
+  void get(void* buffer, int len);
+
+  void put(void* data, int len);
 
  private:
 
   int limit_;
   int mark_;
   int position_;
-  std::vector<char> buff_;
+  const int capacity_;
+  char* data_;
 
 };
 

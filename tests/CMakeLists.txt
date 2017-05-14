@@ -1,7 +1,13 @@
 
+set(LIBS
+        ${LIBS} gtest libnet)
+
 
 add_executable(test_status test_status.cpp)
-target_link_libraries(test_status ${LIBS} gtest libnet)
+target_link_libraries(test_status ${LIBS} )
 
 add_executable(test_log test_log.cpp)
-target_link_libraries(test_log libnet)
+target_link_libraries(test_log ${LIBS})
+
+add_executable(test_bytebuffer test_bytebuffer.cpp)
+target_link_libraries(test_bytebuffer ${LIBS} )
