@@ -13,6 +13,7 @@ set(libnet_SRCS
         src/Status.cpp
         src/Logger.cpp
         src/ByteBuffer.cpp
+        src/Timestamp.cpp
         )
 
 add_library(libnet ${libnet_SRCS})
