@@ -69,14 +69,25 @@ std::string Status::to_string() const
   std::string ret(str);
   uint32_t length;
   memcpy(&length, status_, sizeof(length));
-  ret.append(status_ + 5, length);
+  if (length > 0) {
+    ret.append(status_ + 5, length);
+
+  } else {
+    ret.pop_back();
+  }
+
   return ret;
 
 }
 
 Status::Status(Code code, const char *msg)
 {
-  uint32_t len = strlen(msg);
+  uint32_t len;
+  if (msg == nullptr) {
+    len = 0;
+  } else {
+    len = strlen(msg);
+  }
   status_ = (char *) malloc(len + 5);
   memcpy(status_, &len, sizeof(uint32_t));
   status_[4] = code;

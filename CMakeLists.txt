@@ -18,16 +18,11 @@ add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})
 
 
-add_executable(main
-        ${libnet_SRCS}
-        src/main.cpp)
-
-
 find_package(LibGtest QUIET)
 if (LibGtest_FOUND)
     include_directories(${LibGtest_INCLUDE_DIR})
     set(LIBS
-            ${LIBS} ${LibGtest_LIBRARIE} gtest)
+            ${LIBS} ${LibGtest_LIBRARIE} gtest pthread)
     add_subdirectory(tests)
 endif (LibGtest_FOUND)
 

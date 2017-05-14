@@ -7,6 +7,7 @@ namespace net {
 
 class Status {
  public:
+  // Create a success status.
   Status() : status_(nullptr) {}
   Status(const Status &s);
   void operator=(const Status& s);
@@ -54,4 +55,4 @@ class Status {
 
 }
 
-#endif //SFLOW_STATUS_H
+#endif //Net_STATUS_H

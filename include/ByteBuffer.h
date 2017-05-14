@@ -3,37 +3,36 @@
 #include <inttypes.h>
 #include <vector>
 #include "NonCopyable.h"
+#include "Status.h"
 
 namespace net
 {
 
-
-class ByteBuffer : NonCopyable {
-
+class ByteBuffer : NonCopyable
+{
  public:
-  ByteBuffer() : position_(0), mark_(0) {
-    limit_ = buff_.size();
-  }
-  void put(char* data, uint32_t len);
-  int remaining() const { return limit_ - position_; }
-  bool has_remaining() const { return limit_ > position_ ; }
-  void reset() const { position_ = mark_; }
-  void rewind() { position_ = mark_ = 0; }
-  void clear() { rewind(); limit_ = buff_.size(); }
+  ByteBuffer() : position_(0), mark_(-1), limit_(buff_.size()) {}
+  ByteBuffer(int init_size) : position_(0), mark_(-1), limit_(init_size), buff_(init_size) {}
 
-  void flip()
-  {
-    limit_ = position_;
-    position_ = 0;
-  }
+  int position() { return position_; }
+  Status position(int p);
+
+  int limit() { return limit_; }
+  void limit(int limit ) {}
+
+  void clear();
+
 
  private:
-  uint32_t position_;
-  uint32_t mark_;
-  uint32_t limit_;
-  std::vector<char> buff_;
-};
 
+ private:
+
+  int limit_;
+  int mark_;
+  int position_;
+  std::vector<char> buff_;
+
+};
 
 }
 

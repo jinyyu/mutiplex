@@ -4,14 +4,17 @@
 namespace net
 {
 
-void ByteBuffer::put(char* data,  uint32_t len)
+Status ByteBuffer::position(int p)
 {
-  while (buff_.size() - position_ < len) {
-    buff_.reserve(buff_.size() * 2);
-    limit_ = (uint32_t)buff_.size();
+  if (p <= limit_ && p >= 0) {
+    position_ = p;
+    if (mark_ > position_) {
+      mark_ = -1;
+    }
+    return Status::ok();
+  } else {
+    return Status::invalid_argument("invalid position");
   }
-  memcpy(buff_.data() + position_, data, len);
-  position_ += len;
 }
 
 
