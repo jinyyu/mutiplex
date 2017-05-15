@@ -17,13 +17,13 @@ class InetAddress
   InetAddress(const InetAddress& address)
   {
     this->is_v4_ = address.is_v4_;
-    memcpy(addr_, address.addr_, 46);
+    memcpy(addr_, address.addr_, sizeof(addr_));
   }
 
   InetAddress& operator= (const InetAddress& address)
   {
     this->is_v4_ = address.is_v4_;
-    memcpy(addr_, address.addr_, 46);
+    memcpy(addr_, address.addr_, sizeof(addr_));
     return *this;
   }
 
@@ -34,19 +34,22 @@ class InetAddress
   };
 
   //No name service is checked for the validity of the address
-  static InetAddress get_by_address(const char* addr, Family family);
+  static InetAddress get_by_address(const char* addr, Family family = INET);
+
+  static InetAddress any(Family family = INET);
 
   //Determines the IP address of a host, given the host's name
   //static InetAddress get_by_name(const char* addr);
 
  private:
-  InetAddress() {}
+  InetAddress() { memset(addr_, 0, sizeof(addr_)); }
 
  private:
   bool is_v4_;
-  char addr_[46];
+  char addr_[16];
 
 };
+
 
 }
 

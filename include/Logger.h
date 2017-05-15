@@ -44,14 +44,4 @@ Status set_log_destination(const char* path);
 
 }
 
-
-
-
-
-
-
-//#define LOG(format, ...) printf("[%s:%d] " format "\n", __FILE__, __LINE__, ##__VA_ARGS__)
-
-
-
 #endif //NET_LOGGER_H

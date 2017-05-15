@@ -1,17 +1,8 @@
 #include "InetAddress.h"
+#include "Exception.h"
 
 #include <arpa/inet.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-
-#include "Exception.h"
-#include "Logger.h"
 namespace net
 {
 
@@ -36,8 +27,28 @@ InetAddress InetAddress::get_by_address(const char* addr, Family family)
   return address;
 }
 
+InetAddress InetAddress::any( Family family)
+{
+  InetAddress address;
+  switch (family) {
+    case INET: {
+      address.is_v4_ = true;
+      int any = htonl(INADDR_ANY);
+      memcpy(address.addr_, &any, sizeof(any));
+      break;
+    }
+    case INET6: {
+      address.is_v4_ = false;
+      in6_addr any = in6addr_any;
+      memcpy(address.addr_, &any, sizeof(any));
+      break;
+    }
+    default:
+      throw Exception::not_supported("invalid address familie");
+  }
 
-
+  return address;
+}
 
 
 }
