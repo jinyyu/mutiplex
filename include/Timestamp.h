@@ -15,7 +15,7 @@ class Timestamp {
   //Constructs a Timestamp object using a milliseconds time value
   Timestamp(uint64_t timestamp) : timestamp_(timestamp) {}
 
-  Timestamp operator=(const Timestamp& timestamp)
+  Timestamp& operator=(const Timestamp& timestamp)
   {
     this->timestamp_ = timestamp.timestamp_;
     return *this;
