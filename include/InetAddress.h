@@ -28,6 +28,8 @@ class InetAddress
 
   static InetAddress get_by_address(const char* addr, bool is_v4 = true);
 
+  static InetAddress get_by_name(const char* addr);
+
  private:
   InetAddress(bool is_v4) : is_v4_(is_v4) {}
 
