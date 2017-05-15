@@ -18,8 +18,6 @@ class Exception : public std::exception
 
   static Exception io_error(const char* msg) { return Exception(Status::io_error(msg)); }
 
-  const Status& status() const { return status_; }
-
   Status status() const { return status_; }
 
  private:

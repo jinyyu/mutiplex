@@ -8,6 +8,7 @@ namespace net
 
 class InetAddress
 {
+
  public:
   bool v4() const { return is_v4_; }
 
@@ -26,19 +27,26 @@ class InetAddress
     return *this;
   }
 
-  static InetAddress get_by_address(const char* addr, bool is_v4 = true);
+  enum Family
+  {
+    INET = 1,
+    INET6 = 2
+  };
 
-  static InetAddress get_by_name(const char* addr);
+  //No name service is checked for the validity of the address
+  static InetAddress get_by_address(const char* addr, Family family);
+
+  //Determines the IP address of a host, given the host's name
+  //static InetAddress get_by_name(const char* addr);
 
  private:
-  InetAddress(bool is_v4) : is_v4_(is_v4) {}
+  InetAddress() {}
 
  private:
   bool is_v4_;
   char addr_[46];
 
 };
-
 
 }
 

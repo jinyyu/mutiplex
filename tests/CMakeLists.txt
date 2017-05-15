@@ -17,3 +17,6 @@ target_link_libraries(test_bytebuffer ${LIBS} )
 
 add_executable(test_timestamp test_timestamp.cpp)
 target_link_libraries(test_timestamp ${LIBS} )
+
+add_executable(test_inetaddr test_inetaddr.cpp)
+target_link_libraries(test_inetaddr ${LIBS} )

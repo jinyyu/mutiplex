@@ -50,13 +50,6 @@ TEST(test_reset, test_bytebuffer)
   buffer.get(&c, sizeof(c));
   ASSERT_TRUE(b == c);
   ASSERT_TRUE(buffer.remaining() == 2);
-
-
-
-
-
-
-
 }
 
 

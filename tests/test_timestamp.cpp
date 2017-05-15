@@ -25,9 +25,6 @@ TEST(test_timestamp, test_timestamp)
 
   printf("%s\n", t1.to_string().c_str());
 
-
-
-
 }
 
 
