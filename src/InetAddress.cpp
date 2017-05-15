@@ -19,6 +19,8 @@ InetAddress InetAddress::get_by_address(const char* addr, bool is_v4)
   if (inet_pton(af, addr, address.addr_) != 0) {
     throw Exception::invalid_argument("invalid address");
   }
+
+
 }
 
 
