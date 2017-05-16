@@ -16,22 +16,23 @@ public:
   InetAddress(const InetAddress &address)
   {
     this->is_v4_ = address.is_v4_;
-    memcpy(&addr_, &address.addr_, sizeof(addr_));
+    addr6_ = address.addr6_;
   }
+
+  bool operator== (const InetAddress& address);
+
+  bool operator!= (const InetAddress& address);
 
   InetAddress &operator=(const InetAddress& address)
   {
     this->is_v4_ = address.is_v4_;
-    memcpy(&addr_, &address.addr_, sizeof(addr_));
+    addr6_ = address.addr6_;
     return *this;
   }
 
   bool v4() const { return is_v4_; }
 
   bool v6() const { return !is_v4_; }
-
-  //Checks whether the address has been resolved or not
-  bool is_resolved();
 
   enum Family {
     INET = 1,
@@ -49,14 +50,20 @@ public:
   static InetAddress get_by_host(const char* hostname, Status& status);
 
 private:
-  InetAddress() { memset(&addr_, 0, sizeof(addr_)); }
+  InetAddress() : is_v4_(true) { memset(&addr_, 0, sizeof(addr_)); }
 
 private:
   bool is_v4_;
-  in6_addr addr_;
+
+  union
+  {
+    struct in_addr addr_;
+    struct in6_addr addr6_;
+  };
+
+  friend class InetSocketAddress;
 
 };
-
 
 }
 

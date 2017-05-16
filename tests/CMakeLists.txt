@@ -20,3 +20,6 @@ target_link_libraries(test_timestamp ${LIBS} )
 
 add_executable(test_inetaddr test_inetaddr.cpp)
 target_link_libraries(test_inetaddr ${LIBS} )
+
+add_executable(test_inetsocketaddr test_inetsocketaddress.cpp)
+target_link_libraries(test_inetsocketaddr ${LIBS} )

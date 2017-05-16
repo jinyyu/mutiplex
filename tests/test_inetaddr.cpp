@@ -10,6 +10,12 @@ TEST(test_addr, test_addr)
 {
   InetAddress addr4 = InetAddress::get_by_address("127.0.0.1", InetAddress::INET);
   LOG("ip = %s", addr4.to_string().c_str());
+  ASSERT_TRUE(addr4 == addr4);
+
+  InetAddress addr5 = InetAddress::get_by_address("10.12.23.1", InetAddress::INET);
+  ASSERT_FALSE(addr4 == addr5);
+  ASSERT_TRUE(addr4 != addr5);
+
   ASSERT_TRUE(addr4.v4());
   InetAddress addr6 = InetAddress::get_by_address("0:0:0:0:0:FFFF:204.152.189.116", InetAddress::INET6);
   ASSERT_TRUE(addr6.v6());

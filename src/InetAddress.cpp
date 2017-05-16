@@ -27,7 +27,7 @@ InetAddress InetAddress::get_by_address(const char* addr, Family family)
   }
   int af = address.is_v4_ ? AF_INET : AF_INET6;
 
-  if (inet_pton(af, addr, &address.addr_) != 1) {
+  if (inet_pton(af, addr, &address.addr6_) != 1) {
     throw Exception::invalid_argument("invalid address");
   }
   return address;
@@ -45,7 +45,7 @@ InetAddress InetAddress::any( Family family)
     }
     case INET6: {
       address.is_v4_ = false;
-      address.addr_ = in6addr_any;
+      address.addr6_ = in6addr_any;
       break;
     }
     default:
@@ -58,46 +58,25 @@ InetAddress InetAddress::any( Family family)
 
 InetAddress InetAddress::get_by_host(const char* hostname, Status& status)
 {
-  struct addrinfo hints;
-  struct addrinfo* res = nullptr;
-  int ret;
   InetAddress addr;
+  char buf[8192];
+  struct hostent hent;
+  struct hostent* he = NULL;
+  int herrno = 0;
+  bzero(&hent, sizeof(hent));
 
-  memset(&hints, 0, sizeof(hints));
-  hints.ai_family = AF_UNSPEC;
-  hints.ai_socktype = SOCK_STREAM;
-  hints.ai_protocol = IPPROTO_TCP;
-
-  ret = getaddrinfo(hostname, NULL, &hints, &res);
-
-  for(addrinfo* it = res; it != NULL; it = it->ai_next) {
-    switch (it->ai_family) {
-      case AF_INET: {
-        addr.is_v4_ = true;
-        struct sockaddr_in *in4 = (sockaddr_in *) &it->ai_addr;
-        memcpy(&addr.addr_, &in4->sin_addr, sizeof(&in4->sin_addr));
-        status = Status::ok();
-        goto cleanup;
-        break;
-      }
-      case AF_INET6: {
-        addr.is_v4_ = false;
-        struct sockaddr_in6 *in6 = (sockaddr_in6 *) &it->ai_addr;
-        addr.addr_ = in6->sin6_addr;
-        status = Status::ok();
-        goto cleanup;
-        break;
-      }
-      default:
-        continue;
-    }
+  //only for ip v4
+  addr.is_v4_ = true;
+  int ret = gethostbyname_r(hostname, &hent, buf, sizeof(buf), &he, &herrno);
+  if (ret == 0 && he != NULL)  {
+    addr.is_v4_ = true;
+    memcpy(&addr.addr_, he->h_addr, sizeof(addr.addr_));
+    status = Status::ok();
   }
-
-  status = Status::invalid_argument("invalid hostname");
-cleanup:
-  if (res) {
-    freeaddrinfo(res);
+  else {
+    status = Status::invalid_argument("invalid host name");
   }
+  return addr;
 }
 
 
@@ -111,6 +90,26 @@ std::string InetAddress::to_string() const
     throw Exception::invalid_argument("inet_ntop error");
   }
   return str;
+}
+
+bool InetAddress::operator== (const InetAddress& address)
+{
+  if (this->is_v4_ != address.is_v4_) {
+    return false;
+  }
+
+  if (address.is_v4_) {
+    return memcmp(&addr_, &address.addr_, sizeof(addr_)) == 0;
+  }
+  else {
+    return memcmp(&addr6_, &address.addr6_, sizeof(addr6_)) == 0;
+  }
+}
+
+
+bool InetAddress::operator!= (const InetAddress& address)
+{
+  return !InetAddress::operator==(address);
 }
 
 }

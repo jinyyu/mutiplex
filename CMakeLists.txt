@@ -14,7 +14,8 @@ set(libnet_SRCS
         src/Logger.cpp
         src/ByteBuffer.cpp
         src/Timestamp.cpp
-        src/InetAddress.cpp)
+        src/InetAddress.cpp
+        src/InetSocketAddress.cpp)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})
