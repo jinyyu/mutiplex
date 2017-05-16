@@ -2,6 +2,7 @@
 #define NET_LOGGER_H
 
 #include "Status.h"
+#include "NonCopyable.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <vector>
@@ -9,7 +10,8 @@
 namespace net
 {
 
-class Logger {
+class Logger : NonCopyable
+{
 public:
 
   explicit Logger(int fd);

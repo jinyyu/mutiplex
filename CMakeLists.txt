@@ -15,7 +15,9 @@ set(libnet_SRCS
         src/ByteBuffer.cpp
         src/Timestamp.cpp
         src/InetAddress.cpp
-        src/InetSocketAddress.cpp)
+        src/InetSocketAddress.cpp
+        src/Selector.cpp
+        src/Channel.cpp)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})
