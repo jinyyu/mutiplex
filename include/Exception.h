@@ -6,9 +6,8 @@
 
 namespace net {
 
-class Exception : public std::exception
-{
- public:
+class Exception : public std::exception {
+public:
 
   static Exception not_found(const char* msg) { return Exception(Status::not_found(msg)); }
 
@@ -20,10 +19,10 @@ class Exception : public std::exception
 
   Status status() const { return status_; }
 
- private:
-  Exception(const Status& status) : status_(status) {}
+private:
+  Exception(const Status &status) : status_(status) {}
 
- private:
+private:
   Status status_;
 };
 

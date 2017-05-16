@@ -101,7 +101,7 @@ cleanup:
 }
 
 
-std::string InetAddress::to_string()
+std::string InetAddress::to_string() const
 {
   char str[INET6_ADDRSTRLEN];
   int af = v4() ? AF_INET : AF_INET6;

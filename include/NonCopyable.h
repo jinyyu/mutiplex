@@ -4,15 +4,14 @@
 
 namespace net {
 
-class NonCopyable
-{
- public:
+class NonCopyable {
+public:
 
-  NonCopyable(const NonCopyable &instance) = delete;
+  NonCopyable(const NonCopyable& instance) = delete;
 
-  NonCopyable &operator=(const NonCopyable &) = delete;
+  NonCopyable &operator=(const NonCopyable&) = delete;
 
- protected:
+protected:
   NonCopyable() = default;
   ~NonCopyable() = default;
 };

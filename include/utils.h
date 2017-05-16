@@ -8,9 +8,8 @@
 namespace net
 {
 
-class MutexLockGuard
-{
- public:
+class MutexLockGuard {
+public:
   explicit MutexLockGuard(pthread_mutex_t *mutex)
       : mutex_(mutex) {
     if (pthread_mutex_lock(mutex) != 0) {
@@ -22,7 +21,7 @@ class MutexLockGuard
     pthread_mutex_unlock(mutex_);
   }
 
- private:
+private:
   pthread_mutex_t *mutex_;
 };
 

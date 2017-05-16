@@ -5,15 +5,14 @@
 
 namespace net {
 
-class Status
-{
- public:
+class Status {
+public:
   // Create a success status.
   Status() : status_(nullptr) {}
 
   Status(const Status &s);
 
-  Status& operator=(const Status& s);
+  Status &operator=(const Status &s);
 
   ~Status();
 
@@ -25,7 +24,7 @@ class Status
 
   static Status invalid_argument(const char* msg) { return Status(InvalidArgument, msg); }
 
-  static Status io_error(const char* msg) { return Status(IOError, msg);}
+  static Status io_error(const char* msg) { return Status(IOError, msg); }
 
   bool is_ok() const { return status_ == nullptr; }
 
@@ -35,14 +34,13 @@ class Status
 
   bool is_not_supported() const { return code() == NotSupported; }
 
-  bool is_invalid_argument() const { return code() == InvalidArgument;}
+  bool is_invalid_argument() const { return code() == InvalidArgument; }
 
   std::string to_string() const;
 
- private:
+private:
 
-  enum Code
-  {
+  enum Code {
     OK = 0,
     NotFound = 1,
     NotSupported = 2,
@@ -50,15 +48,16 @@ class Status
     IOError = 4,
   };
 
-  inline static char* copy(const Status& s);
+  inline static char *copy(const Status& s);
 
   Status(Code code, const char* msg);
 
-  Code code() const {
+  Code code() const
+  {
     return status_ == nullptr ? Code::OK : static_cast<Code> (status_[4]);
   }
 
- private:
+private:
   //state_[0..3] == length of message
   //state_[4]    == code
   //state_[5..]  == message

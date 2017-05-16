@@ -7,11 +7,9 @@ namespace net
 
 class InetSocketAddress
 {
- public:
+public:
 
-
-
- private:
+private:
   InetSocketAddress() {}
 
   int port_;

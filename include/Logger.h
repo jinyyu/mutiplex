@@ -9,9 +9,8 @@
 namespace net
 {
 
-class Logger
-{
- public:
+class Logger {
+public:
 
   explicit Logger(int fd);
 
@@ -21,13 +20,13 @@ class Logger
 
   ~Logger();
 
- private:
+private:
 
   void append(char* data, uint32_t len);
 
   void flush();
 
- private:
+private:
 
   int fd_;
   std::vector<char> buffer_;

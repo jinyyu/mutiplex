@@ -5,9 +5,8 @@
 namespace net
 {
 
-class ByteBuffer : NonCopyable
-{
- public:
+class ByteBuffer : NonCopyable {
+public:
   explicit ByteBuffer(int capacity);
 
   ~ByteBuffer();
@@ -22,13 +21,13 @@ class ByteBuffer : NonCopyable
   void position(int p);
 
   //Returns this buffer's limit
-  int limit()  const { return limit_; }
+  int limit() const { return limit_; }
 
   //Sets this buffer's limit
-  void limit(int limit );
+  void limit(int limit);
 
   //Sets this buffer's mark at its position
-  void mark() {mark_ = position_; }
+  void mark() { mark_ = position_; }
 
   //Resets this buffer's position to the previously-marked position
   //Invoking this method neither changes nor discards the mark's value
@@ -50,7 +49,7 @@ class ByteBuffer : NonCopyable
   //Tells whether there are any elements between the current position and the limit
   bool has_remaining() { return position_ < limit_; }
 
-  const void* data() const { return data_ + position_; }
+  const void *data() const { return data_ + position_; }
 
   void* data() { return data_ + position_; }
 
@@ -58,15 +57,15 @@ class ByteBuffer : NonCopyable
   void get(void* buffer, int len);
 
   //bulk put method
-  void put(void* data, int len);
+  void put(void *data, int len);
 
- private:
+private:
 
   int limit_;
   int mark_;
   int position_;
   const int capacity_;
-  char* data_;
+  char *data_;
 
 };
 
