@@ -18,12 +18,13 @@ Status::Status(const Status &s)
   status_ = copy(s);
 }
 
-void Status::operator=(const Status &s)
+Status& Status::operator=(const Status &s)
 {
   if (status_ != nullptr) {
     free(status_);
   }
   status_ = copy(s);
+  return *this;
 }
 
 char *Status::copy(const Status &s)

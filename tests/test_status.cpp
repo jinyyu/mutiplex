@@ -28,6 +28,15 @@ TEST(test_status, test_status)
 
   LOG("%s",status.to_string().c_str() );
 
+  Status st1;
+  Status st2;
+
+  Status st3 = Status::invalid_argument("aaa");
+
+  st1 = st2 = st3;
+  ASSERT_TRUE(st1.is_invalid_argument());
+  ASSERT_TRUE(st2.is_invalid_argument());
+
 }
 
 

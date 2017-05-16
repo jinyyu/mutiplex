@@ -13,7 +13,7 @@ class Status
 
   Status(const Status &s);
 
-  void operator=(const Status& s);
+  Status& operator=(const Status& s);
 
   ~Status();
 
