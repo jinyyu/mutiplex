@@ -16,6 +16,11 @@ TEST(test, test)
   ASSERT_TRUE(in == out);
 
 
+  InetSocketAddress add("wwww.baidu.com", 80);
+  out = add.get_address();
+  LOG("%s", out.to_string().c_str());
+
+
   Status status;
   in = InetAddress::get_by_host("www.baidu.com", status);
   if (status.is_ok()) {
@@ -24,12 +29,6 @@ TEST(test, test)
     LOG("%s", addr.get_address().to_string().c_str());
   }
 
-
-
-  InetSocketAddress add("wwww.baidu.com", 80);
-  out = add.get_address();
-  LOG("%s", out.to_string().c_str());
-  
 }
 
 
