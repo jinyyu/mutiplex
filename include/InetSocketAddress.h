@@ -26,12 +26,13 @@ public:
 private:
   InetSocketAddress() {}
 
+  void from_address(const InetAddress& addr, int port);
+
 
   union {
     struct sockaddr_in sockaddr_;
     struct sockaddr_in6 sockaddr6_;
   };
-
 
 
 };

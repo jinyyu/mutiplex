@@ -9,6 +9,11 @@ namespace net
 
 InetSocketAddress::InetSocketAddress(const InetAddress& addr, int port)
 {
+  from_address(addr, port);
+}
+
+void InetSocketAddress::from_address(const InetAddress& addr, int port)
+{
   if(addr.is_v4_) {
     sockaddr_.sin_port = htons(port);
     sockaddr_.sin_family = AF_INET;
@@ -34,16 +39,7 @@ InetSocketAddress::InetSocketAddress(const char* hostname, int port)
     throw Exception::invalid_argument("invalid hostname");
   }
 
-  if(addr.is_v4_) {
-    sockaddr_.sin_port = htons(port);
-    sockaddr_.sin_family = AF_INET;
-    sockaddr_.sin_addr = addr.addr_;
-
-  } else {
-    sockaddr6_.sin6_family = AF_INET6;
-    sockaddr6_.sin6_port = htons(port);
-    sockaddr6_.sin6_addr = addr.addr6_;
-  }
+  from_address(addr, port);
 }
 
 int InetSocketAddress::get_port() const
@@ -69,7 +65,6 @@ InetAddress InetSocketAddress::get_address() const
   else {
     addr.addr6_ = sockaddr6_.sin6_addr;
   }
-
 
   return addr;
 }
