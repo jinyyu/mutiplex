@@ -32,7 +32,7 @@ public:
   void interest_ops(int ops) { interest_ops_ = ops; }
 
   //Tests whether this key's channel is ready for reading
-  bool is_readable() const { return ready_ops_  & OP_IN; }
+  bool is_readable() const { return ready_ops_ & OP_IN; }
 
   //Tests whether this key's channel is ready for writing
   bool is_writable() const { return  ready_ops_ & OP_OUT; }

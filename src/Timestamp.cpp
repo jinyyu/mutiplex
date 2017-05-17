@@ -32,7 +32,7 @@ std::string Timestamp::to_string() const
 
   char buf[64];
 
-  snprintf(buf, sizeof(buf), "%04d-%02d-%02d %02d-%02d-%02d.%06lu",
+  snprintf(buf, sizeof(buf), "%04d-%02d-%02d %02d:%02d:%02d.%06lu",
            result.tm_year + 1900, result.tm_mon + 1, result.tm_mday, result.tm_hour, result.tm_min, result.tm_sec, tm.tv_usec);
   return buf;
 }

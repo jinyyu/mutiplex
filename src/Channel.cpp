@@ -23,6 +23,7 @@ void Channel::enable_reading(const SelectionCallback& callback)
 {
   selection_key_->enable_ops(SelectionKey::OP_IN);
   read_callback_ = callback;
+  register_ops();
 }
 
 
@@ -30,6 +31,7 @@ void Channel::enable_writing(const SelectionCallback& callback)
 {
   selection_key_->enable_ops(SelectionKey::OP_OUT);
   write_callback_ = callback;
+  register_ops();
 
 }
 

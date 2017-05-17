@@ -50,8 +50,11 @@ void Selector::control(int op,SelectionKey* selection_key)
   struct epoll_event event;
   bzero(&event, sizeof(event));
   event.data.ptr = selection_key;
+  event.events = selection_key->interest_ops();
   if (epoll_ctl(epoll_fd_, op, selection_key->fd(), &event) != 0) {
     LOG("epoll_ctl error, op = %d, errno = %d", op, errno);
+  } else {
+    LOG("epoll_ctl success");
   }
 }
 
@@ -60,6 +63,7 @@ Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey*> 
 {
   int n_events = epoll_wait(epoll_fd_, events_.data(), events_.size(), timeout_milliseconds);
   Timestamp cur = Timestamp::currentTime();
+  LOG("epoll_wait %d", n_events);
 
   if (n_events == -1) {
     LOG("epoll_wait error %d", errno);
