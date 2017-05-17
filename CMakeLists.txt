@@ -16,8 +16,10 @@ set(libnet_SRCS
         src/Timestamp.cpp
         src/InetAddress.cpp
         src/InetSocketAddress.cpp
+        src/SelectionKey.cpp
         src/Selector.cpp
-        src/Channel.cpp)
+        src/Channel.cpp
+        src/EventLoop.cpp)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})

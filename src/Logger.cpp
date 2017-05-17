@@ -53,6 +53,10 @@ void Logger::log(const char* format, ...)
   int len = vsprintf(data, format, args);
   va_end(args);
   append(data, len);
+
+  if (fd_ == 2) {
+    flush();
+  }
 }
 
 void Logger::flush()

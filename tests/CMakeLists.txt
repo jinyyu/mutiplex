@@ -23,3 +23,6 @@ target_link_libraries(test_inetaddr ${LIBS} )
 
 add_executable(test_inetsocketaddr test_inetsocketaddress.cpp)
 target_link_libraries(test_inetsocketaddr ${LIBS} )
+
+add_executable(test_eventloop test_eventloop.cpp)
+target_link_libraries(test_eventloop ${LIBS} )

@@ -7,6 +7,8 @@
 #include <stdarg.h>
 #include <vector>
 
+#include <pthread.h>
+
 namespace net
 {
 
