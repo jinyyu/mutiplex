@@ -54,7 +54,7 @@ public:
   void* data() { return data_ + position_; }
 
   //bulk get method
-  void get(void* buffer, int len);
+  int get(void* buffer, int len);
 
   //bulk put method
   void put(void *data, int len);

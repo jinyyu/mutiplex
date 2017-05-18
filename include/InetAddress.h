@@ -15,7 +15,7 @@ class InetAddress {
 public:
   InetAddress(const InetAddress &address)
   {
-    this->is_v4_ = address.is_v4_;
+    this->famliy_ = address.famliy_;
     addr6_ = address.addr6_;
   }
 
@@ -25,35 +25,32 @@ public:
 
   InetAddress &operator=(const InetAddress& address)
   {
-    this->is_v4_ = address.is_v4_;
+    this->famliy_ = address.famliy_;
     addr6_ = address.addr6_;
     return *this;
   }
 
-  bool v4() const { return is_v4_; }
+  bool v4() const { return famliy_ == AF_INET; }
 
-  bool v6() const { return !is_v4_; }
+  bool v6() const { return famliy_ == AF_INET6; }
 
-  enum Family {
-    INET = 1,
-    INET6 = 2
-  };
+  int family() const { return famliy_; }
 
   std::string to_string() const;
 
   //No name service is checked for the validity of the address
-  static InetAddress get_by_address(const char* addr, Family family = INET);
+  static InetAddress get_by_address(const char* addr, int family, Status& status);
 
-  static InetAddress any(Family family = INET);
+  static InetAddress any(int family);
 
   //Determines the IP address of a host, given the host's name
   static InetAddress get_by_host(const char* hostname, Status& status);
 
 private:
-  InetAddress() : is_v4_(true) { memset(&addr_, 0, sizeof(addr_)); }
+  explicit InetAddress(int family) : famliy_(family) { memset(&addr6_, 0, sizeof(addr6_)); }
 
 private:
-  bool is_v4_;
+  int famliy_;
 
   union
   {

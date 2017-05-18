@@ -11,6 +11,8 @@ class SelectionKey;
 
 typedef std::function<void (const Timestamp&, SelectionKey*)> SelectionCallback;
 
+typedef std::function<void ()> Callback;
+
 }
 
 

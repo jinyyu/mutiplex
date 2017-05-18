@@ -9,8 +9,10 @@ using namespace net;
 
 TEST(test, test)
 {
-  InetAddress in = InetAddress::get_by_address("10.12.18.19");
+  Status status;
+  InetAddress in = InetAddress::get_by_address("10.12.18.19", AF_INET, status);
   InetSocketAddress socketaddr(in, 80);
+  ASSERT_TRUE(status.is_ok());
 
   InetAddress out = socketaddr.get_address();
   ASSERT_TRUE(in == out);
@@ -20,8 +22,6 @@ TEST(test, test)
   out = add.get_address();
   LOG_INFO("%s", out.to_string().c_str());
 
-
-  Status status;
   in = InetAddress::get_by_host("www.baidu.com", status);
   if (status.is_ok()) {
     LOG_INFO("%s", in.to_string().c_str());

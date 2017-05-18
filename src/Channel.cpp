@@ -16,6 +16,7 @@ Channel::Channel(Selector* selector, int fd)
 
 Channel::~Channel()
 {
+  disable_all();
   delete selection_key_;
 }
 
@@ -45,7 +46,7 @@ void Channel::disable_reading()
 void Channel::enable_writing()
 {
   selection_key_->disable_ops(SelectionKey::OP_OUT);
-  unregister_ops();
+  register_ops();
 }
 
 void Channel::disable_all()

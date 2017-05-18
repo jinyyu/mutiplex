@@ -11,14 +11,18 @@ namespace net
 class MutexLockGuard {
 public:
   explicit MutexLockGuard(pthread_mutex_t *mutex)
-      : mutex_(mutex) {
+      : mutex_(mutex)
+  {
     if (pthread_mutex_lock(mutex) != 0) {
-      fprintf(stderr, "pthread_mutex_init error %d\n", errno);
+      fprintf(stderr, "pthread_mutex_init error");
     }
   }
 
-  ~MutexLockGuard() {
-    pthread_mutex_unlock(mutex_);
+  ~MutexLockGuard()
+  {
+    if (pthread_mutex_unlock(mutex_) != 0) {
+      fprintf(stderr, "pthread_mutex_unlock error");
+    }
   }
 
 private:

@@ -2,6 +2,9 @@
 #define LIBNET_DISTRIBUTION_EVENTLOOP_H
 #include <pthread.h>
 #include <vector>
+
+#include "callbacks.h"
+
 namespace net
 {
 
@@ -16,14 +19,18 @@ public:
 
   ~EventLoop();
 
+  //Run the EventLoop object's event processing loop
   void run();
 
-  void wake_up();
+  //Request the EventLoop to invoke the given callback and return immediately
+  void post(const Callback& callback);
 
 private:
   void setup_wakeup_channel();
 
   bool is_in_loop_thread() const { return pthread_id_ == pthread_self(); }
+
+  void wake_up();
 
 private:
   pthread_t pthread_id_;
@@ -31,15 +38,13 @@ private:
   Selector* selector_;
   std::vector<SelectionKey*> active_keys_;
 
-
   int wakeup_fd_;
   Channel* wakeup_channel_;
 
   pthread_mutex_t mutex_;
+  std::vector<Callback> callbacks_; //lock by mutex_
 
 };
-
-
 
 
 }

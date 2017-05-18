@@ -64,6 +64,16 @@ void EventLoop::run()
         channel->handle_wirte(time);
       }
     }
+
+    std::vector<Callback> callbacks;
+    {
+      MutexLockGuard lock(&mutex_);
+      std::swap(callbacks, callbacks_);
+    }
+    for(int i = 0; i < callbacks.size(); ++i) {
+      callbacks[i]();
+    }
+
   }
 }
 
@@ -75,6 +85,19 @@ void EventLoop::wake_up()
 
   if (eventfd_write(wakeup_fd_, 1) < 0) {
     LOG_ERROR("eventfd_write error %d", errno);
+  }
+}
+
+void EventLoop::post(const Callback& callback)
+{
+  if (is_in_loop_thread()){
+    callback();
+  } else {
+    {
+      MutexLockGuard lock(&mutex_);
+      callbacks_.push_back(callback);
+    }
+    wake_up();
   }
 }
 

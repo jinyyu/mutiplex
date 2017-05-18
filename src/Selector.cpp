@@ -74,6 +74,10 @@ Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey*>&
       key->ready_ops(events_[i].events);
       active_key.push_back(key);
     }
+
+    if(n_events == events_.size()) {
+      events_.resize(n_events * 2);
+    }
   }
 
   return cur;

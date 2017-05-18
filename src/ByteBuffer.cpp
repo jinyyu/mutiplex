@@ -1,7 +1,8 @@
 #include <string.h>
 #include "ByteBuffer.h"
-#include "Exception.h"
-#include <assert.h>
+#include "Logger.h"
+#include <stdlib.h>
+
 namespace net
 {
 
@@ -27,11 +28,12 @@ void ByteBuffer::position(int p)
       mark_ = -1;
     }
   } else {
-    throw Exception::invalid_argument("invalid position");
+    LOG_ERROR("invalid position %d", p);
   }
 }
 
-void ByteBuffer::limit(int limit) {
+void ByteBuffer::limit(int limit)
+{
   if (limit <= capacity_ && limit >= 0) {
     limit_ = limit;
     if (position_ > limit_) {
@@ -42,14 +44,14 @@ void ByteBuffer::limit(int limit) {
       mark_ = -1;
     }
   } else {
-    throw Exception::invalid_argument("invalid position");
+    LOG_ERROR("invalid limit %d", limit);
   }
 }
 
 void ByteBuffer::reset()
 {
   if (mark_ < 0) {
-    throw Exception::invalid_argument("invalid mark");
+    LOG_ERROR("invalid mark %d", mark_);
   } else {
     position_ = mark_;
   }
@@ -78,24 +80,19 @@ void ByteBuffer::rewind()
 void ByteBuffer::put(void* data, int len)
 {
   if (len > remaining()) {
-    throw Exception::invalid_argument(nullptr);
+    LOG_ERROR("len > remaining, len = %d, remaining = %d", len, remaining());
   }  else {
     memcpy(this->data(), data, len);
     position_ += len;
   }
-  assert(position_ <= limit_);
 }
 
-void ByteBuffer::get(void* buffer, int len)
+int ByteBuffer::get(void* buffer, int len)
 {
-  if (len > remaining()) {
-    throw Exception::invalid_argument(nullptr);
-  } else {
-    memcpy(buffer, data(), len);
-    position_ += len;
-  }
-  assert(position_ <= limit_);
+  len = std::min(len, remaining());
+  memcpy(buffer, data(), len);
+  position_ += len;
+  return len;
 }
-
 
 }

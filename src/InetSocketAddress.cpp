@@ -1,6 +1,5 @@
 #include "Status.h"
 #include "InetSocketAddress.h"
-#include "Exception.h"
 #include "Logger.h"
 
 
@@ -14,7 +13,7 @@ InetSocketAddress::InetSocketAddress(const InetAddress& addr, int port)
 
 void InetSocketAddress::from_address(const InetAddress& addr, int port)
 {
-  if(addr.is_v4_) {
+  if(addr.v4()) {
     sockaddr_.sin_port = htons(port);
     sockaddr_.sin_family = AF_INET;
     sockaddr_.sin_addr = addr.addr_;
@@ -27,7 +26,7 @@ void InetSocketAddress::from_address(const InetAddress& addr, int port)
 }
 
 InetSocketAddress::InetSocketAddress(int port)
-    : InetSocketAddress(InetAddress::any(InetAddress::INET), port)
+    : InetSocketAddress(InetAddress::any(AF_INET), port)
 {
 }
 
@@ -36,7 +35,7 @@ InetSocketAddress::InetSocketAddress(const char* hostname, int port)
   Status s;
   InetAddress addr = InetAddress::get_by_host(hostname, s);
   if (!s.is_ok()) {
-    throw Exception::invalid_argument("invalid hostname");
+    LOG_ERROR("invalid hostname %s", hostname);
   }
 
   from_address(addr, port);
@@ -56,8 +55,9 @@ int InetSocketAddress::get_port() const
 
 InetAddress InetSocketAddress::get_address() const
 {
-  InetAddress addr;
 
+  int family = sockaddr_cast()->sa_family;
+  InetAddress addr(family);
   sockaddr* p =(sockaddr*) &(sockaddr_);
   if (p->sa_family == AF_INET) {
     addr.addr_ = sockaddr_.sin_addr;

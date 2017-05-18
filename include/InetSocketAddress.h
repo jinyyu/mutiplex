@@ -23,11 +23,17 @@ public:
   //Gets the port number
   int get_port() const;
 
+  int family() const {
+    sockaddr* addr = (sockaddr*)&sockaddr6_;
+    return addr->sa_family;
+  }
+
 private:
   InetSocketAddress() {}
 
-  void from_address(const InetAddress& addr, int port);
+  sockaddr* sockaddr_cast() const { return (sockaddr*)&sockaddr6_; }
 
+  void from_address(const InetAddress& addr, int port);
 
   union {
     struct sockaddr_in sockaddr_;
