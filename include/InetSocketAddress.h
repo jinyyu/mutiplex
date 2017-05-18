@@ -8,6 +8,8 @@ namespace net
 class InetSocketAddress
 {
 public:
+  InetSocketAddress() {}
+
   //Creates a socket address from an IP address and a port number
   InetSocketAddress(const InetAddress& addr, int port);
 
@@ -21,7 +23,7 @@ public:
   InetAddress get_address() const;
 
   //Gets the port number
-  int get_port() const;
+  int port() const;
 
   int family() const {
     sockaddr* addr = (sockaddr*)&sockaddr6_;
@@ -29,8 +31,7 @@ public:
   }
 
 private:
-  InetSocketAddress() {}
-
+  friend class ServerSocket;
   sockaddr* sockaddr_cast() const { return (sockaddr*)&sockaddr6_; }
 
   void from_address(const InetAddress& addr, int port);

@@ -41,7 +41,7 @@ InetSocketAddress::InetSocketAddress(const char* hostname, int port)
   from_address(addr, port);
 }
 
-int InetSocketAddress::get_port() const
+int InetSocketAddress::port() const
 {
   sockaddr* p =(sockaddr*) &(sockaddr_);
   if (p->sa_family == AF_INET) {

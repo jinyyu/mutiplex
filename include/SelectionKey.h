@@ -1,14 +1,14 @@
 #ifndef LIBNET_DISTRIBUTION_SELECTIONKEY_H
 #define LIBNET_DISTRIBUTION_SELECTIONKEY_H
 #include <inttypes.h>
-
+#include "NonCopyable.h"
 namespace net
 {
 
 class Channel;
 class Selector;
 
-class SelectionKey
+class SelectionKey : NonCopyable
 {
 
 public:

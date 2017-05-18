@@ -21,6 +21,8 @@ TEST(test, test)
   InetSocketAddress add("wwww.baidu.com", 80);
   out = add.get_address();
   LOG_INFO("%s", out.to_string().c_str());
+  
+  ASSERT_TRUE(add.port() == 80);
 
   in = InetAddress::get_by_host("www.baidu.com", status);
   if (status.is_ok()) {

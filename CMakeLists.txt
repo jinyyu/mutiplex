@@ -19,7 +19,9 @@ set(libnet_SRCS
         src/SelectionKey.cpp
         src/Selector.cpp
         src/Channel.cpp
-        src/EventLoop.cpp)
+        src/EventLoop.cpp
+        src/ServerSocket.cpp
+        src/Acceptor.cpp)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "callbacks.h"
+#include "NonCopyable.h"
 
 namespace net
 {
@@ -12,7 +13,7 @@ class Channel;
 class Selector;
 class SelectionKey;
 
-class EventLoop
+class EventLoop : NonCopyable
 {
 public:
   explicit EventLoop();
@@ -35,6 +36,8 @@ private:
 private:
   pthread_t pthread_id_;
   volatile bool is_quit_;
+
+  friend class Acceptor;
   Selector* selector_;
   std::vector<SelectionKey*> active_keys_;
 
