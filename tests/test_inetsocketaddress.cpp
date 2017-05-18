@@ -18,15 +18,15 @@ TEST(test, test)
 
   InetSocketAddress add("wwww.baidu.com", 80);
   out = add.get_address();
-  LOG("%s", out.to_string().c_str());
+  LOG_INFO("%s", out.to_string().c_str());
 
 
   Status status;
   in = InetAddress::get_by_host("www.baidu.com", status);
   if (status.is_ok()) {
-    LOG("%s", in.to_string().c_str());
+    LOG_INFO("%s", in.to_string().c_str());
     InetSocketAddress addr(in, 10);
-    LOG("%s", addr.get_address().to_string().c_str());
+    LOG_INFO("%s", addr.get_address().to_string().c_str());
   }
 
 }

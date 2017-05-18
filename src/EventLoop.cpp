@@ -22,7 +22,7 @@ EventLoop::EventLoop()
   active_keys_.reserve(128);
 
   if (wakeup_fd_ == -1) {
-    LOG("eventfd error %d", errno);
+    LOG_ERROR("eventfd error %d", errno);
   }
 
   //setup wakeup channel
@@ -30,7 +30,7 @@ EventLoop::EventLoop()
   wakeup_channel_->enable_reading([this](const Timestamp&, SelectionKey*) {
     uint64_t n;
     if (eventfd_read(wakeup_fd_, &n) < 0) {
-      LOG("eventfd_read error %d", errno);
+      LOG_ERROR("eventfd_read error %d", errno);
     }
   });
 }
@@ -42,13 +42,16 @@ EventLoop::~EventLoop()
   delete(wakeup_channel_);
   ::close(wakeup_fd_);
 
-  LOG("[%lu] : loop exit", pthread_id_);
+  LOG_INFO("[%lu] : loop exit", pthread_id_);
 
 }
 
 
 void EventLoop::run()
 {
+  if (!is_in_loop_thread()) {
+    LOG_WARNING("not in loop thread");
+  }
   while (!is_quit_) {
     active_keys_.clear();
     Timestamp time = selector_->select(8000, active_keys_);
@@ -67,8 +70,11 @@ void EventLoop::run()
 
 void EventLoop::wake_up()
 {
+  if (is_in_loop_thread())
+    return;
+
   if (eventfd_write(wakeup_fd_, 1) < 0) {
-    LOG("eventfd_write error %d", errno);
+    LOG_ERROR("eventfd_write error %d", errno);
   }
 }
 

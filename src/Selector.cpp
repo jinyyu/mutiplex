@@ -17,7 +17,7 @@ Selector::Selector(pthread_t pthread_id)
 {
   epoll_fd_ =  epoll_create1(EPOLL_CLOEXEC);
   if (epoll_fd_ == -1) {
-    LOG("epoll_create1 error %d", errno);
+    LOG_ERROR("epoll_create1 error %d", errno);
   }
 }
 
@@ -53,7 +53,7 @@ void Selector::control(int op,SelectionKey* selection_key)
   event.events = selection_key->interest_ops();
 
   if (epoll_ctl(epoll_fd_, op, selection_key->fd(), &event) != 0) {
-    LOG("epoll_ctl error, op = %d, errno = %d", op, errno);
+    LOG_ERROR("epoll_ctl error, op = %d, errno = %d", op, errno);
   }
 }
 
@@ -63,10 +63,10 @@ Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey*>&
   int n_events = epoll_wait(epoll_fd_, events_.data(), events_.size(), timeout_milliseconds);
   Timestamp cur = Timestamp::currentTime();
   if (n_events == -1) {
-    LOG("epoll_wait error %d", errno);
+    LOG_ERROR("epoll_wait error %d", errno);
   }
   else if (n_events == 0) {
-    LOG("[%lu] selecting event = %d", pthread_id_, selecting_events_);
+    LOG_INFO("[%lu] selecting event = %d", pthread_id_, selecting_events_);
   }
   else {
     for (int i = 0; i < n_events; ++i) {

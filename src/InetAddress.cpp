@@ -86,7 +86,7 @@ std::string InetAddress::to_string() const
   int af = v4() ? AF_INET : AF_INET6;
 
   if (inet_ntop(af, &addr_, str, INET6_ADDRSTRLEN) == NULL) {
-    LOG("inet_ntop error : %d", errno)
+    LOG_ERROR("inet_ntop error : %d", errno)
     throw Exception::invalid_argument("inet_ntop error");
   }
   return str;

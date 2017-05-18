@@ -9,10 +9,6 @@
 
 namespace net {
 
-Logger::Logger(int fd) : fd_(fd)
-{
-  pthread_mutex_init(&mutex_, NULL);
-}
 
 Logger::~Logger()
 {
@@ -45,8 +41,12 @@ void Logger::append(char *data, uint32_t len)
   }
 }
 
-void Logger::log(const char* format, ...)
+void Logger::log(int level, const char* format, ...)
 {
+  if (level < level_) {
+    return;
+  }
+
   va_list args;
   char data[1024];
   va_start(args, format);
@@ -78,10 +78,17 @@ Status set_log_destination(const char *path)
   return _logger_singleton.open(path);
 }
 
+void set_log_level(int level)
+{
+  _logger_singleton.set_level(level);
+}
+
 Logger* get_logger_singleton()
 {
   return &_logger_singleton;
 }
+
+
 
 }
 

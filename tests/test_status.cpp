@@ -15,18 +15,18 @@ TEST(test_status, test_status)
   status = Status::invalid_argument(msg);
   ASSERT_TRUE(status.is_invalid_argument());
 
-  LOG("%s",status.to_string().c_str() );
+  LOG_INFO("%s",status.to_string().c_str() );
 
 
 
   status = Status::io_error("io error");
   ASSERT_TRUE(status.is_io_error());
 
-  LOG("%s",status.to_string().c_str() );
+  LOG_INFO("%s",status.to_string().c_str() );
 
   status = Status::io_error(nullptr);
 
-  LOG("%s",status.to_string().c_str() );
+  LOG_INFO("%s",status.to_string().c_str() );
 
   Status st1;
   Status st2;

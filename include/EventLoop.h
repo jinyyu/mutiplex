@@ -23,6 +23,8 @@ public:
 private:
   void setup_wakeup_channel();
 
+  bool is_in_loop_thread() const { return pthread_id_ == pthread_self(); }
+
 private:
   pthread_t pthread_id_;
   volatile bool is_quit_;

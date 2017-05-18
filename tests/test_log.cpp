@@ -3,8 +3,11 @@
 int main(int argc, char* argv[])
 {
   using namespace net;
-  set_log_destination("/tmp/test.txt");
-  LOG("AAA");
+  //set_log_destination("/tmp/test.txt");
+  set_log_level(Logger::WARNING);
+  LOG_INFO("AAA");
 
-  LOG("int %d", 999);
+  LOG_WARNING("int %d", 999);
+
+  LOG_ERROR("int %d", 999);
 }

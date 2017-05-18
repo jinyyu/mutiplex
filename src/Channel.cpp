@@ -76,6 +76,4 @@ void Channel::unregister_ops()
 }
 
 
-
-
 }
