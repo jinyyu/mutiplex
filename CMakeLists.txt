@@ -21,7 +21,8 @@ set(libnet_SRCS
         src/Channel.cpp
         src/EventLoop.cpp
         src/ServerSocket.cpp
-        src/Acceptor.cpp)
+        src/Acceptor.cpp
+        src/TcpServer.cpp)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})

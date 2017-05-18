@@ -29,3 +29,6 @@ target_link_libraries(test_eventloop ${LIBS} )
 
 add_executable(test_acceptor test_acceptor.cpp)
 target_link_libraries(test_acceptor ${LIBS} )
+
+add_executable(test_tcpserver test_tcpserver.cpp)
+target_link_libraries(test_tcpserver ${LIBS} )

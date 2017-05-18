@@ -101,4 +101,11 @@ void EventLoop::post(const Callback& callback)
   }
 }
 
+
+void EventLoop::on_new_connection(int fd)
+{
+  LOG_ERROR("fd= %d", fd);
+}
+
+
 }

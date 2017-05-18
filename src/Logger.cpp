@@ -61,11 +61,20 @@ void Logger::log(int level, const char* format, ...)
 
 void Logger::flush()
 {
-  size_t len = ::write(fd_, buffer_.data(), buffer_.size());
-  if (len != buffer_.size()) {
-    fprintf(stderr, "write error %lu", len);
+  int remaining = buffer_.size();
+  for (size_t i = 0; remaining > 0; ) {
+    ssize_t n = ::write(fd_, buffer_.data() + i, remaining);
+    if (n < 0) {
+      fprintf(stderr, "write error %d\n", errno);
+    }
+    else if (n == 0) {
+      fprintf(stderr, "n == 0");
+    }
+    else {
+      i += n;
+      remaining -= n;
+    }
   }
-
   buffer_.clear();
 }
 
