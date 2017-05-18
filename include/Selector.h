@@ -24,7 +24,7 @@ public:
 
   void remove(SelectionKey* selection_key);
 
-  Timestamp select(int timeout_milliseconds, std::vector<SelectionKey*> active_key);
+  Timestamp select(int timeout_milliseconds, std::vector<SelectionKey*>& active_key);
 
 
 private:

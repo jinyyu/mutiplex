@@ -14,9 +14,10 @@ int main(int argc, char* argv[])
   EventLoop* p = &loop;
 
   std::thread thread([p]() {
-    sleep(12);
-    LOG("wakeup");
+
+    sleep(5);
     p->wake_up();
+
   });
 
   loop.run();

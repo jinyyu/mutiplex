@@ -9,7 +9,8 @@ namespace net
 Channel::Channel(Selector* selector, int fd)
     : selector_(selector),
       selection_key_( new SelectionKey(this)),
-      status_(NEW)
+      status_(NEW),
+      fd_(fd)
 {
 }
 
@@ -32,7 +33,6 @@ void Channel::enable_writing(const SelectionCallback& callback)
   selection_key_->enable_ops(SelectionKey::OP_OUT);
   write_callback_ = callback;
   register_ops();
-
 }
 
 
