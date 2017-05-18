@@ -16,13 +16,27 @@ namespace net
 
 TcpServer::~TcpServer()
 {
+  if (state_ == CREATE) {
+    return;
+  } else if (state_ == RUNNING) {
+    shutdown();
+  }
 
+  delete(acceptor_);
+  delete(accept_loop_);
+
+  for (auto it = io_loops_.begin() ; it < io_loops_.end(); ++it) {
+    delete(*it);
+  }
 }
 
 void TcpServer::run()
 {
   using namespace std;
-  is_run_ = true;
+  if (state_ != CREATE) {
+    LOG_ERROR("error state %d", state_);
+    return;
+  }
 
   accept_loop_ = new EventLoop();
   acceptor_ = new Acceptor(accept_loop_, port_);
@@ -56,6 +70,21 @@ void TcpServer::on_new_connection(int fd, const Timestamp& timestamp, const Inet
     user_new_connection_callback_(fd, timestamp, address);
   }
   next_loop()->on_new_connection(fd);
+}
+
+
+void TcpServer::shutdown()
+{
+  if (state_ != RUNNING) {
+    return;
+  }
+
+  accept_loop_->stop();
+
+  for (auto it = io_loops_.begin() ; it < io_loops_.end(); ++it) {
+    (*it)->stop();
+  }
+
 }
 
 

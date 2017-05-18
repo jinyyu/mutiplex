@@ -28,18 +28,18 @@ public:
 
   void on_new_connection(int fd);
 
+  void stop()
+  {
+    is_quit_ = true;
+    wake_up();
+  }
+
 private:
   void setup_wakeup_channel();
 
   bool is_in_loop_thread() const { return pthread_id_ == pthread_self(); }
 
   void wake_up();
-
-  void stop()
-  {
-    is_quit_ = true;
-    wake_up();
-  }
 
 private:
   pthread_t pthread_id_;

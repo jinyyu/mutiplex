@@ -15,11 +15,12 @@ class InetSocketAddress;
 class TcpServer : NonCopyable
 {
 public:
-  TcpServer(int port, int num_io_threads) : port_(port), num_io_threads_(num_io_threads), is_run_(false) { }
+  TcpServer(int port, int num_io_threads) : port_(port), num_io_threads_(num_io_threads) ,state_(CREATE) { }
 
   ~TcpServer();
 
-  void set_new_connection_callback(const NewConnectionCallback& cb) {
+  void set_new_connection_callback(const NewConnectionCallback& cb)
+  {
     user_new_connection_callback_ = cb;
   }
 
@@ -44,7 +45,14 @@ private:
   Acceptor* acceptor_;
   std::vector<EventLoop*> io_loops_;
   int index_;
-  bool is_run_;
+
+  enum {
+    CREATE = 0,
+    RUNNING = 1,
+    SHUTDOWN = 2
+  };
+
+  int state_;
 
   NewConnectionCallback user_new_connection_callback_;
 
