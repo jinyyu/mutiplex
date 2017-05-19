@@ -69,4 +69,9 @@ InetAddress InetSocketAddress::get_address() const
   return addr;
 }
 
+std::string InetSocketAddress::to_string() const
+{
+  return get_address().to_string() + ":" + std::to_string(port());
+}
+
 }

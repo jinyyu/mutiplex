@@ -34,6 +34,8 @@ public:
     wake_up();
   }
 
+  Selector* selector() const { return selector_; }
+
 private:
   void setup_wakeup_channel();
 

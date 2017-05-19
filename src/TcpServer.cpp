@@ -2,12 +2,12 @@
 #include "EventLoop.h"
 #include "Acceptor.h"
 #include "Logger.h"
+#include "Connection.h"
+#include "Timestamp.h"
+#include "InetAddress.h"
+#include "InetSocketAddress.h"
+
 #include <unistd.h>
-#include <Timestamp.h>
-#include <InetAddress.h>
-#include <InetSocketAddress.h>
-
-
 #include <thread>
 
 namespace net
@@ -40,11 +40,15 @@ void TcpServer::run()
 
   accept_loop_ = new EventLoop();
   acceptor_ = new Acceptor(accept_loop_, port_);
-  NewConnectionCallback cb = std::bind(&TcpServer::on_new_connection,
-                                       this,
-                                       placeholders::_1,
-                                       placeholders::_2,
-                                       placeholders::_3);
+
+  NewConnectionCallback cb = [this](int fd,
+                                    const Timestamp & timestamp,
+                                    const InetSocketAddress& local,
+                                    const InetSocketAddress& peer)
+  {
+    EventLoop* loop = next_loop();
+    LOG_INFO("new connection %s, %s, %s", timestamp.to_string().c_str(), local.to_string().c_str(), peer.to_string().c_str())
+  };
 
   acceptor_->new_connection_callback(cb);
 
@@ -62,15 +66,6 @@ void TcpServer::run()
   accept_loop_->run();
 }
 
-
-
-void TcpServer::on_new_connection(int fd, const Timestamp& timestamp, const InetSocketAddress& address)
-{
-  if (user_new_connection_callback_) {
-    user_new_connection_callback_(fd, timestamp, address);
-  }
-  next_loop()->on_new_connection(fd);
-}
 
 
 void TcpServer::shutdown()

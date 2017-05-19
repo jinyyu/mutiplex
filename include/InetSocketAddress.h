@@ -30,6 +30,8 @@ public:
     return addr->sa_family;
   }
 
+  std::string to_string() const;
+
 private:
   friend class ServerSocket;
   sockaddr* sockaddr_cast() const { return (sockaddr*)&sockaddr6_; }

@@ -7,12 +7,12 @@
 
 using namespace net;
 
-void cb(int fd, const Timestamp& timestamp, const InetSocketAddress& address)
+void cb(int fd, const Timestamp& timestamp, const InetSocketAddress& local, const InetSocketAddress& peer)
 {
 
   const char* str = "goodby\n";
   ::write(fd, str, strlen(str));
-  LOG_INFO("time = %s, addr =%s, port =%d", timestamp.to_string().c_str(), address.get_address().to_string().c_str(), address.port());
+  LOG_INFO("[%s] local = %s, peer = %s", timestamp.to_string().c_str(), local.to_string().c_str(), peer.to_string().c_str());
   ::close(fd);
 }
 

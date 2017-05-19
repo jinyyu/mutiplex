@@ -15,14 +15,15 @@ class InetSocketAddress;
 class TcpServer : NonCopyable
 {
 public:
-  TcpServer(int port, int num_io_threads) : port_(port), num_io_threads_(num_io_threads) ,state_(CREATE) { }
+  TcpServer(int port, int num_io_threads)
+      : port_(port),
+        num_io_threads_(num_io_threads) ,
+        state_(CREATE),
+        index_(0)
+  { }
 
   ~TcpServer();
 
-  void set_new_connection_callback(const NewConnectionCallback& cb)
-  {
-    user_new_connection_callback_ = cb;
-  }
 
   void run();
 
@@ -37,7 +38,6 @@ private:
     return io_loops_[index_++];
   }
 
-  void on_new_connection(int fd, const Timestamp& timestamp, const InetSocketAddress& address);
 
   int port_;
   int num_io_threads_;
@@ -54,7 +54,6 @@ private:
 
   int state_;
 
-  NewConnectionCallback user_new_connection_callback_;
 
 
 

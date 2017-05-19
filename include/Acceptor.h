@@ -25,11 +25,14 @@ public:
 
   void new_connection_callback(const NewConnectionCallback& callback) { callback_ = callback; }
 
+
+
 private:
   EventLoop* loop_;
   ServerSocket* server_socket_;
   Channel* accept_channel_;
   InetSocketAddress* peer_addr_;
+  InetSocketAddress* local_addr_;
   NewConnectionCallback callback_;
 
 };

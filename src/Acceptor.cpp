@@ -5,6 +5,7 @@
 #include "Channel.h"
 #include "EventLoop.h"
 #include "Timestamp.h"
+#include "Connection.h"
 
 namespace net
 {
@@ -15,7 +16,8 @@ Acceptor::Acceptor(EventLoop* loop,int port)
 }
 
 Acceptor::Acceptor(EventLoop* loop,const InetSocketAddress& addr)
-    : loop_(loop)
+    : loop_(loop),
+      local_addr_(new InetSocketAddress(addr))
 {
   peer_addr_ = new InetSocketAddress();
   server_socket_ = new ServerSocket();
@@ -33,7 +35,7 @@ Acceptor::Acceptor(EventLoop* loop,const InetSocketAddress& addr)
     int fd = server_socket_->accept(*this->peer_addr_);
 
     if (this->callback_) {
-      this->callback_(fd, timestamp, *this->peer_addr_) ;
+      this->callback_(fd, timestamp, *local_addr_, *this->peer_addr_) ;
     }
   };
 
@@ -47,6 +49,7 @@ Acceptor::~Acceptor()
   delete(server_socket_);
   delete(accept_channel_);
   delete(peer_addr_);
+  delete(local_addr_);
 }
 
 
