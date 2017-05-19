@@ -4,9 +4,11 @@
 #include "Channel.h"
 #include "SelectionKey.h"
 #include "Logger.h"
+#include "InetSocketAddress.h"
 
 #include <sys/eventfd.h>
 #include <unistd.h>
+#include "Connection.h"
 
 namespace net
 {
@@ -55,13 +57,22 @@ void EventLoop::run()
   while (!is_quit_) {
     active_keys_.clear();
     Timestamp time = selector_->select(8000, active_keys_);
+    if (active_keys_.empty()) {
+      continue;
+    }
+
     for(SelectionKey* key: active_keys_) {
+      //LOG_INFO("fd = %d, op = %s", key->fd() ,SelectionKey::op_get_string(key->ready_ops()).c_str());
       Channel* channel = key->channel();
       if (key->is_readable()) {
         channel->handle_read(time);
       }
       if (key->is_writable()) {
         channel->handle_wirte(time);
+      }
+
+      if (key->is_closed()) {
+        LOG_INFO("CLOSED");
       }
     }
 
@@ -102,9 +113,23 @@ void EventLoop::post(const Callback& callback)
 }
 
 
-void EventLoop::on_new_connection(int fd)
+void EventLoop::on_new_connection(int fd, const Timestamp& timestamp, const InetSocketAddress& local, const InetSocketAddress& peer)
 {
-  LOG_ERROR("fd= %d", fd);
+  ConnectionPtr conn(new Connection(fd, this, local, peer));
+
+  Callback cb = [this, conn, timestamp]() {
+    bool accept = true;
+    if (established_callback_) {
+      accept = (established_callback_(conn, timestamp));
+    }
+    if (!accept) {
+      return;
+    }
+    LOG_INFO("new connection");
+    connections_[conn->fd()] = conn;
+  };
+  post(cb);
+
 }
 
 

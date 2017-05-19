@@ -18,10 +18,9 @@ typedef std::function<void(const Timestamp &, SelectionKey *)> SelectionCallback
 
 typedef std::function<void()> Callback;
 
-
 typedef std::function<void(int, const Timestamp &, const InetSocketAddress &, const InetSocketAddress &)> NewConnectionCallback;
 
-typedef std::function<bool (ConnectionPtr, const Timestamp &)> __NewConnectionCallback;
+typedef std::function<bool (ConnectionPtr, const Timestamp &)> ConnectionEstablishedCallback;
 
 
 }

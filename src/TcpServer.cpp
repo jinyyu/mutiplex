@@ -13,7 +13,6 @@
 namespace net
 {
 
-
 TcpServer::~TcpServer()
 {
   if (state_ == CREATE) {
@@ -29,6 +28,7 @@ TcpServer::~TcpServer()
     delete(*it);
   }
 }
+
 
 void TcpServer::run()
 {
@@ -47,7 +47,7 @@ void TcpServer::run()
                                     const InetSocketAddress& peer)
   {
     EventLoop* loop = next_loop();
-    LOG_INFO("new connection %s, %s, %s", timestamp.to_string().c_str(), local.to_string().c_str(), peer.to_string().c_str())
+    loop->on_new_connection(fd, timestamp, local, peer);
   };
 
   acceptor_->new_connection_callback(cb);
@@ -80,6 +80,14 @@ void TcpServer::shutdown()
     (*it)->stop();
   }
 
+}
+
+
+void TcpServer::connection_established_callback(const ConnectionEstablishedCallback& cb)
+{
+  for (auto it = io_loops_.begin(); it != io_loops_.end(); ++it) {
+    (*it)->connection_established_callback(cb);
+  }
 }
 
 

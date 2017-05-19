@@ -66,7 +66,8 @@ Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey*>&
     LOG_ERROR("epoll_wait error %d", errno);
   }
   else if (n_events == 0) {
-    LOG_INFO("[%lu] selecting event = %d", pthread_id_, selecting_events_);
+    //LOG_INFO("[%lu] selecting event = %d", pthread_id_, selecting_events_);
+    return cur;
   }
   else {
     for (int i = 0; i < n_events; ++i) {

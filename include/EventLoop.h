@@ -2,6 +2,7 @@
 #define LIBNET_DISTRIBUTION_EVENTLOOP_H
 #include <pthread.h>
 #include <vector>
+#include <unordered_map>
 
 #include "callbacks.h"
 #include "NonCopyable.h"
@@ -26,7 +27,9 @@ public:
   //Request the EventLoop to invoke the given callback and return immediately
   void post(const Callback& callback);
 
-  void on_new_connection(int fd);
+  void on_new_connection(int fd, const Timestamp& timestamp, const InetSocketAddress& local, const InetSocketAddress& peer);
+
+  void connection_established_callback(const ConnectionEstablishedCallback cb) { established_callback_ = cb;}
 
   void stop()
   {
@@ -34,14 +37,16 @@ public:
     wake_up();
   }
 
+private:
+  friend class Connection;
   Selector* selector() const { return selector_; }
 
-private:
   void setup_wakeup_channel();
 
   bool is_in_loop_thread() const { return pthread_id_ == pthread_self(); }
 
   void wake_up();
+
 
 private:
   pthread_t pthread_id_;
@@ -56,6 +61,9 @@ private:
 
   pthread_mutex_t mutex_;
   std::vector<Callback> callbacks_; //lock by mutex_
+
+  ConnectionEstablishedCallback established_callback_;
+  std::unordered_map<int, ConnectionPtr> connections_;
 
 };
 

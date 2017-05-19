@@ -1,7 +1,10 @@
 #ifndef LIBNET_DISTRIBUTION_SELECTIONKEY_H
 #define LIBNET_DISTRIBUTION_SELECTIONKEY_H
 #include <inttypes.h>
+#include <string>
+
 #include "NonCopyable.h"
+
 namespace net
 {
 
@@ -38,6 +41,9 @@ public:
   //Tests whether this key's channel is ready for writing
   bool is_writable() const { return  ready_ops_ & OP_OUT; }
 
+  //Tests whether socket peer is closed
+  bool is_closed() const { return ready_ops_ & OP_HUP; }
+
   //Retrieves this key's ready-operation set
   uint32_t ready_ops() const { return ready_ops_; }
 
@@ -46,7 +52,9 @@ public:
 
   Selector* selector() const;
 
+  int fd() const;
 
+  static std::string op_get_string(uint32_t op);
 private:
   friend class Selector;
   friend class Channel;
@@ -54,8 +62,6 @@ private:
   void enable_ops(uint32_t op) { interest_ops_ |= op; }
 
   void disable_ops(uint32_t op) { interest_ops_ &= ~op; }
-
-  int fd();
 
 private:
   Channel* channel_;

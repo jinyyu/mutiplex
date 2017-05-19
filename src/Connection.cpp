@@ -1,5 +1,6 @@
 #include "Connection.h"
 #include "Channel.h"
+#include "EventLoop.h"
 
 #include <unistd.h>
 
@@ -8,13 +9,14 @@ namespace net
 
 
 Connection::Connection(int fd,
-                       Selector* selector,
+                       EventLoop* loop,
                        const InetSocketAddress& local,
                        const InetSocketAddress& peer)
-    : channel_(new Channel(selector, fd)),
+    : channel_(new Channel(loop->selector(), fd)),
       fd_(fd),
       peer_(peer),
-      local_(local)
+      local_(local),
+      loop_(loop)
 {
 
 }

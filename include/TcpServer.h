@@ -24,12 +24,20 @@ public:
 
   ~TcpServer();
 
+  void connection_established_callback(const ConnectionEstablishedCallback& cb);
 
   void run();
 
   void shutdown();
 
 private:
+
+  enum {
+    CREATE = 0,
+    RUNNING = 1,
+    SHUTDOWN = 2
+  };
+
   EventLoop* next_loop()
   {
     if (index_ == io_loops_.size()) {
@@ -38,25 +46,14 @@ private:
     return io_loops_[index_++];
   }
 
-
+private:
   int port_;
   int num_io_threads_;
   EventLoop* accept_loop_;
   Acceptor* acceptor_;
   std::vector<EventLoop*> io_loops_;
   int index_;
-
-  enum {
-    CREATE = 0,
-    RUNNING = 1,
-    SHUTDOWN = 2
-  };
-
   int state_;
-
-
-
-
 
 };
 

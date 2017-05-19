@@ -2,20 +2,21 @@
 #define LIBNET_DISTRIBUTION_CONNECTION_H
 #include "NonCopyable.h"
 #include <memory>
+
 #include "InetSocketAddress.h"
 #include "InetAddress.h"
 
 namespace net
 {
-
+class EventLoop;
 class Selector;
 class Channel;
 
-class Connection : NonCopyable, std::enable_shared_from_this<Connection>
+class Connection : public std::enable_shared_from_this<Connection>, NonCopyable
 {
 public:
   explicit Connection(int fd,
-                      Selector* selector,
+                      EventLoop* loop,
                       const InetSocketAddress& local,
                       const InetSocketAddress& peer);
 
@@ -33,8 +34,11 @@ public:
 
   int peer_port() const { return peer_.port(); }
 
+  int fd() const { return fd_; }
+
 private:
   int fd_;
+  EventLoop* loop_;
   Channel* channel_;
   InetSocketAddress local_;
   InetSocketAddress peer_;
