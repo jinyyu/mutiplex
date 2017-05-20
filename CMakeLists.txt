@@ -23,7 +23,7 @@ set(libnet_SRCS
         src/ServerSocket.cpp
         src/Acceptor.cpp
         src/TcpServer.cpp
-        src/Connection.cpp)
+        src/Connection.cpp include/Slice.h)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})

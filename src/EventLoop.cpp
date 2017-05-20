@@ -44,6 +44,8 @@ EventLoop::~EventLoop()
   delete(wakeup_channel_);
   ::close(wakeup_fd_);
 
+  delete(selector_);
+
   LOG_INFO("[%lu] : loop exit", pthread_id_);
 
 }
@@ -115,20 +117,23 @@ void EventLoop::post(const Callback& callback)
 
 void EventLoop::on_new_connection(int fd, const Timestamp& timestamp, const InetSocketAddress& local, const InetSocketAddress& peer)
 {
-  ConnectionPtr conn(new Connection(fd, this, local, peer));
+  bool accept = true;
+  if (established_callback_) {
+    accept = (established_callback_(nullptr, timestamp));
+  }
 
-  Callback cb = [this, conn, timestamp]() {
-    bool accept = true;
-    if (established_callback_) {
-      accept = (established_callback_(conn, timestamp));
-    }
-    if (!accept) {
-      return;
-    }
-    LOG_INFO("new connection");
-    connections_[conn->fd()] = conn;
-  };
-  post(cb);
+  if (!accept) {
+    LOG_INFO("not accept");
+    ::close(fd);
+  } else {
+    ConnectionPtr conn(new Connection(fd, this, local, peer));
+    Callback cb = [this, conn, timestamp]() {
+      conn->accept();
+      LOG_INFO("new connection");
+      connections_[conn->fd()] = conn;
+    };
+    post(cb);
+  }
 
 }
 

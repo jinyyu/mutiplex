@@ -13,6 +13,15 @@
 namespace net
 {
 
+TcpServer::TcpServer(int port, int num_io_threads)
+    : port_(port),
+      num_io_threads_(num_io_threads) ,
+      state_(CREATE),
+      index_(0),
+      io_loops_(num_io_threads, nullptr)
+{
+}
+
 TcpServer::~TcpServer()
 {
   if (state_ == CREATE) {
@@ -32,10 +41,22 @@ TcpServer::~TcpServer()
 
 void TcpServer::run()
 {
-  using namespace std;
   if (state_ != CREATE) {
     LOG_ERROR("error state %d", state_);
     return;
+  }
+
+  for (int i = 0; i < num_io_threads_; ++i) {
+    auto run = [i, this] {
+      EventLoop* loop = new EventLoop();
+      loop->connection_established_callback(connection_established_callback_);
+      loop->read_message_callback(read_message_callback_);
+
+      io_loops_[i] = loop;
+      loop->run();
+    };
+    std::thread thread(run);
+    thread.detach();
   }
 
   accept_loop_ = new EventLoop();
@@ -51,18 +72,6 @@ void TcpServer::run()
   };
 
   acceptor_->new_connection_callback(cb);
-
-  for (int i = 0; i < num_io_threads_; ++i) {
-    auto io_loop = [this, i]() {
-      EventLoop* loop = new EventLoop();
-      this->io_loops_.push_back(loop);
-      loop->run();
-    };
-
-    thread io_thread(io_loop);
-    io_thread.detach();
-  }
-
   accept_loop_->run();
 }
 
@@ -81,15 +90,6 @@ void TcpServer::shutdown()
   }
 
 }
-
-
-void TcpServer::connection_established_callback(const ConnectionEstablishedCallback& cb)
-{
-  for (auto it = io_loops_.begin(); it != io_loops_.end(); ++it) {
-    (*it)->connection_established_callback(cb);
-  }
-}
-
 
 
 }

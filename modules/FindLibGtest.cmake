@@ -1,5 +1,6 @@
 
-find_path (LibGtest_INCLUDE_DIR gtest/gtest.h)
+find_path (LibGtest_INCLUDE_DIR
+        gtest/gtest.h)
 
 find_library(LibGtest_LIBRARY gtest)
 

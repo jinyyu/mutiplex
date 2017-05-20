@@ -5,6 +5,7 @@
 
 #include "InetSocketAddress.h"
 #include "InetAddress.h"
+#include "callbacks.h"
 
 namespace net
 {
@@ -36,13 +37,31 @@ public:
 
   int fd() const { return fd_; }
 
+  void read_message_callback(const ReadMessageCallback& cb) {read_message_callback_ = cb; }
+
+  void connection_closed_callback(const ConnectionClosedCallback cb) { connection_closed_callback_ = cb; }
+
 private:
+  friend class EventLoop;
+  void accept();
+
+private:
+  enum State
+  {
+    NEW = 0,
+    ACCEPTED = 1
+
+  };
+
   int fd_;
+  uint8_t state_;
   EventLoop* loop_;
   Channel* channel_;
   InetSocketAddress local_;
   InetSocketAddress peer_;
 
+  ReadMessageCallback read_message_callback_;
+  ConnectionClosedCallback connection_closed_callback_;
 };
 
 

@@ -31,19 +31,21 @@ public:
 
   void connection_established_callback(const ConnectionEstablishedCallback cb) { established_callback_ = cb;}
 
+  void read_message_callback(const ReadMessageCallback& cb)  { read_message_callback_ = cb; }
+
   void stop()
   {
     is_quit_ = true;
     wake_up();
   }
 
+  bool is_in_loop_thread() const { return pthread_id_ == pthread_self(); }
+
 private:
   friend class Connection;
   Selector* selector() const { return selector_; }
 
   void setup_wakeup_channel();
-
-  bool is_in_loop_thread() const { return pthread_id_ == pthread_self(); }
 
   void wake_up();
 
@@ -62,8 +64,11 @@ private:
   pthread_mutex_t mutex_;
   std::vector<Callback> callbacks_; //lock by mutex_
 
-  ConnectionEstablishedCallback established_callback_;
   std::unordered_map<int, ConnectionPtr> connections_;
+
+  ConnectionEstablishedCallback established_callback_;
+
+  ReadMessageCallback read_message_callback_;
 
 };
 
