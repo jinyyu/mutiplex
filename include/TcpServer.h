@@ -23,6 +23,8 @@ public:
 
   void read_message_callback(const ReadMessageCallback& cb) { read_message_callback_ = cb;}
 
+  void connection_closed_callback(const ConnectionClosedCallback& cb) { connection_closed_callback_ = cb; }
+
   void run();
 
   void shutdown();
@@ -50,10 +52,12 @@ private:
   Acceptor* acceptor_;
   std::vector<EventLoop*> io_loops_;
   int index_;
+
   int state_;
 
   ConnectionEstablishedCallback connection_established_callback_;
   ReadMessageCallback read_message_callback_;
+  ConnectionClosedCallback connection_closed_callback_;
 
 };
 

@@ -1,8 +1,13 @@
 
-find_path (LibGtest_INCLUDE_DIR
-        gtest/gtest.h)
 
-find_library(LibGtest_LIBRARY gtest)
+find_path(LibGtest_INCLUDE_DIR gtest/gtest.h
+        PATHS /usr /usr/local/
+        )
+
+find_library(LibGtest_LIBRARY
+        NAMES gtest
+        PATHS /usr /usr/local/ )
+
 
 include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set LIBXML2_FOUND to TRUE

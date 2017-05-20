@@ -3,6 +3,9 @@ project(libnet-distribution)
 
 set(CMAKE_CXX_STANDARD 11)
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(-std=gnu++0x)
+endif()
 
 set(CMAKE_MODULE_PATH
         ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/modules/")
@@ -31,9 +34,12 @@ target_link_libraries(libnet ${LIBS})
 
 find_package(LibGtest QUIET)
 if (LibGtest_FOUND)
+    message("gtest found")
+    message("gtest include : ${LibGtest_INCLUDE_DIR}")
+    message("gtest lib : ${LibGtest_LIBRARY}")
     include_directories(${LibGtest_INCLUDE_DIR})
     set(LIBS
-            ${LIBS} ${LibGtest_LIBRARIE} gtest pthread)
+            ${LIBS} ${LibGtest_LIBRARY} gtest pthread)
     add_subdirectory(tests)
 endif (LibGtest_FOUND)
 

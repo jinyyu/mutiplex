@@ -6,6 +6,9 @@
 #include "InetSocketAddress.h"
 #include "InetAddress.h"
 #include "callbacks.h"
+#include "ByteBuffer.h"
+
+#include <deque>
 
 namespace net
 {
@@ -23,6 +26,8 @@ public:
 
   ~Connection();
 
+  void set_buffer_size(uint32_t size) { buffer_size_ = size; }
+
   const InetSocketAddress& local_socket_address() const { return local_; }
 
   const InetSocketAddress& peer_socket_address() const { return peer_; }
@@ -39,22 +44,31 @@ public:
 
   void read_message_callback(const ReadMessageCallback& cb) {read_message_callback_ = cb; }
 
-  void connection_closed_callback(const ConnectionClosedCallback cb) { connection_closed_callback_ = cb; }
+  void connection_closed_callback(const ConnectionClosedCallback& cb) { connection_closed_callback_ = cb; }
+
+  void error_callback(const ErrorCallback& cb) {error_callback_ = cb; }
+
+  void close();
 
 private:
   friend class EventLoop;
   void accept();
 
+
+
 private:
   enum State
   {
-    NEW = 0,
-    ACCEPTED = 1
+    New = 0,
+    Receiving = 1,
+    Disconnecting =  2,
+    Closed = 3
 
   };
 
   int fd_;
   uint8_t state_;
+  uint32_t buffer_size_;
   EventLoop* loop_;
   Channel* channel_;
   InetSocketAddress local_;
@@ -62,10 +76,12 @@ private:
 
   ReadMessageCallback read_message_callback_;
   ConnectionClosedCallback connection_closed_callback_;
+  ErrorCallback error_callback_;
+  ByteBufferPtr buffer_in_;
+
+  std::deque<ByteBufferPtr> buffer_out_;
+
 };
-
-
-
 
 }
 

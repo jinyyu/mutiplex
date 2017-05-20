@@ -64,7 +64,7 @@ void EventLoop::run()
     }
 
     for(SelectionKey* key: active_keys_) {
-      //LOG_INFO("fd = %d, op = %s", key->fd() ,SelectionKey::op_get_string(key->ready_ops()).c_str());
+      LOG_INFO("fd = %d, op = %s", key->fd() ,SelectionKey::op_get_string(key->ready_ops()).c_str());
       Channel* channel = key->channel();
       if (key->is_readable()) {
         channel->handle_read(time);
@@ -127,6 +127,9 @@ void EventLoop::on_new_connection(int fd, const Timestamp& timestamp, const Inet
     ::close(fd);
   } else {
     ConnectionPtr conn(new Connection(fd, this, local, peer));
+    conn->read_message_callback(read_message_callback_);
+    conn->connection_closed_callback(connection_closed_callback_);
+
     Callback cb = [this, conn, timestamp]() {
       conn->accept();
       LOG_INFO("new connection");

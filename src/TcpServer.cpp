@@ -51,6 +51,7 @@ void TcpServer::run()
       EventLoop* loop = new EventLoop();
       loop->connection_established_callback(connection_established_callback_);
       loop->read_message_callback(read_message_callback_);
+      loop->connection_closed_callback(connection_closed_callback_);
 
       io_loops_[i] = loop;
       loop->run();

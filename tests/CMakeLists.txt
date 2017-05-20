@@ -1,6 +1,6 @@
 
 set(LIBS
-        ${LIBS} gtest libnet)
+        ${LIBS} libnet)
 
 
 add_executable(Tx test.cpp)
@@ -32,3 +32,6 @@ target_link_libraries(test_acceptor ${LIBS} )
 
 add_executable(test_tcpserver test_tcpserver.cpp)
 target_link_libraries(test_tcpserver ${LIBS} )
+
+add_executable(client_shutdown client_shutdown.cpp)
+target_link_libraries(client_shutdown ${LIBS} )

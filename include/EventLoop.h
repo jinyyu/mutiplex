@@ -29,9 +29,11 @@ public:
 
   void on_new_connection(int fd, const Timestamp& timestamp, const InetSocketAddress& local, const InetSocketAddress& peer);
 
-  void connection_established_callback(const ConnectionEstablishedCallback cb) { established_callback_ = cb;}
+  void connection_established_callback(const ConnectionEstablishedCallback& cb) { established_callback_ = cb;}
 
   void read_message_callback(const ReadMessageCallback& cb)  { read_message_callback_ = cb; }
+
+  void connection_closed_callback(const ConnectionClosedCallback& cb) { connection_closed_callback_ = cb; }
 
   void stop()
   {
@@ -45,10 +47,9 @@ private:
   friend class Connection;
   Selector* selector() const { return selector_; }
 
-  void setup_wakeup_channel();
+  void remove_connection(int fd) { connections_.erase(fd); }
 
   void wake_up();
-
 
 private:
   pthread_t pthread_id_;
@@ -67,8 +68,8 @@ private:
   std::unordered_map<int, ConnectionPtr> connections_;
 
   ConnectionEstablishedCallback established_callback_;
-
   ReadMessageCallback read_message_callback_;
+  ConnectionClosedCallback connection_closed_callback_;
 
 };
 
