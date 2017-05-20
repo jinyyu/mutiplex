@@ -95,4 +95,13 @@ int ByteBuffer::get(void* buffer, int len)
   return len;
 }
 
+void ByteBuffer::skip(int n)
+{
+  if (remaining() < n) {
+    LOG_ERROR("n > remaining");
+  }
+
+  position_ += n;
+}
+
 }

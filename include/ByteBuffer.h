@@ -43,6 +43,8 @@ public:
   //Rewinds this buffer. The position is set to zero and the mark is discarded
   void rewind();
 
+  void skip(int n);
+
   //Returns the number of elements between the current position and the limit
   int remaining() { return limit_ - position_; }
 

@@ -50,9 +50,15 @@ public:
 
   void close();
 
+  bool is_closed() { return state_ == Closed || state_ == Disconnecting; }
+
+  bool write(void* data, int len);
+
 private:
   friend class EventLoop;
   void accept();
+
+  void handle_write(const Timestamp &timestamp);
 
 
 
@@ -80,6 +86,7 @@ private:
   ByteBufferPtr buffer_in_;
 
   std::deque<ByteBufferPtr> buffer_out_;
+  int buffer_out_remaining_;
 
 };
 

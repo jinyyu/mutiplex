@@ -19,9 +19,15 @@ public:
 
   void enable_reading(const SelectionCallback& callback);
 
-  void enable_writing(const SelectionCallback& callback);
-
   void disable_reading();
+
+  void enable_writing();
+
+  void disable_writing();
+
+  void set_writing_selection_callback(const SelectionCallback& callback) { write_callback_ = callback; }
+
+
 
   void handle_read(const Timestamp& timestamp) const {
     if (read_callback_)
@@ -32,8 +38,6 @@ public:
     if (write_callback_)
       write_callback_(timestamp, selection_key_);
   }
-
-  void enable_writing();
 
   void disable_all();
 

@@ -29,14 +29,6 @@ void Channel::enable_reading(const SelectionCallback& callback)
 }
 
 
-void Channel::enable_writing(const SelectionCallback& callback)
-{
-  selection_key_->enable_ops(SelectionKey::OP_OUT);
-  write_callback_ = callback;
-  register_ops();
-}
-
-
 void Channel::disable_reading()
 {
   selection_key_->disable_ops(SelectionKey::OP_IN);
@@ -45,8 +37,14 @@ void Channel::disable_reading()
 
 void Channel::enable_writing()
 {
-  selection_key_->disable_ops(SelectionKey::OP_OUT);
+  selection_key_->enable_ops(SelectionKey::OP_OUT);
   register_ops();
+}
+
+void Channel::disable_writing()
+{
+  selection_key_->disable_ops(SelectionKey::OP_OUT);
+  unregister_ops();
 }
 
 void Channel::disable_all()
