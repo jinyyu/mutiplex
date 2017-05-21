@@ -29,6 +29,10 @@ void read_cb(ConnectionPtr conn, ByteBufferPtr buf, const Timestamp &)
   conn->write(buffer, len);
   LOG_INFO("%s", buffer);
 
+  conn->write(buffer, len);
+  LOG_INFO("%s", buffer);
+
+
   free(buffer);
 
 }

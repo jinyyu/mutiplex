@@ -35,3 +35,10 @@ target_link_libraries(test_tcpserver ${LIBS} )
 
 add_executable(client_shutdown client_shutdown.cpp)
 target_link_libraries(client_shutdown ${LIBS} )
+
+add_executable(test_util test_util.cpp)
+target_link_libraries(test_util ${LIBS} )
+
+
+add_executable(test_circularbuffer test_circularbuffer.cpp)
+target_link_libraries(test_circularbuffer ${LIBS} )

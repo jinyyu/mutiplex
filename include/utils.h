@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <errno.h>
+#include <inttypes.h>
 
 namespace net
 {
@@ -14,7 +15,7 @@ public:
       : mutex_(mutex)
   {
     if (pthread_mutex_lock(mutex) != 0) {
-      fprintf(stderr, "pthread_mutex_init error");
+      fprintf(stderr, "pthread_mutex_lock error");
     }
   }
 
@@ -28,6 +29,12 @@ public:
 private:
   pthread_mutex_t *mutex_;
 };
+
+
+bool is_pow_of_two(uint32_t v);
+
+uint32_t roundup_pow_of_two(uint32_t v);
+
 
 }
 

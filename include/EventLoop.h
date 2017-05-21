@@ -35,11 +35,7 @@ public:
 
   void connection_closed_callback(const ConnectionClosedCallback& cb) { connection_closed_callback_ = cb; }
 
-  void stop()
-  {
-    is_quit_ = true;
-    wake_up();
-  }
+  void stop();
 
   bool is_in_loop_thread() const { return pthread_id_ == pthread_self(); }
 
@@ -70,6 +66,8 @@ private:
   ConnectionEstablishedCallback established_callback_;
   ReadMessageCallback read_message_callback_;
   ConnectionClosedCallback connection_closed_callback_;
+
+  pthread_mutex_t mutex_running_;
 
 };
 

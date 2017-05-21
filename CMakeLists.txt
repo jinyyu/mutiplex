@@ -13,6 +13,8 @@ set(CMAKE_MODULE_PATH
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(libnet_SRCS
+        include/Slice.h
+        src/utils.cpp
         src/Status.cpp
         src/Logger.cpp
         src/ByteBuffer.cpp
@@ -26,7 +28,8 @@ set(libnet_SRCS
         src/ServerSocket.cpp
         src/Acceptor.cpp
         src/TcpServer.cpp
-        src/Connection.cpp include/Slice.h)
+        src/Connection.cpp
+        src/CircularBuffer.cpp)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})

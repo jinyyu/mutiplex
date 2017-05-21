@@ -21,6 +21,8 @@ EventLoop::EventLoop()
       wakeup_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK))
 {
   pthread_mutex_init(&mutex_, NULL);
+  pthread_mutex_init(&mutex_running_, NULL);
+
   active_keys_.reserve(128);
 
   if (wakeup_fd_ == -1) {
@@ -56,6 +58,8 @@ void EventLoop::run()
   if (!is_in_loop_thread()) {
     LOG_WARNING("not in loop thread");
   }
+
+  MutexLockGuard lock_running(&mutex_running_);
   while (!is_quit_) {
     active_keys_.clear();
     Timestamp time = selector_->select(8000, active_keys_);
@@ -88,6 +92,13 @@ void EventLoop::run()
     }
 
   }
+}
+
+void EventLoop::stop()
+{
+  is_quit_ = true;
+  wake_up();
+  MutexLockGuard lock_running(&mutex_running_);
 }
 
 
