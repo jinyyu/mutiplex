@@ -39,7 +39,7 @@ void CircularBuffer::put(void* buffer, uint32_t length)
     return;
   }
   else {
-    //length < buffer_remaining()
+    //length <= buffer_remaining()
     uint32_t in_index = in();
 
     /* first put the data starting from in_ to buffer end */
@@ -74,24 +74,30 @@ uint32_t CircularBuffer::get(void* buffer, uint32_t length)
 void CircularBuffer::resize(void* buffer, uint32_t length)
 {
   uint32_t cap = roundup_pow_of_two(length + capacity_);
-  LOG_INFO("CircularBuffer::resize %d", cap);
+  //LOG_INFO("CircularBuffer::resize %d", cap);
   char* data = (char*)malloc(cap);
 
+  uint32_t buff_len = buffer_len();
   uint32_t out_index = out();
   uint32_t in_index = in();
 
-  uint32_t len = std::min(buffer_remaining(), capacity_ - in_index);
-  memcpy(data, data_ + in_index, len);
+  uint32_t len = std::min(buffer_remaining(), capacity_ - out_index);
 
-  memcpy(data + len, data_, out_index);
+  // first put the data starting from in_ to buffer end
+  memcpy(data, data_ + out_index, len);
 
-  memcpy(data + buffer_len(), buffer, length);
+  // then put the rest (if any) from the beginning of the buffer to out_
+  memcpy(data + len, data_, in_index);
+
+  //last append data to the buffer
+  memcpy(data + buff_len, buffer, length);
+
 
   free(data_);
   data_ = data;
 
   out_ = 0;
-  in_ = length;
+  in_ = length + buff_len;
   capacity_ = cap;
 }
 
