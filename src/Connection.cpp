@@ -3,12 +3,13 @@
 #include "EventLoop.h"
 #include "Logger.h"
 #include "SelectionKey.h"
+#include "ByteBuffer.h"
+#include "CircularBuffer.h"
 
 #include <unistd.h>
 
 namespace net
 {
-
 
 Connection::Connection(int fd,
                        EventLoop* loop,
@@ -21,9 +22,9 @@ Connection::Connection(int fd,
       loop_(loop),
       state_(New),
       buffer_size_(1024),
-      buffer_out_remaining_(0)
+      buffer_out_(nullptr),
+      buffer_in_(nullptr)
 {
-
 }
 
 Connection::~Connection()
@@ -36,6 +37,14 @@ Connection::~Connection()
   if (state_ != Closed) {
     LOG_ERROR("connection is now closed %d", state_);
   }
+
+  if (buffer_out_) {
+    delete buffer_out_;
+  }
+
+  if (buffer_in_) {
+    delete buffer_in_;
+  }
   LOG_INFO("connection closed");
 }
 
@@ -46,12 +55,13 @@ void Connection::accept()
     LOG_ERROR("state = %d", state_);
   }
   channel_ = new Channel(loop_->selector(), fd_);
-  buffer_in_ = std::make_shared<ByteBuffer>(buffer_size_);
 
   SelectionCallback read_cb = [this](const Timestamp & timestamp, SelectionKey * key)
   {
-    buffer_in_->clear();
-    int n = ::read(fd_, buffer_in_->data(), buffer_in_->remaining());
+    ByteBuffer* buffer = loop_->recv_buffer_;
+    buffer->clear();
+    ssize_t n = ::read(fd_, buffer->data(), buffer->remaining());
+
     if (n < 0) {
       LOG_ERROR("read error %d", errno);
       if (error_callback_) {
@@ -59,15 +69,25 @@ void Connection::accept()
       }
     }
     else if (n == 0) {
-      //closed
+      //peer shutdown read
       if (connection_closed_callback_) {
         connection_closed_callback_(shared_from_this(), timestamp);
       }
+      channel_->disable_reading();
+
       close();
+
     } else {
       LOG_INFO("read n = %d", n);
-      buffer_in_->position(n);
-      buffer_in_->flip();
+      buffer->position(n);
+      buffer->flip();
+
+      if (!buffer_in_) {
+        buffer_in_ = new CircularBuffer(static_cast<uint32_t>(n));
+      }
+
+      buffer_in_->put(buffer->data(), buffer->remaining());
+
       if (read_message_callback_) {
         read_message_callback_(shared_from_this(), buffer_in_, timestamp);
       }
@@ -86,27 +106,28 @@ void Connection::accept()
 
 void Connection::close()
 {
-  if (buffer_out_.empty()) {
+
+  if (!has_bytes_to_write()) {
+    //closed it
     state_ = Closed;
     loop_->remove_connection(fd_);
-
-  } else {
+  }
+  else {
+    //has bytes to write
     state_ = Disconnecting;
   }
 }
 
 
-bool Connection::write(void* data, int len)
+bool Connection::write(void* data, uint32_t len)
 {
   if (is_closed()) {
     return false;
   }
-  ByteBufferPtr buf(new ByteBuffer(len));
-  buf->put(data, len);
-  buf->flip();
-
-  buffer_out_.push_back(buf);
-
+  if (!buffer_out_) {
+    buffer_out_ = new CircularBuffer(len);
+  }
+  buffer_out_->put(data, len);
   channel_->enable_writing();
 
 }
@@ -114,50 +135,45 @@ bool Connection::write(void* data, int len)
 
 void Connection::handle_write(const Timestamp &timestamp)
 {
-  if (buffer_out_.empty()) {
+
+  if (buffer_out_->empty()) {
+    LOG_ERROR("buffer out is empty");
+    exit(-1);
+  }
+
+  int total = buffer_out_->write_to_fd(this, timestamp);
+  if (total < 0) {
+    if (error_callback_)
+      error_callback_(shared_from_this(), timestamp);
+    state_ = Closed;
+    channel_->disable_all();
+    LOG_ERROR("error happened")
+    close();
     return;
   }
-  std::vector<struct iovec> iovecs;
-
-  for(auto it = buffer_out_.begin(); it != buffer_out_.end(); ++it) {
-    ByteBufferPtr& buf = *it;
-    struct iovec vec;
-    vec.iov_base = buf->data();
-    vec.iov_len = buf->remaining();
-    iovecs.push_back(vec);
-  }
-
-  ssize_t total = writev(fd_, iovecs.data(), iovecs.size());
-
-  if (total == -1) {
-    LOG_ERROR("writev error %d", errno);
-    return;
-  }
-
-  for(auto it = buffer_out_.begin(); it != buffer_out_.end(); ++it) {
-    ByteBufferPtr& buf = *it;
-    int remain = buf->remaining();
-    if (remain > total) {
-      buf->skip(total);
-      break;
-    }
-    else if (remain == total) {
-      buffer_out_.pop_front();
-      break;
-    }
-    else {
-      //remain < total
-      buffer_out_.pop_front();
-      total -= buf->remaining();
-    }
-  }
-
-  if (state_ == Disconnecting && buffer_out_.empty()) {
+  else if (total == 0) {
+    //close
+    state_ = Closed;
+    channel_->disable_all();
     loop_->remove_connection(fd_);
+    return;
   }
-  else if (buffer_out_.empty()) {
+  //write success
+  else if (state_ == Disconnecting) {
     channel_->disable_writing();
+    close();
+    return;
   }
+
+  else if (buffer_out_->empty()) {
+    channel_->disable_writing();
+    return;
+  }
+}
+
+
+bool Connection::has_bytes_to_write() const {
+  return buffer_out_ && !buffer_out_->empty();
 }
 
 }

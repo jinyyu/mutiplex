@@ -5,10 +5,12 @@
 #include "SelectionKey.h"
 #include "Logger.h"
 #include "InetSocketAddress.h"
+#include "Connection.h"
+#include "ByteBuffer.h"
 
 #include <sys/eventfd.h>
 #include <unistd.h>
-#include "Connection.h"
+
 
 namespace net
 {
@@ -18,7 +20,8 @@ EventLoop::EventLoop()
       is_quit_(false),
       selector_(new Selector(pthread_id_)),
       active_keys_(128),
-      wakeup_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK))
+      wakeup_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK)),
+      recv_buffer_(nullptr)
 {
   pthread_mutex_init(&mutex_, NULL);
   pthread_mutex_init(&mutex_running_, NULL);
@@ -47,6 +50,10 @@ EventLoop::~EventLoop()
   ::close(wakeup_fd_);
 
   delete(selector_);
+
+  if(recv_buffer_){
+    delete(recv_buffer_);
+  }
 
   LOG_INFO("[%lu] : loop exit", pthread_id_);
 
@@ -148,7 +155,11 @@ void EventLoop::on_new_connection(int fd, const Timestamp& timestamp, const Inet
     };
     post(cb);
   }
+}
 
+void EventLoop::allocate_receive_buffer(uint32_t capacity)
+{
+  recv_buffer_ = new ByteBuffer(capacity);
 }
 
 

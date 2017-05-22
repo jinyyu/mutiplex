@@ -6,7 +6,7 @@
 #include "InetSocketAddress.h"
 #include "InetAddress.h"
 #include "callbacks.h"
-#include "ByteBuffer.h"
+
 
 #include <deque>
 
@@ -15,6 +15,7 @@ namespace net
 class EventLoop;
 class Selector;
 class Channel;
+class CircularBuffer;
 
 class Connection : public std::enable_shared_from_this<Connection>, NonCopyable
 {
@@ -52,7 +53,7 @@ public:
 
   bool is_closed() { return state_ == Closed || state_ == Disconnecting; }
 
-  bool write(void* data, int len);
+  bool write(void* data, uint32_t len);
 
 private:
   friend class EventLoop;
@@ -60,8 +61,7 @@ private:
 
   void handle_write(const Timestamp &timestamp);
 
-
-
+  bool has_bytes_to_write() const;
 private:
   enum State
   {
@@ -83,10 +83,10 @@ private:
   ReadMessageCallback read_message_callback_;
   ConnectionClosedCallback connection_closed_callback_;
   ErrorCallback error_callback_;
-  ByteBufferPtr buffer_in_;
 
-  std::deque<ByteBufferPtr> buffer_out_;
-  int buffer_out_remaining_;
+  friend class CircularBuffer;
+  CircularBuffer* buffer_in_;
+  CircularBuffer* buffer_out_;
 
 };
 

@@ -13,6 +13,7 @@ namespace net
 class Channel;
 class Selector;
 class SelectionKey;
+class ByteBuffer;
 
 class EventLoop : NonCopyable
 {
@@ -34,6 +35,8 @@ public:
   void read_message_callback(const ReadMessageCallback& cb)  { read_message_callback_ = cb; }
 
   void connection_closed_callback(const ConnectionClosedCallback& cb) { connection_closed_callback_ = cb; }
+
+  void allocate_receive_buffer(uint32_t capacity);
 
   void stop();
 
@@ -68,6 +71,8 @@ private:
   ConnectionClosedCallback connection_closed_callback_;
 
   pthread_mutex_t mutex_running_;
+
+  ByteBuffer* recv_buffer_;
 
 };
 

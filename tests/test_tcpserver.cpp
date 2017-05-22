@@ -1,6 +1,6 @@
 #include <TcpServer.h>
 #include <Logger.h>
-#include <ByteBuffer.h>
+#include <CircularBuffer.h>
 #include <Connection.h>
 #include <string>
 
@@ -18,22 +18,15 @@ void closed(ConnectionPtr, const Timestamp& timestamp) {
   LOG_INFO("connection closed");
 }
 
-void read_cb(ConnectionPtr conn, ByteBufferPtr buf, const Timestamp &)
+void read_cb(ConnectionPtr conn, CircularBuffer* buf, const Timestamp &)
 {
-  int len = buf->remaining();
-  char* buffer = (char*)malloc(len + 1);
-  buffer[len] = '\0';
+  char buffer[1024];
+  uint32_t n = buf->get(buffer, 1024);
+  buffer[n] = '\0';
 
-  buf->get(buffer, len);
+  LOG_INFO("get n = %d, str = %s", n, buffer);
 
-  conn->write(buffer, len);
-  LOG_INFO("%s", buffer);
-
-  conn->write(buffer, len);
-  LOG_INFO("%s", buffer);
-
-
-  free(buffer);
+  conn->write(buffer, n);
 
 }
 

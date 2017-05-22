@@ -4,19 +4,20 @@
 #include <inttypes.h>
 #include <utils.h>
 
+#include <sys/types.h>          /* See NOTES */
+#include <sys/socket.h>
+#include <cstdlib>
+
 using namespace net;
 
 int main(int argc, char* argv[]) {
 
-  uint32_t i = 0x80000000;
-
-  for(int i = 0; i < 34; ++i) {
-    printf("i = %d, v= %d\n",i, roundup_pow_of_two(i));
+  char * p = (char*) malloc(6 * 1024 * 1024);
+  if (!p) {
+    printf("error");
+  } else {
+    printf("success");
   }
-
-
-
-
 
 }
 

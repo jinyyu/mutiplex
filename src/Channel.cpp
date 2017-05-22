@@ -16,7 +16,9 @@ Channel::Channel(Selector* selector, int fd)
 
 Channel::~Channel()
 {
-  disable_all();
+  if (status_ == EXISTS) {
+    disable_all();
+  }
   delete selection_key_;
 }
 

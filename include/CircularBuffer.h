@@ -6,6 +6,8 @@
 
 namespace net
 {
+class Timestamp;
+class Connection;
 
 class CircularBuffer : NonCopyable
 {
@@ -23,7 +25,9 @@ public:
 
   uint32_t buffer_len() const { return in_ - out_ ; }
 
-  bool empty() const { in_ == out_; }
+  bool empty() const { return in_ == out_; }
+
+  bool full() const { return in_ - out_ == capacity_; }
 
 private:
 
@@ -31,11 +35,12 @@ private:
 
   void resize(void* buffer, uint32_t length);
 
-  uint32_t out() const { return out_ <= capacity_ ? out_ : out_ & (capacity_ - 1); }
+  uint32_t out() const { return out_ & (capacity_ - 1); }
 
-  uint32_t in() const { return in_ <= capacity_ ? in_ : in_ & (capacity_ - 1); }
+  uint32_t in() const { return in_ & (capacity_ - 1); }
 
-
+  friend class Connection;
+  int write_to_fd(Connection* conn, const Timestamp &timestamp);
 private:
   char* data_;
   uint32_t capacity_;

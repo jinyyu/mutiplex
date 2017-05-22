@@ -53,6 +53,8 @@ void TcpServer::run()
       loop->read_message_callback(read_message_callback_);
       loop->connection_closed_callback(connection_closed_callback_);
 
+      loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
+
       io_loops_[i] = loop;
       loop->run();
     };
