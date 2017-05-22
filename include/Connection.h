@@ -85,7 +85,6 @@ private:
   ErrorCallback error_callback_;
 
   friend class CircularBuffer;
-  CircularBuffer* buffer_in_;
   CircularBuffer* buffer_out_;
 
 };

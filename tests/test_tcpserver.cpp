@@ -1,13 +1,9 @@
 #include <TcpServer.h>
 #include <Logger.h>
-#include <CircularBuffer.h>
+#include <ByteBuffer.h>
 #include <Connection.h>
-#include <string>
 
 using namespace net;
-
-
-#include <callbacks.h>
 
 
 bool connection_com(ConnectionPtr, const Timestamp & timestamp) {
@@ -18,15 +14,10 @@ void closed(ConnectionPtr, const Timestamp& timestamp) {
   LOG_INFO("connection closed");
 }
 
-void read_cb(ConnectionPtr conn, CircularBuffer* buf, const Timestamp &)
+void read_cb(ConnectionPtr conn, ByteBuffer* buf, const Timestamp &)
 {
-  char buffer[1024];
-  uint32_t n = buf->get(buffer, 1024);
-  buffer[n] = '\0';
 
-  LOG_INFO("get n = %d, str = %s", n, buffer);
-
-  conn->write(buffer, n);
+  conn->write(buf->data(), static_cast<uint32_t>(buf->remaining()));
 
 }
 

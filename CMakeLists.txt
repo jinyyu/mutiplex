@@ -47,11 +47,14 @@ if (LibGtest_FOUND)
 endif (LibGtest_FOUND)
 
 
-find_package(Boost)
+find_package(Boost REQUIRED COMPONENTS system)
 if (Boost_FOUND)
     message("boost found")
     message("boost include : ${Boost_INCLUDE_DIRS}")
     message("boost lib : ${Boost_LIBRARY_DIRS}")
+
+    set(LIBS
+            ${LIBS} Boost::system)
     add_subdirectory(benchmark/asio)
 endif(Boost_FOUND)
 

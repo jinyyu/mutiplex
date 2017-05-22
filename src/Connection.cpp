@@ -22,8 +22,7 @@ Connection::Connection(int fd,
       loop_(loop),
       state_(New),
       buffer_size_(1024),
-      buffer_out_(nullptr),
-      buffer_in_(nullptr)
+      buffer_out_(nullptr)
 {
 }
 
@@ -42,9 +41,6 @@ Connection::~Connection()
     delete buffer_out_;
   }
 
-  if (buffer_in_) {
-    delete buffer_in_;
-  }
   LOG_INFO("connection closed");
 }
 
@@ -82,14 +78,8 @@ void Connection::accept()
       buffer->position(n);
       buffer->flip();
 
-      if (!buffer_in_) {
-        buffer_in_ = new CircularBuffer(static_cast<uint32_t>(n));
-      }
-
-      buffer_in_->put(buffer->data(), buffer->remaining());
-
       if (read_message_callback_) {
-        read_message_callback_(shared_from_this(), buffer_in_, timestamp);
+        read_message_callback_(shared_from_this(), buffer, timestamp);
       }
     }
   };
@@ -129,7 +119,7 @@ bool Connection::write(void* data, uint32_t len)
   }
   buffer_out_->put(data, len);
   channel_->enable_writing();
-
+  return true;
 }
 
 
