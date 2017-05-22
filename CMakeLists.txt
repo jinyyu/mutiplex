@@ -47,7 +47,15 @@ if (LibGtest_FOUND)
 endif (LibGtest_FOUND)
 
 
-add_subdirectory(benchmark)
+find_package(Boost)
+if (Boost_FOUND)
+    message("boost found")
+    message("boost include : ${Boost_INCLUDE_DIRS}")
+    message("boost lib : ${Boost_LIBRARY_DIRS}")
+    add_subdirectory(benchmark/asio)
+endif(Boost_FOUND)
+
+add_subdirectory(benchmark/net)
 
 
 
