@@ -42,9 +42,12 @@ if (LibGtest_FOUND)
     message("gtest lib : ${LibGtest_LIBRARY}")
     include_directories(${LibGtest_INCLUDE_DIR})
     set(LIBS
-            ${LIBS} ${LibGtest_LIBRARY} gtest pthread)
+            ${LIBS} ${LibGtest_LIBRARY} pthread)
     add_subdirectory(tests)
 endif (LibGtest_FOUND)
+
+
+add_subdirectory(benchmark)
 
 
 
