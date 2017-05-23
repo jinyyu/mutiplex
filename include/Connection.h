@@ -53,7 +53,7 @@ public:
 
   bool is_closed() { return state_ == Closed || state_ == Disconnecting; }
 
-  bool write(void* data, uint32_t len);
+  bool write(const void* data, uint32_t len);
 
 private:
   friend class EventLoop;

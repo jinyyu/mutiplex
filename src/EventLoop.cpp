@@ -135,26 +135,20 @@ void EventLoop::post(const Callback& callback)
 
 void EventLoop::on_new_connection(int fd, const Timestamp& timestamp, const InetSocketAddress& local, const InetSocketAddress& peer)
 {
-  bool accept = true;
-  if (established_callback_) {
-    accept = (established_callback_(nullptr, timestamp));
-  }
+  ConnectionPtr conn(new Connection(fd, this, local, peer));
+  conn->read_message_callback(read_message_callback_);
+  conn->connection_closed_callback(connection_closed_callback_);
 
-  if (!accept) {
-    LOG_INFO("not accept");
-    ::close(fd);
-  } else {
-    ConnectionPtr conn(new Connection(fd, this, local, peer));
-    conn->read_message_callback(read_message_callback_);
-    conn->connection_closed_callback(connection_closed_callback_);
+  Callback cb = [this, conn, timestamp]() {
+    conn->accept();
+    LOG_INFO("new connection");
+    connections_[conn->fd()] = conn;
+    if (established_callback_) {
+      (established_callback_(conn, timestamp));
+    }
+  };
+  post(cb);
 
-    Callback cb = [this, conn, timestamp]() {
-      conn->accept();
-      LOG_INFO("new connection");
-      connections_[conn->fd()] = conn;
-    };
-    post(cb);
-  }
 }
 
 void EventLoop::allocate_receive_buffer(uint32_t capacity)

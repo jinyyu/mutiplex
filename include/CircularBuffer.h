@@ -19,7 +19,7 @@ public:
   //Returns this buffer's capacity
   uint32_t capacity() const { return capacity_; }
 
-  void put(void* buffer, uint32_t length);
+  void put(const void* buffer, uint32_t length);
 
   uint32_t get(void* buffer, uint32_t length);
 
@@ -33,7 +33,7 @@ private:
 
   uint32_t buffer_remaining() const { return capacity_ - in_ + out_; }
 
-  void resize(void* buffer, uint32_t length);
+  void resize(const void* buffer, uint32_t length);
 
   uint32_t out() const { return out_ & (capacity_ - 1); }
 

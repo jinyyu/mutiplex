@@ -21,7 +21,7 @@ typedef std::function<void()> Callback;
 
 typedef std::function<void(int, const Timestamp &, const InetSocketAddress &, const InetSocketAddress &)> NewConnectionCallback;
 
-typedef std::function<bool (ConnectionPtr, const Timestamp &)> ConnectionEstablishedCallback;
+typedef std::function<void (ConnectionPtr, const Timestamp &)> ConnectionEstablishedCallback;
 
 typedef std::function<void (ConnectionPtr, ByteBuffer*, const Timestamp &)> ReadMessageCallback;
 

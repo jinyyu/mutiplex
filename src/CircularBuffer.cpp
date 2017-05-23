@@ -36,7 +36,7 @@ CircularBuffer::~CircularBuffer()
   free(data_);
 }
 
-void CircularBuffer::put(void* buffer, uint32_t length)
+void CircularBuffer::put(const void* buffer, uint32_t length)
 {
   if (buffer_remaining() < length) {
     resize(buffer, length);
@@ -75,7 +75,7 @@ uint32_t CircularBuffer::get(void* buffer, uint32_t length)
   return size;
 }
 
-void CircularBuffer::resize(void* buffer, uint32_t length)
+void CircularBuffer::resize(const void* buffer, uint32_t length)
 {
   uint32_t cap = roundup_pow_of_two(length + capacity_);
   //LOG_INFO("CircularBuffer::resize %d", cap);

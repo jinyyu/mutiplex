@@ -109,7 +109,7 @@ void Connection::close()
 }
 
 
-bool Connection::write(void* data, uint32_t len)
+bool Connection::write(const void* data, uint32_t len)
 {
   if (is_closed()) {
     return false;
