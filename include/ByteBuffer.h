@@ -9,6 +9,8 @@ class ByteBuffer : NonCopyable {
 public:
   explicit ByteBuffer(int capacity);
 
+  explicit ByteBuffer(const ByteBuffer& buffer);
+
   ~ByteBuffer();
 
   //Returns this buffer's capacity
@@ -46,10 +48,10 @@ public:
   void skip(int n);
 
   //Returns the number of elements between the current position and the limit
-  int remaining() { return limit_ - position_; }
+  int remaining() const { return limit_ - position_; }
 
   //Tells whether there are any elements between the current position and the limit
-  bool has_remaining() { return position_ < limit_; }
+  bool has_remaining() const { return position_ < limit_; }
 
   const void *data() const { return data_ + position_; }
 
@@ -59,7 +61,7 @@ public:
   int get(void* buffer, int len);
 
   //bulk put method
-  void put(void *data, int len);
+  void put(const void *data, int len);
 
 private:
 

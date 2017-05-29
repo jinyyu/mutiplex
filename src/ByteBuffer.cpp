@@ -15,6 +15,16 @@ ByteBuffer::ByteBuffer(int capacity)
   data_ = (char*) malloc(capacity);
 }
 
+ByteBuffer::ByteBuffer(const ByteBuffer& buffer)
+    :limit_(buffer.limit_),
+     mark_(buffer.mark_),
+     position_(buffer.position_),
+     capacity_(buffer.capacity_)
+{
+  data_ = (char*) malloc(capacity_);
+  memcpy(data_, buffer.data_, capacity_);
+}
+
 ByteBuffer::~ByteBuffer()
 {
   free(data_);
@@ -77,7 +87,7 @@ void ByteBuffer::rewind()
   mark_ = -1;
 }
 
-void ByteBuffer::put(void* data, int len)
+void ByteBuffer::put(const void* data, int len)
 {
   if (len > remaining()) {
     LOG_ERROR("len > remaining, len = %d, remaining = %d", len, remaining());

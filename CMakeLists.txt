@@ -13,7 +13,6 @@ set(CMAKE_MODULE_PATH
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(libnet_SRCS
-        include/Slice.h
         src/utils.cpp
         src/Status.cpp
         src/Logger.cpp

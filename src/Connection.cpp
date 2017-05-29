@@ -109,17 +109,54 @@ void Connection::close()
 }
 
 
+bool Connection::write(const ByteBuffer& buffer)
+{
+  if (is_closed()) {
+    return false;
+  }
+  if (loop_->is_in_loop_thread()) {
+    do_write(buffer.data(), buffer.remaining());
+
+  }
+  else {
+    ByteBuffer buff(buffer);
+    auto callback = [this, buff] {
+      this->do_write(buff.data(), buff.remaining());
+    };
+    loop_->post(callback);
+  }
+  return true;
+}
+
 bool Connection::write(const void* data, uint32_t len)
 {
   if (is_closed()) {
     return false;
   }
+  if (loop_->is_in_loop_thread()) {
+    do_write(data, len);
+  }
+  else {
+    ByteBuffer buffer(len);
+    buffer.put(data, len);
+    buffer.flip();
+
+    //copy buffer
+    auto callback = [this, buffer](){
+      this->do_write(buffer.data(), buffer.remaining());
+    };
+    loop_->post(callback);
+  }
+  return true;
+}
+
+void Connection::do_write(const void* data, uint32_t len)
+{
   if (!buffer_out_) {
     buffer_out_ = new CircularBuffer(len);
   }
   buffer_out_->put(data, len);
   channel_->enable_writing();
-  return true;
 }
 
 

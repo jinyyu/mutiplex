@@ -16,6 +16,7 @@ class EventLoop;
 class Selector;
 class Channel;
 class CircularBuffer;
+class ByteBuffer;
 
 class Connection : public std::enable_shared_from_this<Connection>, NonCopyable
 {
@@ -55,9 +56,13 @@ public:
 
   bool write(const void* data, uint32_t len);
 
+  bool write(const ByteBuffer& buffer);
+
 private:
   friend class EventLoop;
   void accept();
+
+  void do_write(const void* data, uint32_t len);
 
   void handle_write(const Timestamp &timestamp);
 
