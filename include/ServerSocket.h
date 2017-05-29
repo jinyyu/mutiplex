@@ -14,7 +14,7 @@ class ServerSocket : NonCopyable
 {
 public:
   //Creates an unbound server socket
-  ServerSocket();
+  explicit ServerSocket();
 
   ~ServerSocket();
 

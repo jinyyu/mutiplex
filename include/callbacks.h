@@ -29,6 +29,8 @@ typedef std::function<void (ConnectionPtr, const Timestamp &)> ConnectionClosedC
 
 typedef std::function<void (ConnectionPtr, const Timestamp &)> ErrorCallback;
 
+typedef std::function<void (const Timestamp &)> ConnectErrorCallback;
+
 
 }
 

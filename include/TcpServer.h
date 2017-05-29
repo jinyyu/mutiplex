@@ -15,7 +15,7 @@ class InetSocketAddress;
 class TcpServer : NonCopyable
 {
 public:
-  TcpServer(int port, int num_io_threads);
+  explicit TcpServer(int port, int num_io_threads);
 
   ~TcpServer();
 

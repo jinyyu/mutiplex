@@ -49,10 +49,6 @@ void TcpServer::run()
   for (int i = 0; i < num_io_threads_; ++i) {
     auto run = [i, this] {
       EventLoop* loop = new EventLoop();
-      loop->connection_established_callback(connection_established_callback_);
-      loop->read_message_callback(read_message_callback_);
-      loop->connection_closed_callback(connection_closed_callback_);
-
       loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
 
       io_loops_[i] = loop;
@@ -71,7 +67,12 @@ void TcpServer::run()
                                     const InetSocketAddress& peer)
   {
     EventLoop* loop = next_loop();
-    loop->on_new_connection(fd, timestamp, local, peer);
+    ConnectionPtr conn(new Connection(fd, loop, local, peer));
+    conn->connection_established_callback(connection_established_callback_);
+    conn->read_message_callback(read_message_callback_);
+    conn->connection_closed_callback(connection_closed_callback_);
+
+    loop->on_new_connection(conn, timestamp);
   };
 
   acceptor_->new_connection_callback(cb);

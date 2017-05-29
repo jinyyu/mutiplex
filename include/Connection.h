@@ -44,6 +44,8 @@ public:
 
   int fd() const { return fd_; }
 
+  void connection_established_callback(const ConnectionEstablishedCallback& cb) { connection_established_callback_ = cb; }
+
   void read_message_callback(const ReadMessageCallback& cb) {read_message_callback_ = cb; }
 
   void connection_closed_callback(const ConnectionClosedCallback& cb) { connection_closed_callback_ = cb; }
@@ -85,6 +87,7 @@ private:
   InetSocketAddress local_;
   InetSocketAddress peer_;
 
+  ConnectionEstablishedCallback connection_established_callback_;
   ReadMessageCallback read_message_callback_;
   ConnectionClosedCallback connection_closed_callback_;
   ErrorCallback error_callback_;

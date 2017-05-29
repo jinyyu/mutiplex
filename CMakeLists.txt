@@ -28,7 +28,9 @@ set(libnet_SRCS
         src/Acceptor.cpp
         src/TcpServer.cpp
         src/Connection.cpp
-        src/CircularBuffer.cpp)
+        src/CircularBuffer.cpp
+        src/ClientSocket.cpp
+        src/TcpClient.cpp)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})

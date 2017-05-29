@@ -28,13 +28,7 @@ public:
   //Request the EventLoop to invoke the given callback and return immediately
   void post(const Callback& callback);
 
-  void on_new_connection(int fd, const Timestamp& timestamp, const InetSocketAddress& local, const InetSocketAddress& peer);
-
-  void connection_established_callback(const ConnectionEstablishedCallback& cb) { established_callback_ = cb;}
-
-  void read_message_callback(const ReadMessageCallback& cb)  { read_message_callback_ = cb; }
-
-  void connection_closed_callback(const ConnectionClosedCallback& cb) { connection_closed_callback_ = cb; }
+  void on_new_connection(ConnectionPtr conn, const Timestamp& timestamp);
 
   void allocate_receive_buffer(uint32_t capacity);
 
@@ -55,6 +49,7 @@ private:
   volatile bool is_quit_;
 
   friend class Acceptor;
+  friend class TcpClient;
   Selector* selector_;
   std::vector<SelectionKey*> active_keys_;
 
@@ -65,10 +60,6 @@ private:
   std::vector<Callback> callbacks_; //lock by mutex_
 
   std::unordered_map<int, ConnectionPtr> connections_;
-
-  ConnectionEstablishedCallback established_callback_;
-  ReadMessageCallback read_message_callback_;
-  ConnectionClosedCallback connection_closed_callback_;
 
   pthread_mutex_t mutex_running_;
 
