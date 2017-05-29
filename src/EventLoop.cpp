@@ -24,7 +24,6 @@ EventLoop::EventLoop()
       recv_buffer_(nullptr)
 {
   pthread_mutex_init(&mutex_, NULL);
-  pthread_mutex_init(&mutex_running_, NULL);
 
   active_keys_.reserve(128);
 
@@ -66,11 +65,11 @@ void EventLoop::run()
     LOG_WARNING("not in loop thread");
   }
 
-  MutexLockGuard lock_running(&mutex_running_);
   while (!is_quit_) {
     active_keys_.clear();
     Timestamp time = selector_->select(8000, active_keys_);
     if (active_keys_.empty()) {
+      LOG_INFO("nothing happened")
       continue;
     }
 
@@ -97,7 +96,6 @@ void EventLoop::run()
     for(int i = 0; i < callbacks.size(); ++i) {
       callbacks[i]();
     }
-
   }
 }
 
@@ -105,7 +103,6 @@ void EventLoop::stop()
 {
   is_quit_ = true;
   wake_up();
-  MutexLockGuard lock_running(&mutex_running_);
 }
 
 

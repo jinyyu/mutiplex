@@ -60,6 +60,8 @@ public:
 
   bool write(const ByteBuffer& buffer);
 
+  EventLoop* loop() const { return  loop_; }
+
 private:
   friend class EventLoop;
   void accept();

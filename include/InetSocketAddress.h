@@ -8,7 +8,7 @@ namespace net
 class InetSocketAddress
 {
 public:
-  InetSocketAddress() {}
+  InetSocketAddress();
 
   //Creates a socket address from an IP address and a port number
   InetSocketAddress(const InetAddress& addr, int port);

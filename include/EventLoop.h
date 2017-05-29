@@ -61,8 +61,6 @@ private:
 
   std::unordered_map<int, ConnectionPtr> connections_;
 
-  pthread_mutex_t mutex_running_;
-
   ByteBuffer* recv_buffer_;
 
 };

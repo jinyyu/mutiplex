@@ -6,6 +6,11 @@
 namespace net
 {
 
+InetSocketAddress::InetSocketAddress()
+{
+  from_address(InetAddress::any(AF_INET), 0);
+}
+
 InetSocketAddress::InetSocketAddress(const InetAddress& addr, int port)
 {
   from_address(addr, port);

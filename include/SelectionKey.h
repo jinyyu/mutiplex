@@ -44,6 +44,8 @@ public:
   //Tests whether socket peer is closed
   bool is_closed() const { return ready_ops_ & OP_HUP; }
 
+  bool is_error() const { return ready_ops_ & OP_ERR; }
+
   //Retrieves this key's ready-operation set
   uint32_t ready_ops() const { return ready_ops_; }
 
