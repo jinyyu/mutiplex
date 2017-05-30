@@ -1,4 +1,4 @@
-#include <Connector.h>
+#include <Session.h>
 #include <EventLoop.h>
 #include <ByteBuffer.h>
 #include <Timestamp.h>
@@ -28,20 +28,20 @@ public:
     loop.allocate_receive_buffer(10240);
 
     InetSocketAddress local = InetSocketAddress();
-    client = new Connector(&loop, local);
+    session = new Session(&loop, local);
 
-    client->read_message_callback(read_cb);
-    client->connection_closed_callback(close_cb);
+    session->read_message_callback(read_cb);
+    session->connection_closed_callback(close_cb);
 
   }
 
   ~DatetimeClient() {
-    delete(client);
+    delete(session);
   }
 
   void run() {
     InetSocketAddress peer(ip_, port_);
-    client->connect(peer);
+    session->connect(peer);
 
     loop.run();
   };
@@ -49,7 +49,7 @@ public:
 private:
   EventLoop loop;
 
-  Connector* client;
+  Session* session;
   const char* ip_;
   int port_;
 };

@@ -1,5 +1,5 @@
-#ifndef LIBNET_DISTRIBUTION_CONNECTOR_H
-#define LIBNET_DISTRIBUTION_CONNECTOR_H
+#ifndef LIBNET_DISTRIBUTION_SESSION_H
+#define LIBNET_DISTRIBUTION_SESSION_H
 
 #include "callbacks.h"
 #include "InetSocketAddress.h"
@@ -12,12 +12,12 @@ class InetSocketAddress;
 class Channel;
 class ClientSocket;
 
-class Connector
+class Session
 {
 public:
-  explicit Connector(EventLoop* loop, const InetSocketAddress& local);
+  explicit Session(EventLoop* loop, const InetSocketAddress& local);
 
-  ~Connector();
+  ~Session();
 
   void connect_error_callback(const ConnectErrorCallback& cb) { connect_error_callback_ = cb; }
 
@@ -49,4 +49,4 @@ private:
 }
 
 
-#endif //LIBNET_DISTRIBUTION_CONNECTOR_H
+#endif //LIBNET_DISTRIBUTION_SESSION_H

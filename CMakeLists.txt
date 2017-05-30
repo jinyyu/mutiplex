@@ -30,7 +30,7 @@ set(libnet_SRCS
         src/Connection.cpp
         src/CircularBuffer.cpp
         src/ClientSocket.cpp
-        src/Connector.cpp)
+        src/Session.cpp)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})
