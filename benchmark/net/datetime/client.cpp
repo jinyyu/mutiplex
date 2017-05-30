@@ -11,7 +11,7 @@ using namespace net;
 void read_cb(ConnectionPtr conn, ByteBuffer* buffer, const Timestamp & timestamp)
 {
   std::string str((char*)buffer->data(), buffer->remaining());
-  LOG_INFO("%s", str.c_str());
+  printf("%s\n", str.c_str());
 }
 
 void close_cb(ConnectionPtr conn, const Timestamp & timestamp)
@@ -61,6 +61,7 @@ int main(int argc, char* argv[])
     return -1;
   }
 
+  set_log_level(Logger::WARNING);
   DatetimeClient client(argv[1], atoi(argv[2]));
   client.run();
 }

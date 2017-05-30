@@ -10,7 +10,6 @@ namespace net
 class EventLoop;
 class InetSocketAddress;
 class Channel;
-class ClientSocket;
 
 class Session
 {
@@ -32,12 +31,16 @@ public:
 private:
   void handle_connected(const Timestamp& timestamp, SelectionKey* key);
 
+  bool do_connect(const InetSocketAddress& addr);
+
+  void handle_error(const Timestamp& timestamp);
+
 private:
+  int fd_;
   EventLoop* loop_;
   InetSocketAddress local_;
   InetSocketAddress peer_;
   Channel* channel_;
-  ClientSocket* client_socket_;
 
   ConnectErrorCallback connect_error_callback_;
   ConnectionEstablishedCallback connection_established_callback_;

@@ -69,7 +69,7 @@ void EventLoop::run()
     active_keys_.clear();
     Timestamp time = selector_->select(8000, active_keys_);
     if (active_keys_.empty()) {
-      LOG_INFO("nothing happened")
+      //LOG_INFO("nothing happened")
       continue;
     }
 
