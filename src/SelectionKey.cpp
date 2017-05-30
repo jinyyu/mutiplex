@@ -28,6 +28,11 @@ int SelectionKey::fd() const
   return channel_->fd();
 }
 
+void SelectionKey::cancel()
+{
+  channel_->disable_all();
+}
+
 
 std::string SelectionKey::op_get_string(uint32_t op)
 {

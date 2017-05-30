@@ -1,5 +1,5 @@
 #include <EventLoop.h>
-#include "TcpClient.h"
+#include "Connector.h"
 #include "ClientSocket.h"
 #include "Timestamp.h"
 #include "Connection.h"
@@ -11,7 +11,7 @@
 namespace net
 {
 
-TcpClient::TcpClient(EventLoop* loop, const InetSocketAddress& local)
+Connector::Connector(EventLoop* loop, const InetSocketAddress& local)
     : loop_(loop),
       local_(local),
       channel_(nullptr)
@@ -20,7 +20,7 @@ TcpClient::TcpClient(EventLoop* loop, const InetSocketAddress& local)
 }
 
 
-TcpClient::~TcpClient()
+Connector::~Connector()
 {
   if (channel_) {
     delete channel_;
@@ -31,7 +31,7 @@ TcpClient::~TcpClient()
 
 }
 
-void TcpClient::connect(const InetSocketAddress& peer)
+void Connector::connect(const InetSocketAddress& peer)
 {
   peer_ = peer;
   channel_ = new Channel(loop_->selector_, client_socket_->fd());
@@ -52,7 +52,7 @@ void TcpClient::connect(const InetSocketAddress& peer)
   }
 }
 
-void TcpClient::handle_connected(const Timestamp& timestamp, SelectionKey* key)
+void Connector::handle_connected(const Timestamp& timestamp, SelectionKey* key)
 {
   channel_->disable_writing();
 

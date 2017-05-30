@@ -1,4 +1,4 @@
-#include <TcpClient.h>
+#include <Connector.h>
 #include <EventLoop.h>
 #include <ByteBuffer.h>
 #include <Timestamp.h>
@@ -28,7 +28,7 @@ public:
     loop.allocate_receive_buffer(10240);
 
     InetSocketAddress local = InetSocketAddress();
-    client = new TcpClient(&loop, local);
+    client = new Connector(&loop, local);
 
     client->read_message_callback(read_cb);
     client->connection_closed_callback(close_cb);
@@ -49,7 +49,7 @@ public:
 private:
   EventLoop loop;
 
-  TcpClient* client;
+  Connector* client;
   const char* ip_;
   int port_;
 };

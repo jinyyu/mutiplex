@@ -49,7 +49,7 @@ private:
   volatile bool is_quit_;
 
   friend class Acceptor;
-  friend class TcpClient;
+  friend class Connector;
   Selector* selector_;
   std::vector<SelectionKey*> active_keys_;
 

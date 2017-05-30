@@ -27,7 +27,7 @@ public:
 
   void set_writing_selection_callback(const SelectionCallback& callback) { write_callback_ = callback; }
 
-
+  void reset_fd(int fd);
 
   void handle_read(const Timestamp& timestamp) const {
     if (read_callback_)

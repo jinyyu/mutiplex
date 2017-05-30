@@ -76,5 +76,11 @@ void Channel::unregister_ops()
   }
 }
 
+void Channel::reset_fd(int fd)
+{
+  fd_ = fd;
+  status_ = NEW;
+}
+
 
 }

@@ -1,5 +1,5 @@
-#ifndef LIBNET_DISTRIBUTION_TCPCLIENT_H
-#define LIBNET_DISTRIBUTION_TCPCLIENT_H
+#ifndef LIBNET_DISTRIBUTION_CONNECTOR_H
+#define LIBNET_DISTRIBUTION_CONNECTOR_H
 
 #include "callbacks.h"
 #include "InetSocketAddress.h"
@@ -12,12 +12,12 @@ class InetSocketAddress;
 class Channel;
 class ClientSocket;
 
-class TcpClient
+class Connector
 {
 public:
-  explicit TcpClient(EventLoop* loop, const InetSocketAddress& local);
+  explicit Connector(EventLoop* loop, const InetSocketAddress& local);
 
-  ~TcpClient();
+  ~Connector();
 
   void connect_error_callback(const ConnectErrorCallback& cb) { connect_error_callback_ = cb; }
 
@@ -49,4 +49,4 @@ private:
 }
 
 
-#endif //LIBNET_DISTRIBUTION_TCPCLIENT_H
+#endif //LIBNET_DISTRIBUTION_CONNECTOR_H
