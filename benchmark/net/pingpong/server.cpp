@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
     printf("usage %s <port>\n", argv[0]);
     return -1;
   }
-  set_log_level(Logger::ERROR);
+  //set_log_level(Logger::ERROR);
   
   int port = atoi(argv[1]);
 

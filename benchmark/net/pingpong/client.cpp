@@ -8,6 +8,7 @@
 #include <sys/time.h>
 #include <ByteBuffer.h>
 #include <Connection.h>
+#include <unistd.h>
 
 using namespace net;
 
@@ -118,6 +119,7 @@ private:
   void read_callback(ConnectionPtr conn, ByteBuffer* buffer, const Timestamp & timestamp)
   {
     LOG_INFO("read n = %d", buffer->remaining());
+    sleep(1);
     conn->write(buffer->data(), buffer->has_remaining());
   }
 
