@@ -26,8 +26,6 @@ Status Logger::open(const char *file)
     printf("%d\n", errno);
     return Status::io_error(__FUNCTION__);
   }
-
-
   fd_ = fd;
   return status;
 }
@@ -36,7 +34,7 @@ void Logger::append(char *data, uint32_t len)
 {
   MutexLockGuard lockGuard(&mutex_);
   buffer_.insert(buffer_.end(), data, data + len);
-  if (buffer_.size() > 1024) {
+  if (fd_ == 2 || buffer_.size() > 1024) {
     flush();
   }
 }
@@ -51,12 +49,8 @@ void Logger::log(int level, const char* format, ...)
   char data[1024];
   va_start(args, format);
   int len = vsprintf(data, format, args);
-  va_end(args);
   append(data, len);
-
-  if (fd_ == 2) {
-    flush();
-  }
+  va_end(args);
 }
 
 void Logger::flush()

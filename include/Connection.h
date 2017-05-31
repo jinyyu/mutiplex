@@ -54,6 +54,8 @@ public:
 
   void close();
 
+  void force_close();
+
   bool is_closed() { return state_ == Closed || state_ == Disconnecting; }
 
   bool write(const void* data, uint32_t len);
@@ -61,6 +63,7 @@ public:
   bool write(const ByteBuffer& buffer);
 
   EventLoop* loop() const { return  loop_; }
+
 
 private:
   friend class EventLoop;

@@ -29,6 +29,8 @@ public:
 
   bool full() const { return in_ - out_ == capacity_; }
 
+  void clear() { in_ = out_ = 0; }
+
 private:
 
   uint32_t buffer_remaining() const { return capacity_ - in_ + out_; }

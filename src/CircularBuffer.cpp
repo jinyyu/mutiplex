@@ -149,7 +149,7 @@ int CircularBuffer::write_to_fd(Connection* conn, const Timestamp &timestamp)
       return n;
     }
   }
-
+  //LOG_INFO("write n = %d", n);
   out_ += static_cast<uint32_t>(n);
   return static_cast<int>(n);
 }

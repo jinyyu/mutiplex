@@ -20,7 +20,8 @@ public:
       : server_addr_(addr),
         session_count_(session_count),
         timeout_(timeout),
-        block_size_(block_size)
+        block_size_(block_size),
+        total_(0)
   {
     loop_.allocate_receive_buffer(6 * 1024 * 1024);
     buffer_ = malloc(block_size);
@@ -40,7 +41,11 @@ public:
     free(buffer_);
   }
 
-
+  void print_result()
+  {
+    uint64_t mb= total_ / 1024 / 1024/ timeout_;
+    printf("total send = %lu MB/s\n", mb);
+  }
 
   void run()
   {
@@ -118,9 +123,11 @@ private:
 
   void read_callback(ConnectionPtr conn, ByteBuffer* buffer, const Timestamp & timestamp)
   {
-    LOG_INFO("read n = %d", buffer->remaining());
-    sleep(1);
-    conn->write(buffer->data(), buffer->has_remaining());
+    //LOG_INFO("read n = %d", buffer->remaining());
+    int len = buffer->remaining();
+    if (conn->write(buffer->data(), len)) {
+      total_ += len;
+    }
   }
 
 private:
@@ -134,6 +141,8 @@ private:
   std::vector<Session*> sessions_;
 
   void* buffer_;
+
+  uint64_t total_;
 
 };
 
@@ -156,5 +165,6 @@ int main(int argc, char* argv[])
 
   Client client(address, session_count, timeout, block_size);
   client.run();
+  client.print_result();
 
 }

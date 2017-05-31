@@ -72,7 +72,7 @@ void Session::handle_connected(const Timestamp& timestamp, SelectionKey* key)
 
   }
 
-  LOG_INFO("connect success")
+  //LOG_INFO("connect success")
   //success
   ConnectionPtr conn(new Connection(fd_, loop_, local_, peer_));
 
@@ -103,7 +103,6 @@ void Session::handle_error(const Timestamp& timestamp)
   if (connect_error_callback_) {
     connect_error_callback_(timestamp);
   }
-
   ::close(fd_);
 }
 

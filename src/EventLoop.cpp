@@ -74,7 +74,7 @@ void EventLoop::run()
     }
 
     for(SelectionKey* key: active_keys_) {
-      LOG_INFO("fd = %d, op = %s", key->fd() ,SelectionKey::op_get_string(key->ready_ops()).c_str());
+      //LOG_INFO("fd = %d, op = %s", key->fd() ,SelectionKey::op_get_string(key->ready_ops()).c_str());
       Channel* channel = key->channel();
       if (key->is_readable()) {
         channel->handle_read(time);
@@ -83,9 +83,6 @@ void EventLoop::run()
         channel->handle_wirte(time);
       }
 
-      if (key->is_closed()) {
-        LOG_INFO("CLOSED");
-      }
     }
 
     std::vector<Callback> callbacks;
@@ -101,8 +98,11 @@ void EventLoop::run()
 
 void EventLoop::stop()
 {
-  is_quit_ = true;
-  wake_up();
+  auto cb = [this]() {
+    is_quit_ = true;
+    connections_.clear();
+  };
+  post(cb);
 }
 
 

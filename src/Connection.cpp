@@ -33,15 +33,10 @@ Connection::~Connection()
   }
   ::close(fd_);
 
-  if (state_ != Closed) {
-    LOG_ERROR("connection is now closed %d", state_);
-  }
-
   if (buffer_out_) {
     delete buffer_out_;
   }
 
-  LOG_INFO("connection closed");
 }
 
 
@@ -57,14 +52,15 @@ void Connection::accept()
     ByteBuffer* buffer = loop_->recv_buffer_;
     buffer->clear();
     ssize_t n = ::read(fd_, buffer->data(), buffer->remaining());
-
+    int err = errno;
     if (n < 0) {
-      LOG_ERROR("read error %d", errno);
       if (error_callback_) {
         error_callback_(shared_from_this(), timestamp);
       }
-      loop_->remove_connection(fd_);
-      state_ = Closed;
+      force_close();
+      if (err != 104) {
+        LOG_ERROR("read error fd = %d, error = %d", fd_, err);
+      }
     }
     else if (n == 0) {
       //peer shutdown read
@@ -72,11 +68,9 @@ void Connection::accept()
         connection_closed_callback_(shared_from_this(), timestamp);
       }
       channel_->disable_reading();
-
       close();
-
-    } else {
-      LOG_INFO("read n = %d", n);
+    }
+    else {
       buffer->position(n);
       buffer->flip();
 
@@ -98,17 +92,33 @@ void Connection::accept()
 
 void Connection::close()
 {
-  if (!has_bytes_to_write()) {
-    //closed it
-    state_ = Closed;
-    loop_->remove_connection(fd_);
-  }
-  else {
-    //has bytes to write
-    state_ = Disconnecting;
-  }
+  auto cb = [this] {
+    if (!has_bytes_to_write()) {
+      //closed it
+      state_ = Closed;
+      loop_->remove_connection(fd_);
+    } else {
+      //has bytes to write
+      state_ = Disconnecting;
+    }
+  };
+  loop_->post(cb);
 }
 
+void Connection::force_close()
+{
+  auto cb = [this] () {
+    state_ = Closed;
+    buffer_out_->clear();
+    channel_->disable_all();
+
+    if (loop_->connections_.find(fd_) != loop_->connections_.end()) {
+      loop_->remove_connection(fd_);
+    }
+
+  };
+  loop_->post(cb);
+}
 
 bool Connection::write(const ByteBuffer& buffer)
 {
@@ -153,11 +163,17 @@ bool Connection::write(const void* data, uint32_t len)
 
 void Connection::do_write(const void* data, uint32_t len)
 {
-  if (!buffer_out_) {
-    buffer_out_ = new CircularBuffer(len);
+  if (state_ == Closed) {
+    force_close();
   }
-  buffer_out_->put(data, len);
-  channel_->enable_writing();
+
+  else {
+    if (!buffer_out_) {
+      buffer_out_ = new CircularBuffer(len);
+    }
+    buffer_out_->put(data, len);
+    channel_->enable_writing();
+  }
 }
 
 
@@ -198,7 +214,6 @@ void Connection::handle_write(const Timestamp &timestamp)
     return;
   }
 }
-
 
 bool Connection::has_bytes_to_write() const {
   return buffer_out_ && !buffer_out_->empty();
