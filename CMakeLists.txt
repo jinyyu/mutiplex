@@ -47,7 +47,7 @@ if (LibGtest_FOUND)
 endif (LibGtest_FOUND)
 
 
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS system thread)
 if (Boost_FOUND)
     message("boost found")
     message("boost include : ${Boost_INCLUDE_DIRS}")

@@ -21,6 +21,7 @@ public:
   session(boost::asio::io_service& io_service)
       : socket_(io_service)
   {
+    data_ = (char*)malloc(max_length);
   }
 
   tcp::socket& socket()
@@ -69,8 +70,8 @@ public:
 
 private:
   tcp::socket socket_;
-  enum { max_length = 1024 };
-  char data_[max_length];
+  enum { max_length = 102400 };
+  char* data_;
 };
 
 class server
