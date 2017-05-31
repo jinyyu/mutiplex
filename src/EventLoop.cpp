@@ -48,6 +48,8 @@ EventLoop::~EventLoop()
   delete(wakeup_channel_);
   ::close(wakeup_fd_);
 
+  connections_.clear();
+
   delete(selector_);
 
   if(recv_buffer_){
