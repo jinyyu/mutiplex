@@ -102,11 +102,7 @@ void EventLoop::run()
 
 void EventLoop::stop()
 {
-  auto cb = [this]() {
-    is_quit_ = true;
-    connections_.clear();
-  };
-  post(cb);
+  is_quit_ = true;
 }
 
 

@@ -56,7 +56,7 @@ private:
 
   void handle_timeout(const Timestamp& timestamp)
   {
-    LOG_INFO("%s", timestamp.to_string().c_str());
+    LOG_INFO("stop %s", timestamp.to_string().c_str());
     loop_.stop();
 
   }
