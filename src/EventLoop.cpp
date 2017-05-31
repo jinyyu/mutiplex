@@ -134,11 +134,12 @@ void EventLoop::on_new_connection(ConnectionPtr conn, const Timestamp& timestamp
 {
   Callback cb = [this, conn, timestamp]() {
     conn->accept();
+
+    connections_[conn->fd()] = conn;
+
     if (conn->connection_established_callback_) {
       conn->connection_established_callback_(conn, timestamp);
     }
-    LOG_INFO("new connection");
-    connections_[conn->fd()] = conn;
   };
   post(cb);
 

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <inttypes.h>
+#include <stdlib.h>
 
 namespace net
 {
@@ -16,6 +17,7 @@ public:
   {
     if (pthread_mutex_lock(mutex) != 0) {
       fprintf(stderr, "pthread_mutex_lock error");
+      exit(0);
     }
   }
 
@@ -23,6 +25,7 @@ public:
   {
     if (pthread_mutex_unlock(mutex_) != 0) {
       fprintf(stderr, "pthread_mutex_unlock error");
+      exit(0);
     }
   }
 

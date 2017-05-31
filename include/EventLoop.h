@@ -36,9 +36,11 @@ public:
 
   bool is_in_loop_thread() const { return pthread_id_ == pthread_self(); }
 
+  Selector* selector() const { return selector_; }
+
 private:
   friend class Connection;
-  Selector* selector() const { return selector_; }
+
 
   void remove_connection(int fd) { connections_.erase(fd); }
 

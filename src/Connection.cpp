@@ -63,6 +63,8 @@ void Connection::accept()
       if (error_callback_) {
         error_callback_(shared_from_this(), timestamp);
       }
+      loop_->remove_connection(fd_);
+      state_ = Closed;
     }
     else if (n == 0) {
       //peer shutdown read
@@ -96,7 +98,6 @@ void Connection::accept()
 
 void Connection::close()
 {
-
   if (!has_bytes_to_write()) {
     //closed it
     state_ = Closed;
