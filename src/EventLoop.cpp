@@ -76,7 +76,10 @@ void EventLoop::run()
     for(SelectionKey* key: active_keys_) {
       //LOG_INFO("fd = %d, op = %s", key->fd() ,SelectionKey::op_get_string(key->ready_ops()).c_str());
       Channel* channel = key->channel();
-      if (!key->is_error()) {
+      if (key->is_error()) {
+        channel->handle_error(time);
+      }
+      else {
         if (key->is_readable()) {
           channel->handle_read(time);
         }
@@ -84,12 +87,6 @@ void EventLoop::run()
           channel->handle_wirte(time);
         }
       }
-      else{
-        if (key->is_readable()) {
-          channel->handle_read(time);
-        }
-      }
-
     }
 
     std::vector<Callback> callbacks;
