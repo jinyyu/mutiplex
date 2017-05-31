@@ -145,7 +145,7 @@ int CircularBuffer::write_to_fd(Connection* conn, const Timestamp &timestamp)
 
     n = ::writev(conn->fd_, iov, (iov[1].iov_len == 0) ? 1 : 2);
     if (n < 0) {
-      LOG_ERROR("writev error %d", errno);
+      LOG_ERROR("writev error fd = %d, error = %d",conn->fd_,  errno);
       return n;
     }
   }

@@ -27,16 +27,26 @@ public:
 
   void set_writing_selection_callback(const SelectionCallback& callback) { write_callback_ = callback; }
 
+  void set_error_selection_callback(const SelectionCallback& callback) { error_callback_ = callback; }
+
   void reset_fd(int fd);
 
-  void handle_read(const Timestamp& timestamp) const {
+  void handle_read(const Timestamp& timestamp) const
+  {
     if (read_callback_)
       read_callback_(timestamp, selection_key_);
   }
 
-  void handle_wirte(const Timestamp& timestamp) const {
+  void handle_wirte(const Timestamp& timestamp) const
+  {
     if (write_callback_)
       write_callback_(timestamp, selection_key_);
+  }
+
+  void handle_error(const Timestamp& timestamp) const
+  {
+    if (error_callback_)
+      error_callback_(timestamp, selection_key_);
   }
 
   void disable_all();
@@ -63,6 +73,7 @@ private:
   int status_;
   SelectionCallback read_callback_;
   SelectionCallback write_callback_;
+  SelectionCallback error_callback_;
 };
 
 

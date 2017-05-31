@@ -87,6 +87,11 @@ void Connection::accept()
   };
   channel_->set_writing_selection_callback(write_cb);
 
+  SelectionCallback error_cb = [this](const Timestamp & timestamp, SelectionKey*){
+    this->force_close();
+  };
+  channel_->set_error_selection_callback(error_cb);
+
   state_ = Receiving;
 }
 
@@ -179,7 +184,6 @@ void Connection::do_write(const void* data, uint32_t len)
 
 void Connection::handle_write(const Timestamp &timestamp)
 {
-
   if (buffer_out_->empty()) {
     LOG_ERROR("buffer out is empty");
     exit(-1);
@@ -187,19 +191,15 @@ void Connection::handle_write(const Timestamp &timestamp)
 
   int total = buffer_out_->write_to_fd(this, timestamp);
   if (total < 0) {
+    force_close();
+
     if (error_callback_)
       error_callback_(shared_from_this(), timestamp);
-    state_ = Closed;
-    channel_->disable_all();
-    LOG_ERROR("error happened")
-    close();
     return;
   }
   else if (total == 0) {
     //close
-    state_ = Closed;
-    channel_->disable_all();
-    loop_->remove_connection(fd_);
+    force_close();
     return;
   }
   //write success
