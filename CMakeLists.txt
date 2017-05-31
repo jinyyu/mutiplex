@@ -54,7 +54,7 @@ if (Boost_FOUND)
     message("boost lib : ${Boost_LIBRARY_DIRS}")
 
     set(LIBS
-            ${LIBS} Boost::system)
+            ${LIBS} Boost::system Boost::thread)
     add_subdirectory(benchmark/asio)
 endif(Boost_FOUND)
 
