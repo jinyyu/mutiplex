@@ -192,6 +192,6 @@ int main(int argc, char* argv[])
     total += totals[i];
   }
 
-  printf("total send = %lu\n MB/s", total);
+  printf("total send = %lu MB/s\n", total);
 
 }
