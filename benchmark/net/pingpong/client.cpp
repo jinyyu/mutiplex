@@ -170,12 +170,15 @@ int main(int argc, char* argv[])
 
   totals.resize(threads);
 
+  int per_thread = session_count / threads + 1;
+
   std::vector<std::thread> thread_vec;
   for (int i = 0; i < threads; ++i) {
     totals[i] = 0;
 
-    auto cb = [address, session_count, timeout, block_size, i] () {
-      Client client(address, session_count, timeout, block_size, i);
+    auto cb = [address, per_thread, timeout, block_size, i] () {
+
+      Client client(address, per_thread, timeout, block_size, i);
       client.run();
       client.print_result();
     };
