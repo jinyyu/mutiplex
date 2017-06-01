@@ -6,13 +6,11 @@
 
 using namespace net;
 
-#define NUM_THREADS 2
-
 class EchoServer
 {
 public:
-  EchoServer(int port)
-      : server_(port, NUM_THREADS)
+  EchoServer(int port, int threads)
+      : server_(port, threads)
   {
     ReadMessageCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, const Timestamp& timestamp)
     {
@@ -38,14 +36,15 @@ private:
 
 int main(int argc, char* argv[])
 {
-  if (argc != 2){
-    printf("usage %s <port>\n", argv[0]);
+  if (argc != 3){
+    printf("usage %s <port> <threads>\n", argv[0]);
     return -1;
   }
   //set_log_level(Logger::ERROR);
   
   int port = atoi(argv[1]);
+  int threads = atoi(argv[2]);
 
-  EchoServer server(port);
+  EchoServer server(port, threads);
   server.run();
 }

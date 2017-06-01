@@ -56,7 +56,7 @@ EventLoop::~EventLoop()
     delete(recv_buffer_);
   }
 
-  LOG_INFO("[%lu] : loop exit", pthread_id_);
+  LOG_INFO("[%lu] : loop delete", pthread_id_);
 
 }
 
@@ -64,7 +64,7 @@ EventLoop::~EventLoop()
 void EventLoop::run()
 {
   if (!is_in_loop_thread()) {
-    LOG_WARNING("not in loop thread");
+    LOG_ERROR("not in loop thread")
   }
 
   while (!is_quit_) {

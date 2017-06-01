@@ -48,7 +48,7 @@ private:
 
 private:
   pthread_t pthread_id_;
-  volatile bool is_quit_;
+  bool is_quit_;
 
   friend class Acceptor;
   friend class Session;

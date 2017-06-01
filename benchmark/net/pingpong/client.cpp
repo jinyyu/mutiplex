@@ -9,19 +9,22 @@
 #include <ByteBuffer.h>
 #include <Connection.h>
 #include <unistd.h>
+#include <thread>
 
 using namespace net;
 
+std::vector<uint64_t> totals;
 
 class Client
 {
 public:
-  Client(const InetSocketAddress& addr,int session_count, int timeout, int block_size)
+  Client(const InetSocketAddress& addr,int session_count, int timeout, int block_size, int index)
       : server_addr_(addr),
         session_count_(session_count),
         timeout_(timeout),
         block_size_(block_size),
-        total_(0)
+        total_(0),
+        index_(index)
   {
     loop_.allocate_receive_buffer(6 * 1024 * 1024);
     buffer_ = malloc(block_size);
@@ -44,7 +47,7 @@ public:
   void print_result()
   {
     uint64_t mb= total_ / 1024 / 1024/ timeout_;
-    printf("total send = %lu MB/s\n", mb);
+    totals[index_] = mb;
   }
 
   void run()
@@ -143,13 +146,14 @@ private:
   void* buffer_;
 
   uint64_t total_;
+  int index_;
 
 };
 
 
 int main(int argc, char* argv[])
 {
-  if (argc != 6) {
+  if (argc != 7) {
     printf("usage %s <ip> <port> <session_count> <timeout> <block_size>\n", argv[0]);
     return -1;
   }
@@ -158,13 +162,36 @@ int main(int argc, char* argv[])
   int session_count = std::atoi(argv[3]);
   int timeout = std::atoi(argv[4]);
   int block_size = std::atoi(argv[5]);
+  int threads = std::atoi(argv[6]);
 
   InetSocketAddress address(ip, port);
 
-  printf("ip = %s, port = %d, session_count = %d, timeout = %d, block_size = %d\n", ip, port, session_count, timeout, block_size);
+  printf("ip = %s, port = %d, session_count = %d, timeout = %d, block_size = %d, threads = %d\n", ip, port, session_count, timeout, block_size, threads);
 
-  Client client(address, session_count, timeout, block_size);
-  client.run();
-  client.print_result();
+  totals.resize(threads);
+
+  std::vector<std::thread> thread_vec;
+  for (int i = 0; i < threads; ++i) {
+    totals[i] = 0;
+
+    auto cb = [address, session_count, timeout, block_size, i] () {
+      Client client(address, session_count, timeout, block_size, i);
+      client.run();
+      client.print_result();
+    };
+
+    thread_vec.push_back(std::thread(cb));
+  }
+
+  for (int i = 0; i < threads; ++i) {
+    thread_vec[i].join();
+  }
+
+  uint64_t total = 0;
+  for(int i = 0; i < totals.size(); ++i) {
+    total += totals[i];
+  }
+
+  printf("total = %lu\n MB/s", total);
 
 }
