@@ -24,10 +24,11 @@ using namespace boost;
 class stats
 {
 public:
-  stats()
+  explicit stats(int timeout)
       : mutex_(),
         total_bytes_written_(0),
-        total_bytes_read_(0)
+        total_bytes_read_(0),
+        timeout_(timeout)
   {
   }
 
@@ -40,14 +41,18 @@ public:
 
   void print()
   {
-    std::cout << total_bytes_written_ << " total bytes written\n";
-    std::cout << total_bytes_read_ << " total bytes read\n";
+    uint64_t mb_w = total_bytes_written_ / 1024 / 1024 / timeout_;
+    std::cout << "write : " << mb_w << " MB/s\n";
+
+    uint64_t mb_r = total_bytes_read_ / 1024 / 1024 / timeout_;
+    std::cout << "read : " << mb_r << " MB/s\n";
   }
 
 private:
   boost::mutex mutex_;
   size_t total_bytes_written_;
   size_t total_bytes_read_;
+  int timeout_;
 };
 
 class session
@@ -208,7 +213,7 @@ public:
       : io_service_(ios),
         stop_timer_(ios),
         sessions_(),
-        stats_()
+        stats_(timeout)
   {
     stop_timer_.expires_from_now(boost::posix_time::seconds(timeout));
     stop_timer_.async_wait(boost::bind(&client::handle_timeout, this));
