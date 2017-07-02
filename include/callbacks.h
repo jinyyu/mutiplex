@@ -31,6 +31,8 @@ typedef std::function<void (ConnectionPtr, const Timestamp &)> ErrorCallback;
 
 typedef std::function<void (const Timestamp &)> ConnectErrorCallback;
 
+typedef std::function<void (const Timestamp &)> TimeoutCallback;
+
 
 }
 

@@ -29,7 +29,8 @@ set(libnet_SRCS
         src/TcpServer.cpp
         src/Connection.cpp
         src/CircularBuffer.cpp
-        src/Session.cpp)
+        src/Session.cpp
+        src/Timer.cpp)
 
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})

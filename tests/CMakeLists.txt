@@ -39,6 +39,8 @@ target_link_libraries(client_shutdown ${LIBS} )
 add_executable(test_util test_util.cpp)
 target_link_libraries(test_util ${LIBS} )
 
-
 add_executable(test_circularbuffer test_circularbuffer.cpp)
 target_link_libraries(test_circularbuffer ${LIBS} )
+
+add_executable(test_timer test_timer.cpp)
+target_link_libraries(test_timer ${LIBS} )
