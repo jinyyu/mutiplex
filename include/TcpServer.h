@@ -11,7 +11,6 @@ class EventLoop;
 class Timestamp;
 class InetSocketAddress;
 
-
 class TcpServer : NonCopyable
 {
 public:

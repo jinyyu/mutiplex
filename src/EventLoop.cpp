@@ -7,6 +7,7 @@
 #include "InetSocketAddress.h"
 #include "Connection.h"
 #include "ByteBuffer.h"
+#include "TimingWheel.h"
 
 #include <sys/eventfd.h>
 #include <unistd.h>
@@ -39,6 +40,8 @@ EventLoop::EventLoop()
       LOG_ERROR("eventfd_read error %d", errno);
     }
   });
+
+  timing_wheel_ = new TimingWheel(this, 30);
 }
 
 
@@ -56,6 +59,7 @@ EventLoop::~EventLoop()
     delete(recv_buffer_);
   }
 
+  delete(timing_wheel_);
   LOG_INFO("[%lu] : loop delete", pthread_id_);
 
 }
@@ -142,6 +146,11 @@ void EventLoop::on_new_connection(ConnectionPtr conn, const Timestamp& timestamp
     if (conn->connection_established_callback_) {
       conn->connection_established_callback_(conn, timestamp);
     }
+
+    SharedConnectionEntry entry(new ConnectionEntry(conn));
+    WeakConnectionEntry weak_entry(entry);
+    conn->set_context(weak_entry);
+    conn->set_default_timeout();
   };
   post(cb);
 

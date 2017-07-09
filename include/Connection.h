@@ -6,6 +6,7 @@
 #include "InetSocketAddress.h"
 #include "InetAddress.h"
 #include "callbacks.h"
+#include "TimingWheel.h"
 
 
 #include <deque>
@@ -62,7 +63,19 @@ public:
 
   bool write(const ByteBuffer& buffer);
 
+  void set_default_timeout();
+
   EventLoop* loop() const { return  loop_; }
+
+  void set_context(WeakConnectionEntry entry)
+  {
+    entry_ = entry;
+  }
+
+  WeakConnectionEntry get_context() const
+  {
+    return entry_;
+  }
 
 
 private:
@@ -99,7 +112,7 @@ private:
 
   friend class CircularBuffer;
   CircularBuffer* buffer_out_;
-
+  WeakConnectionEntry entry_;
 };
 
 }

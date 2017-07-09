@@ -14,6 +14,7 @@ class Channel;
 class Selector;
 class SelectionKey;
 class ByteBuffer;
+class TimingWheel;
 
 class EventLoop : NonCopyable
 {
@@ -65,6 +66,7 @@ private:
 
   ByteBuffer* recv_buffer_;
 
+  TimingWheel* timing_wheel_;
 };
 
 

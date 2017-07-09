@@ -5,6 +5,7 @@
 #include "SelectionKey.h"
 #include "ByteBuffer.h"
 #include "CircularBuffer.h"
+#include "Timestamp.h"
 
 #include <unistd.h>
 
@@ -64,9 +65,6 @@ void Connection::accept()
     }
     else if (n == 0) {
       //peer shutdown read
-      if (connection_closed_callback_) {
-        connection_closed_callback_(shared_from_this(), timestamp);
-      }
       channel_->disable_reading();
       close();
     }
@@ -93,6 +91,7 @@ void Connection::accept()
   channel_->set_error_selection_callback(error_cb);
 
   state_ = Receiving;
+
 }
 
 void Connection::close()
@@ -101,6 +100,9 @@ void Connection::close()
     if (!has_bytes_to_write()) {
       //closed it
       state_ = Closed;
+      if (connection_closed_callback_) {
+        connection_closed_callback_(shared_from_this(), Timestamp::currentTime());
+      }
       loop_->remove_connection(fd_);
     } else {
       //has bytes to write
@@ -118,6 +120,11 @@ void Connection::force_close()
     channel_->disable_all();
 
     if (loop_->connections_.find(fd_) != loop_->connections_.end()) {
+
+      if (connection_closed_callback_) {
+        connection_closed_callback_(shared_from_this(), Timestamp::currentTime());
+      }
+
       loop_->remove_connection(fd_);
     }
 
@@ -179,6 +186,11 @@ void Connection::do_write(const void* data, uint32_t len)
     buffer_out_->put(data, len);
     channel_->enable_writing();
   }
+}
+
+void Connection::set_default_timeout()
+{
+  loop_->timing_wheel_->set_default_timeout(shared_from_this());
 }
 
 
