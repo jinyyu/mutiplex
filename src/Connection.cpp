@@ -8,6 +8,7 @@
 #include "libnet/Timestamp.h"
 
 #include <unistd.h>
+#include <assert.h>
 
 namespace net
 {
@@ -25,6 +26,7 @@ Connection::Connection(int fd,
       buffer_size_(1024),
       buffer_out_(nullptr)
 {
+    LOG_INFO("new connection %d", fd_);
 }
 
 Connection::~Connection()
@@ -38,9 +40,11 @@ Connection::~Connection()
         delete buffer_out_;
     }
 
+    LOG_INFO("connection closed %d", fd_);
+
 }
 
-void Connection::accept()
+void Connection::setup_callbacks()
 {
     if (state_ != New) {
         LOG_ERROR("state = %d", state_);
@@ -49,6 +53,7 @@ void Connection::accept()
 
     SelectionCallback read_cb = [this](const Timestamp &timestamp, SelectionKey *key)
     {
+        set_default_timeout();
         ByteBuffer *buffer = loop_->recv_buffer_;
         buffer->clear();
         ssize_t n = ::read(fd_, buffer->data(), buffer->remaining());
@@ -194,17 +199,9 @@ void Connection::do_write(const void *data, uint32_t len)
     }
 }
 
-void Connection::set_default_timeout()
-{
-    loop_->timing_wheel_->set_default_timeout(shared_from_this());
-}
-
 void Connection::handle_write(const Timestamp &timestamp)
 {
-    if (buffer_out_->empty()) {
-        LOG_ERROR("buffer out is empty");
-        exit(-1);
-    }
+    assert(!buffer_out_->empty());
 
     int total = buffer_out_->write_to_fd(this, timestamp);
     if (total < 0) {
@@ -235,6 +232,15 @@ void Connection::handle_write(const Timestamp &timestamp)
 bool Connection::has_bytes_to_write() const
 {
     return buffer_out_ && !buffer_out_->empty();
+}
+
+void Connection::set_default_timeout()
+{
+    TimingWheel* wheel = loop_->timing_wheel_;
+    if (wheel) {
+        wheel->set_default_timeout(entry_.lock());
+    }
+
 }
 
 }

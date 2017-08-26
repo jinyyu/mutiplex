@@ -51,6 +51,7 @@ void TcpServer::run()
         {
             EventLoop *loop = new EventLoop();
             loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
+            loop->enable_timing_wheel(10);
 
             io_loops_[i] = loop;
             loop->run();

@@ -6,7 +6,7 @@
 
 using namespace net;
 
-#define NUM_THREADS 4
+#define NUM_THREADS 1
 
 class EchoServer
 {
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
         printf("usage %s <port>\n", argv[0]);
         return -1;
     }
-    set_log_level(Logger::ERROR);
+    set_log_level(Logger::INFO);
 
     int port = atoi(argv[1]);
 

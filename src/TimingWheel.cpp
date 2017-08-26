@@ -42,9 +42,8 @@ void TimingWheel::handle_timeout()
     queue_.push(Bucket());
 }
 
-void TimingWheel::set_default_timeout(ConnectionPtr conn)
+void TimingWheel::set_default_timeout(SharedConnectionEntry entry)
 {
-    SharedConnectionEntry entry = conn->get_context().lock();
     if (entry) {
         queue_.back().insert(entry);
     }

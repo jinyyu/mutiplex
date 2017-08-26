@@ -22,7 +22,8 @@ EventLoop::EventLoop()
       selector_(new Selector(pthread_id_)),
       active_keys_(128),
       wakeup_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK)),
-      recv_buffer_(nullptr)
+      recv_buffer_(nullptr),
+      timing_wheel_(nullptr)
 {
     pthread_mutex_init(&mutex_, NULL);
 
@@ -41,8 +42,6 @@ EventLoop::EventLoop()
                                             LOG_ERROR("eventfd_read error %d", errno);
                                         }
                                     });
-
-    timing_wheel_ = new TimingWheel(this, 30);
 }
 
 EventLoop::~EventLoop()
@@ -134,11 +133,11 @@ void EventLoop::post(const Callback &callback)
     }
 }
 
-void EventLoop::on_new_connection(ConnectionPtr conn, const Timestamp &timestamp)
+void EventLoop::on_new_connection(ConnectionPtr& conn, const Timestamp &timestamp)
 {
     Callback cb = [this, conn, timestamp]()
     {
-        conn->accept();
+        conn->setup_callbacks();
 
         connections_[conn->fd()] = conn;
 
@@ -148,16 +147,26 @@ void EventLoop::on_new_connection(ConnectionPtr conn, const Timestamp &timestamp
 
         SharedConnectionEntry entry(new ConnectionEntry(conn));
         WeakConnectionEntry weak_entry(entry);
-        conn->set_context(weak_entry);
+        conn->context(weak_entry);
+
         conn->set_default_timeout();
     };
-    post(cb);
+    if (is_in_loop_thread()) {
+        cb();
+    } else {
+        post(cb);
+    }
 
 }
 
 void EventLoop::allocate_receive_buffer(uint32_t capacity)
 {
     recv_buffer_ = new ByteBuffer(capacity);
+}
+
+void EventLoop::enable_timing_wheel(int seconds)
+{
+    timing_wheel_ = new TimingWheel(this, seconds);
 }
 
 }

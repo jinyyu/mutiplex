@@ -76,25 +76,16 @@ public:
 
     bool write(const ByteBuffer &buffer);
 
-    void set_default_timeout();
-
     EventLoop *loop() const
     { return loop_; }
 
-    void set_context(WeakConnectionEntry entry)
-    {
-        entry_ = entry;
-    }
+    void context(WeakConnectionEntry &entry)
+    { entry_ = entry; }
 
-    WeakConnectionEntry get_context() const
-    {
-        return entry_;
-    }
-
-
+    void set_default_timeout();
 private:
     friend class EventLoop;
-    void accept();
+    void setup_callbacks();
 
     void do_write(const void *data, uint32_t len);
 

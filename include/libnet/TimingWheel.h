@@ -46,7 +46,7 @@ public:
 
     ~TimingWheel();
 
-    void set_default_timeout(ConnectionPtr conn);
+    void set_default_timeout(SharedConnectionEntry entry);
 
 private:
     void handle_timeout();

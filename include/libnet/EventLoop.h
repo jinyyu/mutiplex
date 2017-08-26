@@ -29,7 +29,7 @@ public:
     //Request the EventLoop to invoke the given callback and return immediately
     void post(const Callback &callback);
 
-    void on_new_connection(ConnectionPtr conn, const Timestamp &timestamp);
+    void on_new_connection(ConnectionPtr& conn, const Timestamp &timestamp);
 
     void allocate_receive_buffer(uint32_t capacity);
 
@@ -40,6 +40,8 @@ public:
 
     Selector *selector() const
     { return selector_; }
+
+    void enable_timing_wheel(int seconds);
 
 private:
     friend class Connection;
