@@ -1,6 +1,6 @@
 #include <string.h>
-#include "ByteBuffer.h"
-#include "Logger.h"
+#include "libnet/ByteBuffer.h"
+#include "libnet/Logger.h"
 #include <stdlib.h>
 
 namespace net
@@ -12,106 +12,110 @@ ByteBuffer::ByteBuffer(int capacity)
       capacity_(capacity),
       mark_(-1)
 {
-  data_ = (char*) malloc(capacity);
+    data_ = (char *) malloc(capacity);
 }
 
-ByteBuffer::ByteBuffer(const ByteBuffer& buffer)
-    :limit_(buffer.limit_),
-     mark_(buffer.mark_),
-     position_(buffer.position_),
-     capacity_(buffer.capacity_)
+ByteBuffer::ByteBuffer(const ByteBuffer &buffer)
+    : limit_(buffer.limit_),
+      mark_(buffer.mark_),
+      position_(buffer.position_),
+      capacity_(buffer.capacity_)
 {
-  data_ = (char*) malloc(capacity_);
-  memcpy(data_, buffer.data_, capacity_);
+    data_ = (char *) malloc(capacity_);
+    memcpy(data_, buffer.data_, capacity_);
 }
 
 ByteBuffer::~ByteBuffer()
 {
-  free(data_);
+    free(data_);
 }
 
 void ByteBuffer::position(int p)
 {
-  if (p <= limit_ && p >= 0) {
-    position_ = p;
-    if (mark_ > position_) {
-      mark_ = -1;
+    if (p <= limit_ && p >= 0) {
+        position_ = p;
+        if (mark_ > position_) {
+            mark_ = -1;
+        }
     }
-  } else {
-    LOG_ERROR("invalid position %d", p);
-  }
+    else {
+        LOG_ERROR("invalid position %d", p);
+    }
 }
 
 void ByteBuffer::limit(int limit)
 {
-  if (limit <= capacity_ && limit >= 0) {
-    limit_ = limit;
-    if (position_ > limit_) {
-      position_ = limit_;
-    }
+    if (limit <= capacity_ && limit >= 0) {
+        limit_ = limit;
+        if (position_ > limit_) {
+            position_ = limit_;
+        }
 
-    if (mark_ > limit_) {
-      mark_ = -1;
+        if (mark_ > limit_) {
+            mark_ = -1;
+        }
     }
-  } else {
-    LOG_ERROR("invalid limit %d", limit);
-  }
+    else {
+        LOG_ERROR("invalid limit %d", limit);
+    }
 }
 
 void ByteBuffer::reset()
 {
-  if (mark_ < 0) {
-    LOG_ERROR("invalid mark %d", mark_);
-  } else {
-    position_ = mark_;
-  }
+    if (mark_ < 0) {
+        LOG_ERROR("invalid mark %d", mark_);
+    }
+    else {
+        position_ = mark_;
+    }
 }
 
 void ByteBuffer::clear()
 {
-  position_ = 0;
-  limit_ = capacity_;
-  mark_ = -1;
+    position_ = 0;
+    limit_ = capacity_;
+    mark_ = -1;
 }
 
 void ByteBuffer::flip()
 {
-  limit_ = position_;
-  position_ = 0;
-  mark_ = -1;
+    limit_ = position_;
+    position_ = 0;
+    mark_ = -1;
 }
 
 void ByteBuffer::rewind()
 {
-  position_ = 0;
-  mark_ = -1;
+    position_ = 0;
+    mark_ = -1;
 }
 
-void ByteBuffer::put(const void* data, int len)
+void ByteBuffer::put(const void *data, int len)
 {
-  if (len > remaining()) {
-    LOG_ERROR("len > remaining, len = %d, remaining = %d", len, remaining());
-  }  else {
-    memcpy(this->data(), data, len);
+    if (len > remaining()) {
+        LOG_ERROR("len > remaining, len = %d, remaining = %d", len, remaining());
+    }
+    else {
+        memcpy(this->data(), data, len);
+        position_ += len;
+    }
+}
+
+int ByteBuffer::get(void *buffer, int len)
+{
+    len = std::min(len, remaining());
+    memcpy(buffer, data(), len);
     position_ += len;
-  }
-}
-
-int ByteBuffer::get(void* buffer, int len)
-{
-  len = std::min(len, remaining());
-  memcpy(buffer, data(), len);
-  position_ += len;
-  return len;
+    return len;
 }
 
 void ByteBuffer::skip(int n)
 {
-  if (remaining() < n) {
-    LOG_ERROR("n > remaining");
-  }
+    if (remaining() < n) {
+        LOG_ERROR("n > remaining");
+    }
 
-  position_ += n;
+    position_ += n;
 }
 
 }

@@ -1,8 +1,8 @@
 #ifndef NET_LOGGER_H
 #define NET_LOGGER_H
 
-#include "Status.h"
-#include "NonCopyable.h"
+#include <libnet/Status.h>
+#include <libnet/NonCopyable.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <vector>
@@ -12,44 +12,48 @@
 namespace net
 {
 
-class Logger : NonCopyable
+class Logger: NonCopyable
 {
 
 public:
-  enum {
-    INFO = 0,
-    WARNING = 1,
-    ERROR = 2
-  };
+    enum
+    {
+        INFO = 0,
+        WARNING = 1,
+        ERROR = 2
+    };
 
-  explicit Logger(int fd) :fd_(fd), level_(0) { pthread_mutex_init(&mutex_, NULL); }
+    explicit Logger(int fd)
+        : fd_(fd), level_(0)
+    { pthread_mutex_init(&mutex_, NULL); }
 
-  Status open(const char* file);
+    Status open(const char *file);
 
-  void log(int level, const char* format, ...);
+    void log(int level, const char *format, ...);
 
-  ~Logger();
+    ~Logger();
 
-  void set_level(int level) { level_ = level; }
-
-private:
-
-  void append(char* data, uint32_t len);
-
-  void flush();
+    void set_level(int level)
+    { level_ = level; }
 
 private:
 
-  int fd_;
-  std::vector<char> buffer_;
-  pthread_mutex_t mutex_;
-  int level_;
+    void append(char *data, uint32_t len);
+
+    void flush();
+
+private:
+
+    int fd_;
+    std::vector<char> buffer_;
+    pthread_mutex_t mutex_;
+    int level_;
 
 };
 
-Logger* get_logger_singleton();
+Logger *get_logger_singleton();
 
-Status set_log_destination(const char* path);
+Status set_log_destination(const char *path);
 
 void set_log_level(int level);
 

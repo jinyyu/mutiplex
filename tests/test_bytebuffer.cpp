@@ -1,61 +1,58 @@
 #include <gtest/gtest.h>
-#include <ByteBuffer.h>
+#include <libnet/ByteBuffer.h>
 
 using namespace net;
 
-TEST(consstruct , test_bytebuffer)
+TEST(consstruct, test_bytebuffer)
 {
-  ByteBuffer buffer(4);
-  ASSERT_TRUE(buffer.has_remaining());
-  ASSERT_TRUE(buffer.remaining() == 4);
-  int a = 7;
-  buffer.put(&a, sizeof(a));
+    ByteBuffer buffer(4);
+    ASSERT_TRUE(buffer.has_remaining());
+    ASSERT_TRUE(buffer.remaining() == 4);
+    int a = 7;
+    buffer.put(&a, sizeof(a));
 
-  ASSERT_FALSE(buffer.has_remaining());
-  ASSERT_TRUE(buffer.remaining() == 0);
+    ASSERT_FALSE(buffer.has_remaining());
+    ASSERT_TRUE(buffer.remaining() == 0);
 
-  int b;
-  buffer.flip();
-  buffer.get(&b, sizeof(b));
+    int b;
+    buffer.flip();
+    buffer.get(&b, sizeof(b));
 
-  ASSERT_TRUE(a == b);
+    ASSERT_TRUE(a == b);
 
 
-  ASSERT_TRUE(buffer.position() == 4);
-  buffer.rewind();
-  ASSERT_TRUE(buffer.remaining() == 4);
-  ASSERT_TRUE(buffer.position() == 0);
+    ASSERT_TRUE(buffer.position() == 4);
+    buffer.rewind();
+    ASSERT_TRUE(buffer.remaining() == 4);
+    ASSERT_TRUE(buffer.position() == 0);
 }
-
 
 TEST(test_reset, test_bytebuffer)
 {
-  ByteBuffer buffer(10);
-  int a = 9;
-  buffer.put(&a, sizeof(a));
+    ByteBuffer buffer(10);
+    int a = 9;
+    buffer.put(&a, sizeof(a));
 
-  buffer.mark();
+    buffer.mark();
 
-  ASSERT_TRUE(buffer.remaining() == 6);
+    ASSERT_TRUE(buffer.remaining() == 6);
 
-  int c;
-  int b = 8;
-  buffer.put(&b, sizeof(b));
+    int c;
+    int b = 8;
+    buffer.put(&b, sizeof(b));
 
-  ASSERT_TRUE(buffer.remaining() == 2);
+    ASSERT_TRUE(buffer.remaining() == 2);
 
-  buffer.reset();
-  ASSERT_TRUE(buffer.remaining() == 6);
+    buffer.reset();
+    ASSERT_TRUE(buffer.remaining() == 6);
 
-  buffer.get(&c, sizeof(c));
-  ASSERT_TRUE(b == c);
-  ASSERT_TRUE(buffer.remaining() == 2);
+    buffer.get(&c, sizeof(c));
+    ASSERT_TRUE(b == c);
+    ASSERT_TRUE(buffer.remaining() == 2);
 }
 
-
-
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

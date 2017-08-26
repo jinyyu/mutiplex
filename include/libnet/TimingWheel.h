@@ -1,8 +1,8 @@
 #ifndef LIBNET_DISTRIBUTION_TIMINGWHEEL_H
 #define LIBNET_DISTRIBUTION_TIMINGWHEEL_H
 
-#include "NonCopyable.h"
-#include "Timer.h"
+#include <libnet/NonCopyable.h>
+#include <libnet/Timer.h>
 
 #include <queue>
 #include <memory>
@@ -15,53 +15,49 @@ class EventLoop;
 class Connection;
 
 typedef std::weak_ptr<Connection> WeakConnection;
+
 typedef std::shared_ptr<Connection> SharedConnection;
 
 class ConnectionEntry
 {
 public:
-  ConnectionEntry(WeakConnection conn)
-      : conn_(conn)
-  {
-  }
+    ConnectionEntry(WeakConnection conn)
+        : conn_(conn)
+    {
+    }
 
-  ~ConnectionEntry();
+    ~ConnectionEntry();
 
 private:
-  WeakConnection conn_;
+    WeakConnection conn_;
 
 };
 
 typedef std::shared_ptr<ConnectionEntry> SharedConnectionEntry;
+
 typedef std::weak_ptr<ConnectionEntry> WeakConnectionEntry;
 
 typedef std::unordered_set<SharedConnectionEntry> Bucket;
 
-
-class TimingWheel : NonCopyable
+class TimingWheel: NonCopyable
 {
 public:
-  explicit TimingWheel(EventLoop* loop, int timeout_second);
+    explicit TimingWheel(EventLoop *loop, int timeout_second);
 
-  ~TimingWheel();
+    ~TimingWheel();
 
-  void set_default_timeout(ConnectionPtr conn);
-
-private:
-  void handle_timeout();
+    void set_default_timeout(ConnectionPtr conn);
 
 private:
+    void handle_timeout();
 
-  Timer timer_;
-  int queue_size_;
-  std::queue<Bucket> queue_;
+private:
 
-
+    Timer timer_;
+    int queue_size_;
+    std::queue<Bucket> queue_;
 
 };
-
-
-
 
 }
 #endif //LIBNET_DISTRIBUTION_TIMINGWHEEL_H

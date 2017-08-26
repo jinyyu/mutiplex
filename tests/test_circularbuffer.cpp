@@ -1,7 +1,7 @@
-#include <utils.h>
+#include <libnet/utils.h>
 #include <gtest/gtest.h>
-#include <CircularBuffer.h>
-#include <Logger.h>
+#include <libnet/CircularBuffer.h>
+#include <libnet/Logger.h>
 #include <string>
 
 using namespace net;

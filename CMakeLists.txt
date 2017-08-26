@@ -10,7 +10,7 @@ endif()
 set(CMAKE_MODULE_PATH
         ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/modules/")
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(include)
 
 set(libnet_SRCS
         src/utils.cpp
