@@ -12,7 +12,6 @@
 #include <sys/eventfd.h>
 #include <unistd.h>
 
-
 namespace net
 {
 
@@ -65,10 +64,7 @@ EventLoop::~EventLoop()
 
 void EventLoop::run()
 {
-    if (!is_in_loop_thread()) {
-        LOG_ERROR("not in loop thread")
-    }
-
+    pthread_id_ = pthread_self();
     while (!is_quit_) {
         active_keys_.clear();
         Timestamp time = selector_->select(8000, active_keys_);
@@ -151,11 +147,8 @@ void EventLoop::on_new_connection(ConnectionPtr& conn, const Timestamp &timestam
 
         conn->set_default_timeout();
     };
-    if (is_in_loop_thread()) {
-        cb();
-    } else {
-        post(cb);
-    }
+
+    post(cb);
 
 }
 

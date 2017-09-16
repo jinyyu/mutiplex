@@ -3,10 +3,11 @@
 #include <libnet/NonCopyable.h>
 #include <libnet/callbacks.h>
 #include <vector>
+#include <thread>
+#include <memory>
 
 namespace net
 {
-class Acceptor;
 class EventLoop;
 class Timestamp;
 class InetSocketAddress;
@@ -32,14 +33,6 @@ public:
     void shutdown();
 
 private:
-
-    enum
-    {
-        CREATE = 0,
-        RUNNING = 1,
-        SHUTDOWN = 2
-    };
-
     EventLoop *next_loop()
     {
         if (index_ == io_loops_.size()) {
@@ -52,11 +45,8 @@ private:
     int port_;
     int num_io_threads_;
     EventLoop *accept_loop_;
-    Acceptor *acceptor_;
     std::vector<EventLoop *> io_loops_;
     int index_;
-
-    int state_;
 
     ConnectionEstablishedCallback connection_established_callback_;
     ReadMessageCallback read_message_callback_;
