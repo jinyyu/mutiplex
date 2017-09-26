@@ -131,25 +131,19 @@ void EventLoop::post(const Callback &callback)
 
 void EventLoop::on_new_connection(ConnectionPtr& conn, const Timestamp &timestamp)
 {
-    Callback cb = [this, conn, timestamp]()
-    {
-        conn->setup_callbacks();
+    conn->setup_callbacks();
 
-        connections_[conn->fd()] = conn;
+    connections_[conn->fd()] = conn;
 
-        if (conn->connection_established_callback_) {
-            conn->connection_established_callback_(conn, timestamp);
-        }
+    if (conn->connection_established_callback_) {
+        conn->connection_established_callback_(conn, timestamp);
+    }
 
-        SharedConnectionEntry entry(new ConnectionEntry(conn));
-        WeakConnectionEntry weak_entry(entry);
-        conn->context(weak_entry);
+    SharedConnectionEntry entry(new ConnectionEntry(conn));
+    WeakConnectionEntry weak_entry(entry);
+    conn->context(weak_entry);
 
-        conn->set_default_timeout();
-    };
-
-    post(cb);
-
+    conn->set_default_timeout();
 }
 
 void EventLoop::allocate_receive_buffer(uint32_t capacity)

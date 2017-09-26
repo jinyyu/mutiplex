@@ -31,22 +31,10 @@ public:
     void run();
 
     void shutdown();
-
-private:
-    EventLoop *next_loop()
-    {
-        if (index_ == io_loops_.size()) {
-            index_ = 0;
-        }
-        return io_loops_[index_++];
-    }
-
 private:
     int port_;
     int num_io_threads_;
-    EventLoop *accept_loop_;
-    std::vector<EventLoop *> io_loops_;
-    int index_;
+    std::vector<EventLoop*> io_loops_;
 
     ConnectionEstablishedCallback connection_established_callback_;
     ReadMessageCallback read_message_callback_;

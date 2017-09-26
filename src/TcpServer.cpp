@@ -7,24 +7,17 @@
 #include "libnet/InetAddress.h"
 #include "libnet/InetSocketAddress.h"
 
-#include <unistd.h>
-
-
 namespace net
 {
 
 TcpServer::TcpServer(int port, int num_io_threads)
     : port_(port),
-      num_io_threads_(num_io_threads),
-      index_(0),
-      accept_loop_(nullptr)
+      num_io_threads_(num_io_threads)
 {
 }
 
 TcpServer::~TcpServer()
 {
-    if (accept_loop_) delete (accept_loop_);
-
     for (auto it = io_loops_.begin(); it < io_loops_.end(); ++it) {
         delete (*it);
     }
@@ -32,46 +25,39 @@ TcpServer::~TcpServer()
 
 void TcpServer::run()
 {
-    for(int i = 0; i < num_io_threads_; ++i) {
-        EventLoop* loop = new EventLoop();
+    io_loops_.resize(num_io_threads_, NULL);
+    auto run_cb = [this](int index)
+    {
+        EventLoop *loop = new EventLoop();
         loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
         loop->enable_timing_wheel(30);
-        io_loops_.push_back(loop);
-    }
-
-    for (int i = 0; i < num_io_threads_; ++i) {
-        auto run = [i, this]
+        NewConnectionCallback cb = [this, loop](int fd,
+                                                const Timestamp &timestamp,
+                                                const InetSocketAddress &local,
+                                                const InetSocketAddress &peer)
         {
-            io_loops_[i]->run();
+            ConnectionPtr conn(new Connection(fd, loop, local, peer));
+            conn->connection_established_callback(connection_established_callback_);
+            conn->read_message_callback(read_message_callback_);
+            conn->connection_closed_callback(connection_closed_callback_);
+            loop->on_new_connection(conn, timestamp);
         };
-        std::thread thread(run);
+        Acceptor acceptor(loop, port_);
+        acceptor.new_connection_callback(cb);
+        io_loops_[index] = loop;
+        loop->run();
+    };
+
+    for (int i = 1; i < num_io_threads_; ++i) {
+        std::thread thread(std::bind(run_cb, i));
         thread.detach();
     }
 
-    accept_loop_ = new EventLoop();
-    Acceptor acceptor(accept_loop_, port_);
-
-    NewConnectionCallback cb = [this](int fd,
-                                      const Timestamp &timestamp,
-                                      const InetSocketAddress &local,
-                                      const InetSocketAddress &peer)
-    {
-        EventLoop *loop = next_loop();
-        ConnectionPtr conn(new Connection(fd, loop, local, peer));
-        conn->connection_established_callback(connection_established_callback_);
-        conn->read_message_callback(read_message_callback_);
-        conn->connection_closed_callback(connection_closed_callback_);
-
-        loop->on_new_connection(conn, timestamp);
-    };
-
-    acceptor.new_connection_callback(cb);
-    accept_loop_->run();
+    run_cb(0);
 }
 
 void TcpServer::shutdown()
 {
-    accept_loop_->stop();
     for (auto it = io_loops_.begin(); it < io_loops_.end(); ++it) {
         (*it)->stop();
     }

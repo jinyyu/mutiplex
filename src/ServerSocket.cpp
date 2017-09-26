@@ -62,4 +62,10 @@ void ServerSocket::reuse_address(bool on)
     ::setsockopt(fd_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
 }
 
+void ServerSocket::reuse_port(bool on)
+{
+    int optval = on ? 1 : 0;
+    ::setsockopt(fd_, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+}
+
 }

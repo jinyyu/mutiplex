@@ -21,7 +21,7 @@ Acceptor::Acceptor(EventLoop *loop, const InetSocketAddress &addr)
 {
     peer_addr_ = new InetSocketAddress();
     server_socket_ = new ServerSocket();
-    server_socket_->reuse_address(true);
+    server_socket_->reuse_port(true);
 
     Status status = server_socket_->bind(addr);
     if (!status.is_ok()) {

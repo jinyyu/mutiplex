@@ -26,6 +26,8 @@ public:
     //Enable/disable the SO_REUSEADDR socket option
     void reuse_address(bool on);
 
+    void reuse_port(bool on);
+
     int fd() const
     { return fd_; }
 
