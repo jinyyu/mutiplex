@@ -3,6 +3,8 @@ project(libnet-distribution)
 
 set(CMAKE_CXX_STANDARD 11)
 
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG ")
+
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-std=gnu++0x)
 endif()

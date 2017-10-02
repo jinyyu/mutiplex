@@ -26,7 +26,7 @@ Connection::Connection(int fd,
       buffer_size_(1024),
       buffer_out_(nullptr)
 {
-    LOG_INFO("new connection %d", fd_);
+    LOG_DEBUG("new connection %d", fd_);
 }
 
 Connection::~Connection()
@@ -40,7 +40,7 @@ Connection::~Connection()
         delete buffer_out_;
     }
 
-    LOG_INFO("connection closed %d", fd_);
+    LOG_DEBUG("connection closed %d", fd_);
 
 }
 

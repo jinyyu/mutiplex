@@ -3,6 +3,7 @@
 
 #include <libnet/Status.h>
 #include <libnet/NonCopyable.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <vector>
@@ -57,9 +58,15 @@ Status set_log_destination(const char *path);
 
 void set_log_level(int level);
 
-#define LOG_INFO(format, ...) do { net::get_logger_singleton()->log(net::Logger::INFO, "[INFO] [%s:%d] " format "\n", __FILE__, __LINE__, ##__VA_ARGS__); } while(0);
-#define LOG_WARNING(format, ...) do { net::get_logger_singleton()->log(net::Logger::WARNING, "[WARNING] [%s:%d] " format "\n", __FILE__, __LINE__, ##__VA_ARGS__); } while(0);
-#define LOG_ERROR(format, ...) do { net::get_logger_singleton()->log(net::Logger::ERROR, "[ERROR] [%s:%d] " format "\n", __FILE__, __LINE__, ##__VA_ARGS__); } while(0);
+#ifdef DEBUG
+#define LOG_DEBUG(format, ...) do { net::get_logger_singleton()->log(net::Logger::INFO, "[INFO] [%s:%d] " format "\n", strrchr(__FILE__, '/') + 1, __LINE__, ##__VA_ARGS__); } while(0);
+#else
+#define LOG_DEBUG(format, ...)
+#endif
+
+#define LOG_INFO(format, ...) do { net::get_logger_singleton()->log(net::Logger::INFO, "[INFO] [%s:%d] " format "\n", strrchr(__FILE__, '/') + 1, __LINE__, ##__VA_ARGS__); } while(0);
+#define LOG_WARNING(format, ...) do { net::get_logger_singleton()->log(net::Logger::WARNING, "[WARNING] [%s:%d] " format "\n", strrchr(__FILE__, '/') + 1, __LINE__, ##__VA_ARGS__); } while(0);
+#define LOG_ERROR(format, ...) do { net::get_logger_singleton()->log(net::Logger::ERROR, "[ERROR] [%s:%d] " format "\n", strrchr(__FILE__, '/') + 1, __LINE__, ##__VA_ARGS__); } while(0);
 }
 
 #endif //NET_LOGGER_H
