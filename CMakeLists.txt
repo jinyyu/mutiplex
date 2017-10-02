@@ -7,9 +7,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-std=gnu++0x)
 endif()
 
-set(CMAKE_MODULE_PATH
-        ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/modules/")
-
 include_directories(include)
 
 set(libnet_SRCS
@@ -36,25 +33,18 @@ set(libnet_SRCS
 add_library(libnet ${libnet_SRCS})
 target_link_libraries(libnet ${LIBS})
 
-
-find_package(LibGtest QUIET)
-if (LibGtest_FOUND)
-    message("gtest found")
-    message("gtest include : ${LibGtest_INCLUDE_DIR}")
-    message("gtest lib : ${LibGtest_LIBRARY}")
-    include_directories(${LibGtest_INCLUDE_DIR})
+find_package(PkgConfig REQUIRED)
+pkg_check_modules (GoogleTest gtest gtest_main)
+if (GoogleTest_FOUND)
+    include_directories(${GoogleTest_INCLUDE_DIRS})
     set(LIBS
-            ${LIBS} ${LibGtest_LIBRARY} pthread)
+            ${LIBS} ${GoogleTest_LIBRARIES} pthread)
     add_subdirectory(tests)
-endif (LibGtest_FOUND)
+endif (GoogleTest_FOUND)
 
 
 find_package(Boost COMPONENTS system thread)
 if (Boost_FOUND)
-    message("boost found")
-    message("boost include : ${Boost_INCLUDE_DIRS}")
-    message("boost lib : ${Boost_LIBRARY_DIRS}")
-
     set(LIBS
             ${LIBS} Boost::system Boost::thread)
     add_subdirectory(benchmark/asio)
