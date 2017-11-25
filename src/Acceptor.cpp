@@ -1,13 +1,13 @@
-#include "libnet/Acceptor.h"
-#include "libnet/ServerSocket.h"
-#include "libnet/InetSocketAddress.h"
-#include "libnet/Logger.h"
-#include "libnet/Channel.h"
-#include "libnet/EventLoop.h"
-#include "libnet/Timestamp.h"
-#include "libnet/Connection.h"
+#include "net4cxx/Acceptor.h"
+#include "net4cxx/ServerSocket.h"
+#include "net4cxx/InetSocketAddress.h"
+#include "net4cxx/Logger.h"
+#include "net4cxx/Channel.h"
+#include "net4cxx/EventLoop.h"
+#include "net4cxx/Timestamp.h"
+#include "net4cxx/Connection.h"
 
-namespace net
+namespace net4cxx
 {
 
 Acceptor::Acceptor(EventLoop *loop, int port)

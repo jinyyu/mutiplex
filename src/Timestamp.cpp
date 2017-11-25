@@ -1,8 +1,8 @@
-#include "libnet/Timestamp.h"
+#include "net4cxx/Timestamp.h"
 #include <sys/time.h>
 
 
-namespace net
+namespace net4cxx
 {
 
 static int MICROSECONDS_PER_SECOND = 1000 * 1000;

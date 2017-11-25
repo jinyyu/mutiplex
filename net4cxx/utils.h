@@ -1,5 +1,5 @@
-#ifndef NET_UTILS_H
-#define NET_UTILS_H
+#ifndef NET4CXX_UTILS_H
+#define NET4CXX_UTILS_H
 
 #include <pthread.h>
 #include <stdio.h>
@@ -7,7 +7,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 
-namespace net
+namespace net4cxx
 {
 
 class MutexLockGuard {

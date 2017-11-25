@@ -1,13 +1,13 @@
-#include "libnet/TcpServer.h"
-#include "libnet/EventLoop.h"
-#include "libnet/Acceptor.h"
-#include "libnet/Logger.h"
-#include "libnet/Connection.h"
-#include "libnet/Timestamp.h"
-#include "libnet/InetAddress.h"
-#include "libnet/InetSocketAddress.h"
+#include "net4cxx/TcpServer.h"
+#include "net4cxx/EventLoop.h"
+#include "net4cxx/Acceptor.h"
+#include "net4cxx/Logger.h"
+#include "net4cxx/Connection.h"
+#include "net4cxx/Timestamp.h"
+#include "net4cxx/InetAddress.h"
+#include "net4cxx/InetSocketAddress.h"
 
-namespace net
+namespace net4cxx
 {
 
 TcpServer::TcpServer(int port, int num_io_threads)

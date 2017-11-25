@@ -1,10 +1,10 @@
-#ifndef LIBNET_DISTRIBUTION_SESSION_H
-#define LIBNET_DISTRIBUTION_SESSION_H
+#ifndef NET4CXX_DISTRIBUTION_SESSION_H
+#define NET4CXX_DISTRIBUTION_SESSION_H
 
-#include <libnet/callbacks.h>
-#include <libnet/InetSocketAddress.h>
+#include <net4cxx/callbacks.h>
+#include <net4cxx/InetSocketAddress.h>
 
-namespace net
+namespace net4cxx
 {
 
 class EventLoop;

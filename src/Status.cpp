@@ -1,10 +1,10 @@
-#include "libnet/Status.h"
+#include "net4cxx/Status.h"
 #include <stdlib.h>
 #include <inttypes.h>
 #include <string.h>
 #include <iostream>
 
-namespace net
+namespace net4cxx
 {
 
 Status::~Status()

@@ -1,9 +1,9 @@
-#include "libnet/Status.h"
-#include "libnet/InetSocketAddress.h"
-#include "libnet/Logger.h"
+#include "net4cxx/Status.h"
+#include "net4cxx/InetSocketAddress.h"
+#include "net4cxx/Logger.h"
 
 
-namespace net
+namespace net4cxx
 {
 
 InetSocketAddress::InetSocketAddress()

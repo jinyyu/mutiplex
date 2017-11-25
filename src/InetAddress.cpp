@@ -1,4 +1,4 @@
-#include "libnet/InetAddress.h"
+#include "net4cxx/InetAddress.h"
 
 #include <arpa/inet.h>
 #include <sys/types.h>
@@ -6,10 +6,10 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include "libnet/Logger.h"
-#include "libnet/Status.h"
+#include "net4cxx/Logger.h"
+#include "net4cxx/Status.h"
 
-namespace net
+namespace net4cxx
 {
 
 InetAddress InetAddress::get_by_address(const char *addr, int family, Status &status)

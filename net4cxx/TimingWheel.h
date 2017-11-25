@@ -1,14 +1,14 @@
-#ifndef LIBNET_DISTRIBUTION_TIMINGWHEEL_H
-#define LIBNET_DISTRIBUTION_TIMINGWHEEL_H
+#ifndef NET4CXX_DISTRIBUTION_TIMINGWHEEL_H
+#define NET4CXX_DISTRIBUTION_TIMINGWHEEL_H
 
-#include <libnet/NonCopyable.h>
-#include <libnet/Timer.h>
+#include <net4cxx/NonCopyable.h>
+#include <net4cxx/Timer.h>
 
 #include <queue>
 #include <memory>
 #include <unordered_set>
 
-namespace net
+namespace net4cxx
 {
 
 class EventLoop;

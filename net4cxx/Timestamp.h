@@ -1,10 +1,10 @@
-#ifndef LIBNET_DISTRIBUTION_TIMESTAMP_H
-#define LIBNET_DISTRIBUTION_TIMESTAMP_H
+#ifndef NET4CXX_DISTRIBUTION_TIMESTAMP_H
+#define NET4CXX_DISTRIBUTION_TIMESTAMP_H
 
 #include <inttypes.h>
 #include <string>
 
-namespace net
+namespace net4cxx
 {
 
 class Timestamp

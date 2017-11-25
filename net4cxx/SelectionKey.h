@@ -1,11 +1,11 @@
-#ifndef LIBNET_DISTRIBUTION_SELECTIONKEY_H
-#define LIBNET_DISTRIBUTION_SELECTIONKEY_H
+#ifndef NET4CXX_DISTRIBUTION_SELECTIONKEY_H
+#define NET4CXX_DISTRIBUTION_SELECTIONKEY_H
 #include <inttypes.h>
 #include <string>
 
-#include <libnet/NonCopyable.h>
+#include <net4cxx/NonCopyable.h>
 
-namespace net
+namespace net4cxx
 {
 
 class Channel;

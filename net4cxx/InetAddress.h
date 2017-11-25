@@ -1,11 +1,11 @@
-#ifndef LIBNET_DISTRIBUTION_INETADDRESS_H
-#define LIBNET_DISTRIBUTION_INETADDRESS_H
+#ifndef NET4CXX_DISTRIBUTION_INETADDRESS_H
+#define NET4CXX_DISTRIBUTION_INETADDRESS_H
 #include <stdlib.h>
 #include <string.h>
 #include <arpa/inet.h>
 #include <string>
 
-namespace net
+namespace net4cxx
 {
 
 class Status;

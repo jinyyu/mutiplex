@@ -1,10 +1,10 @@
-#include "libnet/SelectionKey.h"
-#include "libnet/Channel.h"
+#include "net4cxx/SelectionKey.h"
+#include "net4cxx/Channel.h"
 
 #include <sys/epoll.h>
 #include <inttypes.h>
 
-namespace net
+namespace net4cxx
 {
 
 const uint32_t SelectionKey::OP_IN = EPOLLIN; //There is data to read

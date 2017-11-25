@@ -1,6 +1,6 @@
-#include "libnet/utils.h"
+#include "net4cxx/utils.h"
 
-namespace net
+namespace net4cxx
 {
 
 bool is_pow_of_two(uint32_t v)

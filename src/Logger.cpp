@@ -1,13 +1,13 @@
-#include "libnet/Logger.h"
+#include "net4cxx/Logger.h"
 
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <libnet/utils.h>
+#include <net4cxx/utils.h>
 
-namespace net
+namespace net4cxx
 {
 
 

@@ -1,8 +1,8 @@
-#include "libnet/Channel.h"
-#include "libnet/SelectionKey.h"
-#include "libnet/Selector.h"
+#include "net4cxx/Channel.h"
+#include "net4cxx/SelectionKey.h"
+#include "net4cxx/Selector.h"
 
-namespace net
+namespace net4cxx
 {
 
 

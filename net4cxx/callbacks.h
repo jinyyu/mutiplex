@@ -4,7 +4,7 @@
 #include <functional>
 #include <memory>
 
-namespace net
+namespace net4cxx
 {
 
 class Timestamp;

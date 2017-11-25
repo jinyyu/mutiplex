@@ -1,13 +1,13 @@
-#include "libnet/Selector.h"
+#include "net4cxx/Selector.h"
 #include <unistd.h>
 #include <memory.h>
-#include "libnet/Logger.h"
-#include "libnet/Channel.h"
-#include "libnet/SelectionKey.h"
-#include "libnet/Logger.h"
+#include "net4cxx/Logger.h"
+#include "net4cxx/Channel.h"
+#include "net4cxx/SelectionKey.h"
+#include "net4cxx/Logger.h"
 
 
-namespace net
+namespace net4cxx
 {
 
 Selector::Selector(pthread_t pthread_id)

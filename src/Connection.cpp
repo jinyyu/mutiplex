@@ -1,16 +1,16 @@
-#include "libnet/Connection.h"
-#include "libnet/Channel.h"
-#include "libnet/EventLoop.h"
-#include "libnet/Logger.h"
-#include "libnet/SelectionKey.h"
-#include "libnet/ByteBuffer.h"
-#include "libnet/CircularBuffer.h"
-#include "libnet/Timestamp.h"
+#include "net4cxx/Connection.h"
+#include "net4cxx/Channel.h"
+#include "net4cxx/EventLoop.h"
+#include "net4cxx/Logger.h"
+#include "net4cxx/SelectionKey.h"
+#include "net4cxx/ByteBuffer.h"
+#include "net4cxx/CircularBuffer.h"
+#include "net4cxx/Timestamp.h"
 
 #include <unistd.h>
 #include <assert.h>
 
-namespace net
+namespace net4cxx
 {
 
 Connection::Connection(int fd,

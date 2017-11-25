@@ -1,13 +1,13 @@
-#ifndef LIBNET_DISTRIBUTION_EVENTLOOP_H
-#define LIBNET_DISTRIBUTION_EVENTLOOP_H
+#ifndef NET4CXX_DISTRIBUTION_EVENTLOOP_H
+#define NET4CXX_DISTRIBUTION_EVENTLOOP_H
 #include <pthread.h>
 #include <vector>
 #include <unordered_map>
 
-#include <libnet/callbacks.h>
-#include <libnet/NonCopyable.h>
+#include <net4cxx/callbacks.h>
+#include <net4cxx/NonCopyable.h>
 
-namespace net
+namespace net4cxx
 {
 
 class Channel;

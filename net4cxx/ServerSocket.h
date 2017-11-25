@@ -1,11 +1,11 @@
-#ifndef LIBNET_DISTRIBUTION_SOCKET_H
-#define LIBNET_DISTRIBUTION_SOCKET_H
+#ifndef NET4CXX_DISTRIBUTION_SOCKET_H
+#define NET4CXX_DISTRIBUTION_SOCKET_H
 
-#include <libnet/Status.h>
-#include <libnet/NonCopyable.h>
+#include <net4cxx/Status.h>
+#include <net4cxx/NonCopyable.h>
 
 
-namespace net
+namespace net4cxx
 {
 
 class InetSocketAddress;

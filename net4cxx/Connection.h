@@ -1,17 +1,17 @@
-#ifndef LIBNET_DISTRIBUTION_CONNECTION_H
-#define LIBNET_DISTRIBUTION_CONNECTION_H
-#include <libnet/NonCopyable.h>
+#ifndef NET4CXX_DISTRIBUTION_CONNECTION_H
+#define NET4CXX_DISTRIBUTION_CONNECTION_H
+#include <net4cxx/NonCopyable.h>
 #include <memory>
 
-#include <libnet/InetSocketAddress.h>
-#include <libnet/InetAddress.h>
-#include <libnet/callbacks.h>
-#include <libnet/TimingWheel.h>
+#include <net4cxx/InetSocketAddress.h>
+#include <net4cxx/InetAddress.h>
+#include <net4cxx/callbacks.h>
+#include <net4cxx/TimingWheel.h>
 
 
 #include <deque>
 
-namespace net
+namespace net4cxx
 {
 class EventLoop;
 class Selector;

@@ -1,15 +1,15 @@
-#include "libnet/ServerSocket.h"
+#include "net4cxx/ServerSocket.h"
 
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-#include "libnet/Logger.h"
-#include "libnet/InetSocketAddress.h"
-#include "libnet/InetAddress.h"
+#include "net4cxx/Logger.h"
+#include "net4cxx/InetSocketAddress.h"
+#include "net4cxx/InetAddress.h"
 
-namespace net
+namespace net4cxx
 {
 
 ServerSocket::ServerSocket()

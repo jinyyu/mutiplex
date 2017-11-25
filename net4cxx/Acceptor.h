@@ -1,10 +1,10 @@
-#ifndef LIBNET_DISTRIBUTION_ACCEPTOR_H
-#define LIBNET_DISTRIBUTION_ACCEPTOR_H
+#ifndef NET4CXX_DISTRIBUTION_ACCEPTOR_H
+#define NET4CXX_DISTRIBUTION_ACCEPTOR_H
 
-#include <libnet/NonCopyable.h>
-#include <libnet/callbacks.h>
+#include <net4cxx/NonCopyable.h>
+#include <net4cxx/callbacks.h>
 
-namespace net
+namespace net4cxx
 {
 
 class ServerSocket;

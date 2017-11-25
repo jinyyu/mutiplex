@@ -1,17 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
-project(libnet-distribution)
+project(net4cxx-distribution)
 
 set(CMAKE_CXX_STANDARD 11)
 
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG ")
+include_directories(${CMAKE_SOURCE_DIR})
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    add_definitions(-std=gnu++0x)
-endif()
-
-include_directories(include)
-
-set(libnet_SRCS
+set(net4cxx_SRCS
         src/utils.cpp
         src/Status.cpp
         src/Logger.cpp
@@ -32,11 +26,11 @@ set(libnet_SRCS
         src/Timer.cpp
         src/TimingWheel.cpp)
 
-add_library(libnet ${libnet_SRCS})
-target_link_libraries(libnet ${LIBS})
+add_library(net4cxx ${net4cxx_SRCS})
+target_link_libraries(net4cxx ${LIBS})
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules (GoogleTest gtest gtest_main)
+pkg_check_modules(GoogleTest gtest gtest_main)
 if (GoogleTest_FOUND)
     include_directories(${GoogleTest_INCLUDE_DIRS})
     set(LIBS
@@ -50,7 +44,7 @@ if (Boost_FOUND)
     set(LIBS
             ${LIBS} Boost::system Boost::thread)
     add_subdirectory(benchmark/asio)
-endif(Boost_FOUND)
+endif (Boost_FOUND)
 
 add_subdirectory(benchmark/net)
 

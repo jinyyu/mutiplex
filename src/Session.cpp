@@ -1,15 +1,15 @@
-#include "libnet/Session.h"
+#include "net4cxx/Session.h"
 #include <unistd.h>
 
-#include "libnet/Timestamp.h"
-#include "libnet/Connection.h"
-#include "libnet/Selector.h"
-#include "libnet/Channel.h"
-#include "libnet/Logger.h"
-#include "libnet/SelectionKey.h"
-#include "libnet/EventLoop.h"
+#include "net4cxx/Timestamp.h"
+#include "net4cxx/Connection.h"
+#include "net4cxx/Selector.h"
+#include "net4cxx/Channel.h"
+#include "net4cxx/Logger.h"
+#include "net4cxx/SelectionKey.h"
+#include "net4cxx/EventLoop.h"
 
-namespace net
+namespace net4cxx
 {
 
 Session::Session(EventLoop *loop, const InetSocketAddress &local)

@@ -1,8 +1,8 @@
-#ifndef LIBNET_DISTRIBUTION_INETSOCKETADDRESS_H
-#define LIBNET_DISTRIBUTION_INETSOCKETADDRESS_H
-#include <libnet/InetAddress.h>
+#ifndef NET4CXX_DISTRIBUTION_INETSOCKETADDRESS_H
+#define NET4CXX_DISTRIBUTION_INETSOCKETADDRESS_H
+#include <net4cxx/InetAddress.h>
 
-namespace net
+namespace net4cxx
 {
 
 class InetSocketAddress

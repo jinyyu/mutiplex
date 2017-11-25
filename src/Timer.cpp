@@ -1,12 +1,12 @@
-#include "libnet/Timer.h"
+#include "net4cxx/Timer.h"
 
 #include <unistd.h>
 
-#include "libnet/EventLoop.h"
-#include "libnet/Logger.h"
-#include "libnet/Timestamp.h"
+#include "net4cxx/EventLoop.h"
+#include "net4cxx/Logger.h"
+#include "net4cxx/Timestamp.h"
 
-namespace net
+namespace net4cxx
 {
 
 Timer::Timer(EventLoop *loop)

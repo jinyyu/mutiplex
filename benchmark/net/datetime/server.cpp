@@ -1,10 +1,10 @@
-#include <libnet/TcpServer.h>
-#include <libnet/CircularBuffer.h>
-#include <libnet/Connection.h>
-#include <libnet/ByteBuffer.h>
-#include <libnet/Timestamp.h>
+#include <net4cxx/TcpServer.h>
+#include <net4cxx/CircularBuffer.h>
+#include <net4cxx/Connection.h>
+#include <net4cxx/ByteBuffer.h>
+#include <net4cxx/Timestamp.h>
 
-using namespace net;
+using namespace net4cxx;
 
 #define NUM_THREADS 2
 

@@ -1,10 +1,10 @@
-#ifndef LIBNET_DISTRIBUTION_CHANNEL_H
-#define LIBNET_DISTRIBUTION_CHANNEL_H
-#include <libnet/NonCopyable.h>
-#include <libnet/callbacks.h>
+#ifndef NET4CXX_DISTRIBUTION_CHANNEL_H
+#define NET4CXX_DISTRIBUTION_CHANNEL_H
+#include <net4cxx/NonCopyable.h>
+#include <net4cxx/callbacks.h>
 
 
-namespace net
+namespace net4cxx
 {
 class Selector;
 class SelectionKey;

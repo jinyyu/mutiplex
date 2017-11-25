@@ -1,10 +1,10 @@
-#ifndef LIBNET_DISTRIBUTION_CIRCULARBUFFER_H
-#define LIBNET_DISTRIBUTION_CIRCULARBUFFER_H
+#ifndef NET4CXX_DISTRIBUTION_CIRCULARBUFFER_H
+#define NET4CXX_DISTRIBUTION_CIRCULARBUFFER_H
 
-#include <libnet/NonCopyable.h>
+#include <net4cxx/NonCopyable.h>
 #include <inttypes.h>
 
-namespace net
+namespace net4cxx
 {
 class Timestamp;
 class Connection;

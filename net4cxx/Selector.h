@@ -1,12 +1,12 @@
-#ifndef LIBNET_DISTRIBUTION_SELECTOR_H
-#define LIBNET_DISTRIBUTION_SELECTOR_H
-#include <libnet/NonCopyable.h>
-#include <libnet/Timestamp.h>
+#ifndef NET4CXX_DISTRIBUTION_SELECTOR_H
+#define NET4CXX_DISTRIBUTION_SELECTOR_H
+#include <net4cxx/NonCopyable.h>
+#include <net4cxx/Timestamp.h>
 #include <vector>
 #include <sys/epoll.h>
 #include <pthread.h>
 
-namespace net
+namespace net4cxx
 {
 
 class SelectionKey;

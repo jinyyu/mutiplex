@@ -1,11 +1,11 @@
-#include <libnet/Session.h>
-#include <libnet/EventLoop.h>
-#include <libnet/ByteBuffer.h>
-#include <libnet/Timestamp.h>
-#include <libnet/Connection.h>
-#include <libnet/Logger.h>
+#include <net4cxx/Session.h>
+#include <net4cxx/EventLoop.h>
+#include <net4cxx/ByteBuffer.h>
+#include <net4cxx/Timestamp.h>
+#include <net4cxx/Connection.h>
+#include <net4cxx/Logger.h>
 
-using namespace net;
+using namespace net4cxx;
 
 
 void read_cb(ConnectionPtr conn, ByteBuffer *buffer, const Timestamp &timestamp)

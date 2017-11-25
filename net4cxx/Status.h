@@ -1,9 +1,9 @@
-#ifndef NET_STATUS_H
-#define NET_STATUS_H
+#ifndef NET4CXX_STATUS_H
+#define NET4CXX_STATUS_H
 
 #include <string>
 
-namespace net
+namespace net4cxx
 {
 
 class Status

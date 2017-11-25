@@ -1,5 +1,5 @@
 set(LIBS
-        ${LIBS} libnet)
+        ${LIBS} net4cxx)
 
 add_executable(echo_server echo/server.cpp)
 target_link_libraries(echo_server ${LIBS} )

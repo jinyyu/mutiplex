@@ -1,7 +1,7 @@
-#include "libnet/CircularBuffer.h"
-#include "libnet/utils.h"
-#include "libnet/Connection.h"
-#include "libnet/Logger.h"
+#include "net4cxx/CircularBuffer.h"
+#include "net4cxx/utils.h"
+#include "net4cxx/Connection.h"
+#include "net4cxx/Logger.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +11,7 @@
 #include <unistd.h>
 
 
-namespace net
+namespace net4cxx
 {
 
 CircularBuffer::CircularBuffer(uint32_t capacity)

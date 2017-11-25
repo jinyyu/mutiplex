@@ -1,14 +1,14 @@
-#ifndef LIBNET_DISTRIBUTION_TIMER_H
-#define LIBNET_DISTRIBUTION_TIMER_H
+#ifndef NET4CXX_DISTRIBUTION_TIMER_H
+#define NET4CXX_DISTRIBUTION_TIMER_H
 #include <sys/timerfd.h>
 #include <string.h>
 
 #include <inttypes.h>
-#include <libnet/Channel.h>
-#include <libnet/NonCopyable.h>
-#include <libnet/callbacks.h>
+#include <net4cxx/Channel.h>
+#include <net4cxx/NonCopyable.h>
+#include <net4cxx/callbacks.h>
 
-namespace net
+namespace net4cxx
 {
 class EventLoop;
 

@@ -1,12 +1,12 @@
-#ifndef LIBNET_DISTRIBUTION_SLICE_H
-#define LIBNET_DISTRIBUTION_SLICE_H
+#ifndef NET4CXX_DISTRIBUTION_SLICE_H
+#define NET4CXX_DISTRIBUTION_SLICE_H
 
 #include <assert.h>
 #include <stddef.h>
 #include <string.h>
 #include <string>
 
-namespace net
+namespace net4cxx
 {
 
 class Slice

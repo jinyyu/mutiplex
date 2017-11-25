@@ -1,17 +1,17 @@
-#include <libnet/Session.h>
-#include <libnet/EventLoop.h>
-#include <libnet/InetSocketAddress.h>
+#include <net4cxx/Session.h>
+#include <net4cxx/EventLoop.h>
+#include <net4cxx/InetSocketAddress.h>
 #include <sys/timerfd.h>
-#include <libnet/Logger.h>
-#include <libnet/Timestamp.h>
-#include <libnet/Channel.h>
+#include <net4cxx/Logger.h>
+#include <net4cxx/Timestamp.h>
+#include <net4cxx/Channel.h>
 #include <sys/time.h>
-#include <libnet/ByteBuffer.h>
-#include <libnet/Connection.h>
+#include <net4cxx/ByteBuffer.h>
+#include <net4cxx/Connection.h>
 #include <unistd.h>
 #include <thread>
 
-using namespace net;
+using namespace net4cxx;
 
 std::vector<uint64_t> totals;
 

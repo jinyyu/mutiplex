@@ -1,10 +1,10 @@
-#include "libnet/TimingWheel.h"
-#include "libnet/EventLoop.h"
-#include "libnet/Connection.h"
-#include "libnet/Logger.h"
+#include "net4cxx/TimingWheel.h"
+#include "net4cxx/EventLoop.h"
+#include "net4cxx/Connection.h"
+#include "net4cxx/Logger.h"
 
 
-namespace net
+namespace net4cxx
 {
 
 ConnectionEntry::~ConnectionEntry()

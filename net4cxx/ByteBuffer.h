@@ -1,8 +1,8 @@
-#ifndef LIBNET_DISTRIBUTION_BYTEBUFFER_H
-#define LIBNET_DISTRIBUTION_BYTEBUFFER_H
-#include <libnet/NonCopyable.h>
+#ifndef NET4CXX_DISTRIBUTION_BYTEBUFFER_H
+#define NET4CXX_DISTRIBUTION_BYTEBUFFER_H
+#include <net4cxx/NonCopyable.h>
 
-namespace net
+namespace net4cxx
 {
 
 class ByteBuffer: NonCopyable

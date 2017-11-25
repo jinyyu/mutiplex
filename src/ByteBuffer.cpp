@@ -1,9 +1,9 @@
 #include <string.h>
-#include "libnet/ByteBuffer.h"
-#include "libnet/Logger.h"
+#include "net4cxx/ByteBuffer.h"
+#include "net4cxx/Logger.h"
 #include <stdlib.h>
 
-namespace net
+namespace net4cxx
 {
 
 ByteBuffer::ByteBuffer(int capacity)
