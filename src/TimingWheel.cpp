@@ -1,8 +1,6 @@
 #include "net4cxx/TimingWheel.h"
 #include "net4cxx/EventLoop.h"
 #include "net4cxx/Connection.h"
-#include "net4cxx/Logger.h"
-
 
 namespace net4cxx
 {

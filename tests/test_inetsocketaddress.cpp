@@ -2,8 +2,6 @@
 #include <gtest/gtest.h>
 #include <net4cxx/InetAddress.h>
 #include <net4cxx/Status.h>
-#include <net4cxx/Logger.h>
-
 
 using namespace net4cxx;
 
@@ -20,15 +18,15 @@ TEST(test, test)
 
     InetSocketAddress add("wwww.baidu.com", 80);
     out = add.get_address();
-    LOG_INFO("%s", out.to_string().c_str());
+    printf("%s\n", out.to_string().c_str());
 
     ASSERT_TRUE(add.port() == 80);
 
     in = InetAddress::get_by_host("www.baidu.com", status);
     if (status.is_ok()) {
-        LOG_INFO("%s", in.to_string().c_str());
+        printf("%s\n", in.to_string().c_str());
         InetSocketAddress addr(in, 10);
-        LOG_INFO("%s", addr.get_address().to_string().c_str());
+        printf("%s\n", addr.get_address().to_string().c_str());
     }
 
 }

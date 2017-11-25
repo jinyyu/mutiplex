@@ -1,6 +1,5 @@
 #include <net4cxx/EventLoop.h>
 #include <thread>
-#include <net4cxx/Logger.h>
 #include <unistd.h>
 #include <net4cxx/Timestamp.h>
 
@@ -9,7 +8,7 @@ using namespace net4cxx;
 
 auto fun = []()
 {
-    LOG_INFO("%s", Timestamp::currentTime().to_string().c_str());
+    printf("%s\n", Timestamp::currentTime().to_string().c_str());
 };
 
 int main(int argc, char *argv[])

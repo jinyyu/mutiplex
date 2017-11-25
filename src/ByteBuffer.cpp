@@ -1,10 +1,13 @@
 #include <string.h>
 #include "net4cxx/ByteBuffer.h"
-#include "net4cxx/Logger.h"
 #include <stdlib.h>
+#include <assert.h>
+#include <log4cxx/logger.h>
 
 namespace net4cxx
 {
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 ByteBuffer::ByteBuffer(int capacity)
     : position_(0),
@@ -39,7 +42,7 @@ void ByteBuffer::position(int p)
         }
     }
     else {
-        LOG_ERROR("invalid position %d", p);
+        LOG4CXX_ERROR(logger, "invalid position " << p);
     }
 }
 
@@ -56,14 +59,14 @@ void ByteBuffer::limit(int limit)
         }
     }
     else {
-        LOG_ERROR("invalid limit %d", limit);
+        LOG4CXX_ERROR(logger, "invalid limit " << limit);
     }
 }
 
 void ByteBuffer::reset()
 {
     if (mark_ < 0) {
-        LOG_ERROR("invalid mark %d", mark_);
+        LOG4CXX_ERROR(logger, "invalid mark " << mark_);
     }
     else {
         position_ = mark_;
@@ -93,7 +96,7 @@ void ByteBuffer::rewind()
 void ByteBuffer::put(const void *data, int len)
 {
     if (len > remaining()) {
-        LOG_ERROR("len > remaining, len = %d, remaining = %d", len, remaining());
+        LOG4CXX_ERROR(logger, "len > remaining, len = " << len << " remaining " << remaining());
     }
     else {
         memcpy(this->data(), data, len);
@@ -111,10 +114,7 @@ int ByteBuffer::get(void *buffer, int len)
 
 void ByteBuffer::skip(int n)
 {
-    if (remaining() < n) {
-        LOG_ERROR("n > remaining");
-    }
-
+    assert(remaining() >= n);
     position_ += n;
 }
 

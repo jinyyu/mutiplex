@@ -2,7 +2,6 @@
 #include <net4cxx/CircularBuffer.h>
 #include <net4cxx/Connection.h>
 #include <net4cxx/ByteBuffer.h>
-#include <net4cxx/Logger.h>
 
 using namespace net4cxx;
 

@@ -1,10 +1,12 @@
 #include "net4cxx/Status.h"
 #include "net4cxx/InetSocketAddress.h"
-#include "net4cxx/Logger.h"
+#include <log4cxx/logger.h>
 
 
 namespace net4cxx
 {
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 InetSocketAddress::InetSocketAddress()
 {
@@ -41,7 +43,7 @@ InetSocketAddress::InetSocketAddress(const char *hostname, int port)
     Status s;
     InetAddress addr = InetAddress::get_by_host(hostname, s);
     if (!s.is_ok()) {
-        LOG_ERROR("invalid hostname %s", hostname);
+        LOG4CXX_ERROR(logger, "invalid hostname " << hostname);
     }
 
     from_address(addr, port);

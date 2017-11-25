@@ -2,7 +2,6 @@
 #include <net4cxx/EventLoop.h>
 #include <net4cxx/InetSocketAddress.h>
 #include <sys/timerfd.h>
-#include <net4cxx/Logger.h>
 #include <net4cxx/Timestamp.h>
 #include <net4cxx/Channel.h>
 #include <sys/time.h>
@@ -60,7 +59,7 @@ private:
 
     void handle_timeout(const Timestamp &timestamp)
     {
-        LOG_INFO("stop %s", timestamp.to_string().c_str());
+        printf("stop %s\n", timestamp.to_string().c_str());
         loop_.stop();
 
     }
@@ -69,7 +68,7 @@ private:
     {
         int fd = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
         if (fd < 0) {
-            LOG_ERROR("timerfd_create error %d", errno);
+            printf("timerfd_create error %d\n", errno);
         }
 
         timer_channel_ = new Channel(loop_.selector(), fd);
@@ -97,7 +96,7 @@ private:
         timer.it_value.tv_nsec = timeval_res.tv_usec * 1000;
 
         if (timerfd_settime(fd, 0, &timer, NULL) != 0) {
-            LOG_ERROR("timerfd_settime error %d", errno);
+            printf("timerfd_settime error %d\n", errno);
         }
     }
 

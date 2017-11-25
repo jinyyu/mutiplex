@@ -2,7 +2,6 @@
 #include <net4cxx/CircularBuffer.h>
 #include <net4cxx/Connection.h>
 #include <net4cxx/ByteBuffer.h>
-#include <net4cxx/Logger.h>
 
 using namespace net4cxx;
 
@@ -42,8 +41,6 @@ int main(int argc, char *argv[])
         printf("usage %s <port>\n", argv[0]);
         return -1;
     }
-    set_log_level(Logger::INFO);
-
     int port = atoi(argv[1]);
 
     EchoServer server(port);

@@ -1,18 +1,17 @@
 #include "net4cxx/CircularBuffer.h"
 #include "net4cxx/utils.h"
 #include "net4cxx/Connection.h"
-#include "net4cxx/Logger.h"
-
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <algorithm>
-
 #include <unistd.h>
-
+#include <log4cxx/logger.h>
 
 namespace net4cxx
 {
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 CircularBuffer::CircularBuffer(uint32_t capacity)
     : in_(0),
@@ -76,7 +75,6 @@ uint32_t CircularBuffer::get(void *buffer, uint32_t length)
 void CircularBuffer::resize(const void *buffer, uint32_t length)
 {
     uint32_t cap = roundup_pow_of_two(length + capacity_);
-    //LOG_INFO("CircularBuffer::resize %d", cap);
     char *data = (char *) malloc(cap);
 
     uint32_t buff_len = buffer_len();
@@ -84,7 +82,6 @@ void CircularBuffer::resize(const void *buffer, uint32_t length)
     uint32_t in_index = in();
 
     if (full() && in_index == 0) {
-        //case out_ == (n) capacity_, in_ == (n+1) capacity_
         memcpy(data, data_, capacity_);
     }
     else {
@@ -112,7 +109,7 @@ void CircularBuffer::resize(const void *buffer, uint32_t length)
 int CircularBuffer::write_to_fd(Connection *conn, const Timestamp &timestamp)
 {
     if (empty()) {
-        LOG_ERROR("buffer is empty");
+        LOG4CXX_ERROR(logger, "buffer is empty");
         return -1;
     }
 
@@ -126,7 +123,7 @@ int CircularBuffer::write_to_fd(Connection *conn, const Timestamp &timestamp)
         //case out_ == (n) capacity_, in_ == (n+1) capacity_
         n = ::write(conn->fd_, data_, capacity_);
         if (n < 0) {
-            LOG_ERROR("write error %d", errno);
+            LOG4CXX_ERROR(logger,"write error " << errno);
             return n;
         }
     }
@@ -142,11 +139,10 @@ int CircularBuffer::write_to_fd(Connection *conn, const Timestamp &timestamp)
 
         n = ::writev(conn->fd_, iov, (iov[1].iov_len == 0) ? 1 : 2);
         if (n < 0) {
-            LOG_ERROR("writev error fd = %d, error = %d", conn->fd_, errno);
+            LOG4CXX_ERROR(logger, "writev error fd = " << conn->fd_ << " error = " << errno);
             return n;
         }
     }
-    //LOG_INFO("write n = %d", n);
     out_ += static_cast<uint32_t>(n);
     return static_cast<int>(n);
 }

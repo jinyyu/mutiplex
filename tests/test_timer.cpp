@@ -1,9 +1,11 @@
 #include <net4cxx/Timer.h>
 #include <net4cxx/EventLoop.h>
-#include <net4cxx/Logger.h>
 #include <net4cxx/Timestamp.h>
+#include <log4cxx/logger.h>
 
 using namespace net4cxx;
+
+log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 int main(int argc, char *argv[])
 {
@@ -12,7 +14,7 @@ int main(int argc, char *argv[])
 
     TimeoutCallback cb = [](const Timestamp &timestamp)
     {
-        LOG_INFO("timeout : %s", timestamp.to_string().c_str());
+        LOG4CXX_INFO(logger, "timeout : " <<  timestamp.to_string());
     };
 
 

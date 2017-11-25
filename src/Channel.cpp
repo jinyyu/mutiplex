@@ -5,7 +5,6 @@
 namespace net4cxx
 {
 
-
 Channel::Channel(Selector *selector, int fd)
     : selector_(selector),
       selection_key_(new SelectionKey(this)),

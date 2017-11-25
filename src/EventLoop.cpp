@@ -3,17 +3,18 @@
 #include "net4cxx/Selector.h"
 #include "net4cxx/Channel.h"
 #include "net4cxx/SelectionKey.h"
-#include "net4cxx/Logger.h"
 #include "net4cxx/InetSocketAddress.h"
 #include "net4cxx/Connection.h"
 #include "net4cxx/ByteBuffer.h"
 #include "net4cxx/TimingWheel.h"
+#include <log4cxx/logger.h>
 
 #include <sys/eventfd.h>
 #include <unistd.h>
 
 namespace net4cxx
 {
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 EventLoop::EventLoop()
     : pthread_id_(pthread_self()),
@@ -29,7 +30,7 @@ EventLoop::EventLoop()
     active_keys_.reserve(128);
 
     if (wakeup_fd_ == -1) {
-        LOG_ERROR("eventfd error %d", errno);
+        LOG4CXX_ERROR(logger, "eventfd error " << errno);
     }
 
     //setup wakeup channel
@@ -38,7 +39,7 @@ EventLoop::EventLoop()
                                     {
                                         uint64_t n;
                                         if (eventfd_read(wakeup_fd_, &n) < 0) {
-                                            LOG_ERROR("eventfd_read error %d", errno);
+                                            LOG4CXX_ERROR(logger, "eventfd_read error " << errno);
                                         }
                                     });
 }
@@ -58,7 +59,7 @@ EventLoop::~EventLoop()
     }
 
     delete (timing_wheel_);
-    LOG_INFO("[%lu] : loop delete", pthread_id_);
+    LOG4CXX_INFO(logger, "loop delete " << pthread_id_);
 
 }
 
@@ -69,12 +70,10 @@ void EventLoop::run()
         active_keys_.clear();
         Timestamp time = selector_->select(8000, active_keys_);
         if (active_keys_.empty()) {
-            //LOG_INFO("nothing happened")
             continue;
         }
 
         for (SelectionKey *key: active_keys_) {
-            //LOG_INFO("fd = %d, op = %s", key->fd() ,SelectionKey::op_get_string(key->ready_ops()).c_str());
             Channel *channel = key->channel();
             if (key->is_error()) {
                 channel->handle_error(time);
@@ -111,7 +110,7 @@ void EventLoop::wake_up()
         return;
 
     if (eventfd_write(wakeup_fd_, 1) < 0) {
-        LOG_ERROR("eventfd_write error %d", errno);
+        LOG4CXX_ERROR(logger, "eventfd_write error " << errno);
     }
 }
 

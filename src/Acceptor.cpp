@@ -1,14 +1,16 @@
 #include "net4cxx/Acceptor.h"
 #include "net4cxx/ServerSocket.h"
 #include "net4cxx/InetSocketAddress.h"
-#include "net4cxx/Logger.h"
 #include "net4cxx/Channel.h"
 #include "net4cxx/EventLoop.h"
 #include "net4cxx/Timestamp.h"
 #include "net4cxx/Connection.h"
+#include <log4cxx/logger.h>
 
 namespace net4cxx
 {
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Acceptor::Acceptor(EventLoop *loop, int port)
     : Acceptor(loop, InetSocketAddress(port))
@@ -25,7 +27,7 @@ Acceptor::Acceptor(EventLoop *loop, const InetSocketAddress &addr)
 
     Status status = server_socket_->bind(addr);
     if (!status.is_ok()) {
-        LOG_ERROR("bind error %s", status.to_string().c_str());
+        LOG4CXX_ERROR(logger, "bind error " <<  status.to_string());
         exit(EXIT_FAILURE);
     }
 

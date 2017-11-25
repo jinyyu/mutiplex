@@ -3,10 +3,8 @@
 #include <net4cxx/ByteBuffer.h>
 #include <net4cxx/Timestamp.h>
 #include <net4cxx/Connection.h>
-#include <net4cxx/Logger.h>
 
 using namespace net4cxx;
-
 
 void read_cb(ConnectionPtr conn, ByteBuffer *buffer, const Timestamp &timestamp)
 {
@@ -63,7 +61,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    set_log_level(Logger::WARNING);
     DatetimeClient client(argv[1], atoi(argv[2]));
     client.run();
 }

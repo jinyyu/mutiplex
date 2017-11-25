@@ -1,14 +1,15 @@
 #include "net4cxx/Selector.h"
 #include <unistd.h>
 #include <memory.h>
-#include "net4cxx/Logger.h"
 #include "net4cxx/Channel.h"
 #include "net4cxx/SelectionKey.h"
-#include "net4cxx/Logger.h"
+
+#include <log4cxx/logger.h>
 
 
 namespace net4cxx
 {
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Selector::Selector(pthread_t pthread_id)
     : events_(64),
@@ -17,7 +18,7 @@ Selector::Selector(pthread_t pthread_id)
 {
     epoll_fd_ = epoll_create1(EPOLL_CLOEXEC);
     if (epoll_fd_ == -1) {
-        LOG_ERROR("epoll_create1 error %d", errno);
+        LOG4CXX_ERROR(logger, "epoll_create1 error " << errno);
     }
 }
 
@@ -51,7 +52,7 @@ void Selector::control(int op, SelectionKey *selection_key)
     event.events = selection_key->interest_ops();
 
     if (epoll_ctl(epoll_fd_, op, selection_key->fd(), &event) != 0) {
-        LOG_ERROR("epoll_ctl error, op = %d, errno = %d", op, errno);
+        LOG4CXX_ERROR(logger, "epoll_ctl error, op  " << op << " error " << errno);
     }
 }
 
@@ -60,10 +61,9 @@ Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey *>
     int n_events = epoll_wait(epoll_fd_, events_.data(), events_.size(), timeout_milliseconds);
     Timestamp cur = Timestamp::currentTime();
     if (n_events == -1) {
-        LOG_ERROR("epoll_wait error %d", errno);
+        LOG4CXX_ERROR(logger, "epoll_wait error " << errno);
     }
     else if (n_events == 0) {
-        //LOG_INFO("[%lu] selecting event = %d", pthread_id_, selecting_events_);
         return cur;
     }
     else {
@@ -72,12 +72,10 @@ Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey *>
             key->ready_ops(events_[i].events);
             active_key.push_back(key);
         }
-
         if (n_events == events_.size()) {
             events_.resize(n_events * 2);
         }
     }
-
     return cur;
 }
 

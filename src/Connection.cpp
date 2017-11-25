@@ -1,7 +1,6 @@
 #include "net4cxx/Connection.h"
 #include "net4cxx/Channel.h"
 #include "net4cxx/EventLoop.h"
-#include "net4cxx/Logger.h"
 #include "net4cxx/SelectionKey.h"
 #include "net4cxx/ByteBuffer.h"
 #include "net4cxx/CircularBuffer.h"
@@ -9,9 +8,11 @@
 
 #include <unistd.h>
 #include <assert.h>
+#include <log4cxx/logger.h>
 
 namespace net4cxx
 {
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Connection::Connection(int fd,
                        EventLoop *loop,
@@ -26,7 +27,7 @@ Connection::Connection(int fd,
       buffer_size_(1024),
       buffer_out_(nullptr)
 {
-    LOG_DEBUG("new connection %d", fd_);
+    LOG4CXX_ERROR(logger, "new connection " << fd_);
 }
 
 Connection::~Connection()
@@ -40,14 +41,14 @@ Connection::~Connection()
         delete buffer_out_;
     }
 
-    LOG_DEBUG("connection closed %d", fd_);
+    LOG4CXX_ERROR(logger, "connection closed " << fd_);
 
 }
 
 void Connection::setup_callbacks()
 {
     if (state_ != New) {
-        LOG_ERROR("state = %d", state_);
+        LOG4CXX_ERROR(logger, "state = " << state_);
     }
     channel_ = new Channel(loop_->selector(), fd_);
 
@@ -64,7 +65,7 @@ void Connection::setup_callbacks()
             }
             force_close();
             if (err != 104) {
-                LOG_ERROR("read error fd = %d, error = %d", fd_, err);
+                LOG4CXX_ERROR(logger, "read error fd = " << fd_  << " error = " << err);
             }
         }
         else if (n == 0) {

@@ -4,13 +4,15 @@
 #include "net4cxx/Timestamp.h"
 #include "net4cxx/Connection.h"
 #include "net4cxx/Selector.h"
-#include "net4cxx/Channel.h"
-#include "net4cxx/Logger.h"
 #include "net4cxx/SelectionKey.h"
 #include "net4cxx/EventLoop.h"
 
+#include <log4cxx/logger.h>
+
 namespace net4cxx
 {
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Session::Session(EventLoop *loop, const InetSocketAddress &local)
     : loop_(loop),
@@ -19,7 +21,7 @@ Session::Session(EventLoop *loop, const InetSocketAddress &local)
 {
     fd_ = ::socket(local.family(), SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
     if (fd_ < 0) {
-        LOG_ERROR("socket error %d", errno);
+        LOG4CXX_ERROR(logger, "socket error " << errno);
     }
 }
 
@@ -56,7 +58,7 @@ void Session::handle_connected(const Timestamp &timestamp, SelectionKey *key)
     channel_->disable_all();
 
     if (key->is_error()) {
-        LOG_INFO("error");
+        LOG4CXX_INFO(logger, "error");
         handle_error(timestamp);
         return;
     }
@@ -67,13 +69,12 @@ void Session::handle_connected(const Timestamp &timestamp, SelectionKey *key)
 
     if (err != 0) {
         //error
-        LOG_ERROR("connect error %d", err);
+        LOG4CXX_ERROR(logger, "connect error " << err);
         handle_error(timestamp);
         return;
 
     }
 
-    //LOG_INFO("connect success")
     //success
     ConnectionPtr conn(new Connection(fd_, loop_, local_, peer_));
 
@@ -91,7 +92,7 @@ bool Session::do_connect(const InetSocketAddress &addr)
     int err = errno;
 
     if (ret < 0 && err != EINPROGRESS) {
-        LOG_ERROR("connect error %d", errno);
+        LOG4CXX_ERROR(logger, "connect error " << errno);
         return false;
     }
     return true;
@@ -100,7 +101,7 @@ bool Session::do_connect(const InetSocketAddress &addr)
 
 void Session::handle_error(const Timestamp &timestamp)
 {
-    LOG_ERROR("error happened %s", timestamp.to_string().c_str());
+    LOG4CXX_ERROR(logger, "error happened " << timestamp.to_string());
     if (connect_error_callback_) {
         connect_error_callback_(timestamp);
     }

@@ -1,12 +1,10 @@
 #include "net4cxx/TcpServer.h"
 #include "net4cxx/EventLoop.h"
 #include "net4cxx/Acceptor.h"
-#include "net4cxx/Logger.h"
 #include "net4cxx/Connection.h"
 #include "net4cxx/Timestamp.h"
 #include "net4cxx/InetAddress.h"
 #include "net4cxx/InetSocketAddress.h"
-
 namespace net4cxx
 {
 

@@ -1,7 +1,6 @@
 #include <net4cxx/utils.h>
 #include <gtest/gtest.h>
 #include <net4cxx/CircularBuffer.h>
-#include <net4cxx/Logger.h>
 #include <string>
 
 using namespace net4cxx;

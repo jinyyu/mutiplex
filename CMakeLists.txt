@@ -5,10 +5,17 @@ set(CMAKE_CXX_STANDARD 11)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(log4cxx liblog4cxx REQUIRED)
+if (log4cxx_FOUND)
+    include_directories(${log4cxx_INCLUDE_DIRS})
+    set(LIBS
+            ${LIBS} ${log4cxx_LIBRARIES})
+endif (log4cxx_FOUND)
+
 set(net4cxx_SRCS
         src/utils.cpp
         src/Status.cpp
-        src/Logger.cpp
         src/ByteBuffer.cpp
         src/Timestamp.cpp
         src/InetAddress.cpp
@@ -29,7 +36,6 @@ set(net4cxx_SRCS
 add_library(net4cxx ${net4cxx_SRCS})
 target_link_libraries(net4cxx ${LIBS})
 
-find_package(PkgConfig REQUIRED)
 pkg_check_modules(GoogleTest gtest gtest_main)
 if (GoogleTest_FOUND)
     include_directories(${GoogleTest_INCLUDE_DIRS})

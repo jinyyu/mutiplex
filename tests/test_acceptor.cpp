@@ -1,21 +1,21 @@
-#include <net4cxx/Logger.h>
 #include <net4cxx/EventLoop.h>
 #include <net4cxx/Acceptor.h>
 #include <unistd.h>
 #include <net4cxx/Timestamp.h>
 #include <net4cxx/InetSocketAddress.h>
 
+#include <log4cxx/logger.h>
+
 using namespace net4cxx;
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 void cb(int fd, const Timestamp &timestamp, const InetSocketAddress &local, const InetSocketAddress &peer)
 {
 
     const char *str = "goodby\n";
     ::write(fd, str, strlen(str));
-    LOG_INFO("[%s] local = %s, peer = %s",
-             timestamp.to_string().c_str(),
-             local.to_string().c_str(),
-             peer.to_string().c_str());
+    LOG4CXX_INFO(logger,timestamp.to_string() << " " << local.to_string() << " " << peer.to_string());
     ::close(fd);
 }
 

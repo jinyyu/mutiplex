@@ -3,11 +3,13 @@
 #include <unistd.h>
 
 #include "net4cxx/EventLoop.h"
-#include "net4cxx/Logger.h"
 #include "net4cxx/Timestamp.h"
+#include <log4cxx/logger.h>
 
 namespace net4cxx
 {
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Timer::Timer(EventLoop *loop)
     : fd_(timerfd_create(CLOCK_REALTIME, TFD_NONBLOCK | TFD_CLOEXEC)),
@@ -15,7 +17,7 @@ Timer::Timer(EventLoop *loop)
       loop_(loop)
 {
     if (fd_ < 0) {
-        LOG_ERROR("timerfd_create error %d", errno);
+        LOG4CXX_ERROR(logger, "timerfd_create error " << errno);
     }
 }
 
@@ -49,7 +51,7 @@ void Timer::set_timer(uint32_t millisecond, uint32_t millisecond_interval, const
     struct itimerspec spec;
     memset(&spec, 0, sizeof(spec));
     if (millisecond == 0 || millisecond_interval == 0) {
-        LOG_ERROR("set_timer error %lu, %lu", millisecond, millisecond_interval);
+        LOG4CXX_ERROR(logger, "set_timer error " << millisecond << " " << millisecond_interval);
     }
 
     spec.it_value.tv_sec = millisecond / 1000;
@@ -64,7 +66,7 @@ void Timer::set_timer(uint32_t millisecond, uint32_t millisecond_interval, const
 void Timer::set_timmer(struct itimerspec spec, const TimeoutCallback &timeout_callback)
 {
     if (timerfd_settime(fd_, 0, &spec, NULL) < 0) {
-        LOG_ERROR("timerfd_settime error %d", errno);
+        LOG4CXX_ERROR(logger, "timerfd_settime error " <<  errno);
     }
 
     SelectionCallback cb = [this, timeout_callback](const Timestamp &timestamp, SelectionKey *key)
@@ -78,7 +80,7 @@ void Timer::handle_timeout(const Timestamp &timestamp, SelectionKey *key, const 
 {
     uint64_t exp;
     if (read(fd_, &exp, sizeof(uint64_t)) != sizeof(uint64_t)) {
-        LOG_ERROR("read error %d", errno);
+        LOG4CXX_ERROR(logger, "read error " << errno);
     }
     callback(timestamp);
 

@@ -1,5 +1,4 @@
 #include <net4cxx/TcpServer.h>
-#include <net4cxx/Logger.h>
 #include <net4cxx/ByteBuffer.h>
 #include <net4cxx/Connection.h>
 #include <net4cxx/Timestamp.h>
@@ -8,12 +7,12 @@ using namespace net4cxx;
 
 void connection_com(ConnectionPtr conn, const Timestamp &timestamp)
 {
-    LOG_INFO("new connection time = %s", timestamp.to_string().c_str());
+    printf("new connection time = %s\n", timestamp.to_string().c_str());
 }
 
 void closed(ConnectionPtr conn, const Timestamp &timestamp)
 {
-    LOG_INFO("connection closed   = %s", timestamp.to_string().c_str());
+    printf("connection closed   = %s\n", timestamp.to_string().c_str());
 }
 
 void read_cb(ConnectionPtr conn, ByteBuffer *buf, const Timestamp &)

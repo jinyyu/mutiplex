@@ -1,22 +1,22 @@
 #include "net4cxx/InetAddress.h"
-
+#include "net4cxx/Status.h"
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
-
-#include "net4cxx/Logger.h"
-#include "net4cxx/Status.h"
+#include <log4cxx/logger.h>
 
 namespace net4cxx
 {
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 InetAddress InetAddress::get_by_address(const char *addr, int family, Status &status)
 {
     InetAddress address(family);
     if (inet_pton(family, addr, &address.addr6_) != 1) {
-        LOG_ERROR("invalid address %s", addr);
+        LOG4CXX_ERROR(logger, "invalid address " << addr);
         status = Status::invalid_argument("invalid address");
     }
     return address;
@@ -35,7 +35,8 @@ InetAddress InetAddress::any(int family)
             address.addr6_ = in6addr_any;
             break;
         }
-        default:LOG_ERROR("unknown family %d", family);
+        default:
+            LOG4CXX_ERROR(logger, "unknown family " << family);
     }
 
     return address;
@@ -57,7 +58,7 @@ InetAddress InetAddress::get_by_host(const char *hostname, Status &status)
         status = Status::ok();
     }
     else {
-        LOG_ERROR("invalid hostname %s", hostname);
+        LOG4CXX_ERROR(logger, "invalid hostname " << hostname);
         status = Status::invalid_argument("invalid hostname");
     }
     return addr;
@@ -69,7 +70,7 @@ std::string InetAddress::to_string() const
     int af = v4() ? AF_INET : AF_INET6;
 
     if (inet_ntop(af, &addr_, str, INET6_ADDRSTRLEN) == NULL) {
-        LOG_ERROR("inet_ntop error : %d", errno)
+        LOG4CXX_ERROR(logger, "inet_ntop error : " << errno);
     }
     return str;
 }

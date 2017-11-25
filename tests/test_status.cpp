@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
 #include <net4cxx/Status.h>
-#include <net4cxx/Logger.h>
-
 
 using namespace net4cxx;
 
@@ -15,17 +13,17 @@ TEST(test_status, test_status)
     status = Status::invalid_argument(msg);
     ASSERT_TRUE(status.is_invalid_argument());
 
-    LOG_INFO("%s", status.to_string().c_str());
+    printf("%s\n", status.to_string().c_str());
 
 
     status = Status::io_error("io error");
     ASSERT_TRUE(status.is_io_error());
 
-    LOG_INFO("%s", status.to_string().c_str());
+    printf("%s\n", status.to_string().c_str());
 
     status = Status::io_error(nullptr);
 
-    LOG_INFO("%s", status.to_string().c_str());
+    printf("%s\n", status.to_string().c_str());
 
     Status st1;
     Status st2;
