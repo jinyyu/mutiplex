@@ -2,8 +2,12 @@
 #include <net4cxx/CircularBuffer.h>
 #include <net4cxx/Connection.h>
 #include <net4cxx/ByteBuffer.h>
+#include <log4cxx/logger.h>
+#include <log4cxx/basicconfigurator.h>
 
 using namespace net4cxx;
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 #define NUM_THREADS 1
 
@@ -41,6 +45,9 @@ int main(int argc, char *argv[])
         printf("usage %s <port>\n", argv[0]);
         return -1;
     }
+    log4cxx::BasicConfigurator::configure();
+
+    LOG4CXX_INFO(logger, "start");
     int port = atoi(argv[1]);
 
     EchoServer server(port);

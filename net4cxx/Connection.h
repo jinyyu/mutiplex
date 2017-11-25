@@ -7,6 +7,7 @@
 #include <net4cxx/InetAddress.h>
 #include <net4cxx/callbacks.h>
 #include <net4cxx/TimingWheel.h>
+#include <net4cxx/Context.h>
 
 
 #include <deque>
@@ -83,6 +84,13 @@ public:
     { entry_ = entry; }
 
     void set_default_timeout();
+
+    ContextPtr& context()
+    { return ctx_; }
+
+    void context(ContextPtr& ctx)
+    { ctx_ = std::move(ctx); }
+
 private:
     friend class EventLoop;
     void setup_callbacks();
@@ -118,6 +126,7 @@ private:
     friend class CircularBuffer;
     CircularBuffer *buffer_out_;
     WeakConnectionEntry entry_;
+    ContextPtr ctx_;
 };
 
 }
