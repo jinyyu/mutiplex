@@ -1,10 +1,10 @@
-#include <libnet/TcpServer.h>
-#include <libnet/Logger.h>
-#include <libnet/ByteBuffer.h>
-#include <libnet/Connection.h>
-#include <libnet/Timestamp.h>
+#include <net4cxx/TcpServer.h>
+#include <net4cxx/Logger.h>
+#include <net4cxx/ByteBuffer.h>
+#include <net4cxx/Connection.h>
+#include <net4cxx/Timestamp.h>
 
-using namespace net;
+using namespace net4cxx;
 
 void connection_com(ConnectionPtr conn, const Timestamp &timestamp)
 {

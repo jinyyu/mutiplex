@@ -1,10 +1,10 @@
-#include <libnet/utils.h>
+#include <net4cxx/utils.h>
 #include <gtest/gtest.h>
-#include <libnet/CircularBuffer.h>
-#include <libnet/Logger.h>
+#include <net4cxx/CircularBuffer.h>
+#include <net4cxx/Logger.h>
 #include <string>
 
-using namespace net;
+using namespace net4cxx;
 
 
 TEST(test_cirularbuffer, test_cirularbuffer)

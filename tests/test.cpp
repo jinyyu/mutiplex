@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <inttypes.h>
-#include <libnet/utils.h>
+#include <net4cxx/utils.h>
 
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>
 #include <cstdlib>
 
-using namespace net;
+using namespace net4cxx;
 
 int main(int argc, char *argv[])
 {

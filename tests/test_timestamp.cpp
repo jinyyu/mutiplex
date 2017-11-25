@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include <libnet/Timestamp.h>
+#include <net4cxx/Timestamp.h>
 #include <unistd.h>
 
-using namespace net;
+using namespace net4cxx;
 
 TEST(test_timestamp, test_timestamp)
 {

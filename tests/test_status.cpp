@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include <libnet/Status.h>
-#include <libnet/Logger.h>
+#include <net4cxx/Status.h>
+#include <net4cxx/Logger.h>
 
 
-using namespace net;
+using namespace net4cxx;
 
 TEST(test_status, test_status)
 {

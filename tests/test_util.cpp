@@ -1,9 +1,9 @@
-#include <libnet/utils.h>
+#include <net4cxx/utils.h>
 #include <gtest/gtest.h>
 #include <math.h>
 
 
-using namespace net;
+using namespace net4cxx;
 
 
 TEST(test_pow_of_two, test_pow_of_two)

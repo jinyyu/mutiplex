@@ -1,9 +1,9 @@
-#include <libnet/Timer.h>
-#include <libnet/EventLoop.h>
-#include <libnet/Logger.h>
-#include <libnet/Timestamp.h>
+#include <net4cxx/Timer.h>
+#include <net4cxx/EventLoop.h>
+#include <net4cxx/Logger.h>
+#include <net4cxx/Timestamp.h>
 
-using namespace net;
+using namespace net4cxx;
 
 int main(int argc, char *argv[])
 {

@@ -1,11 +1,11 @@
-#include <libnet/InetSocketAddress.h>
+#include <net4cxx/InetSocketAddress.h>
 #include <gtest/gtest.h>
-#include <libnet/InetAddress.h>
-#include <libnet/Status.h>
-#include <libnet/Logger.h>
+#include <net4cxx/InetAddress.h>
+#include <net4cxx/Status.h>
+#include <net4cxx/Logger.h>
 
 
-using namespace net;
+using namespace net4cxx;
 
 TEST(test, test)
 {

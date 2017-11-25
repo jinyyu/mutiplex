@@ -1,11 +1,11 @@
-#include <libnet/Logger.h>
-#include <libnet/EventLoop.h>
-#include <libnet/Acceptor.h>
+#include <net4cxx/Logger.h>
+#include <net4cxx/EventLoop.h>
+#include <net4cxx/Acceptor.h>
 #include <unistd.h>
-#include <libnet/Timestamp.h>
-#include <libnet/InetSocketAddress.h>
+#include <net4cxx/Timestamp.h>
+#include <net4cxx/InetSocketAddress.h>
 
-using namespace net;
+using namespace net4cxx;
 
 void cb(int fd, const Timestamp &timestamp, const InetSocketAddress &local, const InetSocketAddress &peer)
 {

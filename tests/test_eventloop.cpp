@@ -1,9 +1,10 @@
-#include <libnet/EventLoop.h>
+#include <net4cxx/EventLoop.h>
 #include <thread>
-#include <libnet/Logger.h>
+#include <net4cxx/Logger.h>
 #include <unistd.h>
-using namespace net;
-#include <libnet/Timestamp.h>
+#include <net4cxx/Timestamp.h>
+
+using namespace net4cxx;
 
 
 auto fun = []()

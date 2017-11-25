@@ -1,13 +1,13 @@
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>
-#include <libnet/Logger.h>
+#include <net4cxx/Logger.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 
-using namespace net;
+using namespace net4cxx;
 
 int main(int argc, char *argv[])
 {

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include <libnet/ByteBuffer.h>
+#include <net4cxx/ByteBuffer.h>
 
-using namespace net;
+using namespace net4cxx;
 
 TEST(consstruct, test_bytebuffer)
 {

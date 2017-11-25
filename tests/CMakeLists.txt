@@ -1,6 +1,6 @@
 
 set(LIBS
-        ${LIBS} libnet)
+        ${LIBS} net4cxx)
 
 
 add_executable(Tx test.cpp)
