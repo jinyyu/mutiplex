@@ -37,4 +37,4 @@ private:
 
 }
 
-#endif //LIBNET_DISTRIBUTION_TIMER_H
+#endif

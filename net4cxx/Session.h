@@ -55,4 +55,4 @@ private:
 }
 
 
-#endif //LIBNET_DISTRIBUTION_SESSION_H
+#endif

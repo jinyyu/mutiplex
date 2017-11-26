@@ -16,4 +16,4 @@ typedef std::unique_ptr<Context> ContextPtr;
 
 }
 
-#endif //NET4CXX_DISTRIBUTION_CONTEXT_H
+#endif

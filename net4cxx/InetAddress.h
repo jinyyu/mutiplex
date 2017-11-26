@@ -70,4 +70,4 @@ private:
 
 }
 
-#endif //LIBNET_DISTRIBUTION_INETADDRESS_H
+#endif

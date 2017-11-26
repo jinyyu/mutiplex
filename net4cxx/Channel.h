@@ -81,4 +81,4 @@ private:
 
 }
 
-#endif //LIBNET_DISTRIBUTION_CHANNEL_H
+#endif

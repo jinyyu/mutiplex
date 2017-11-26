@@ -58,4 +58,4 @@ private:
 
 }
 
-#endif //LIBNET_DISTRIBUTION_TIMESTAMP_H
+#endif

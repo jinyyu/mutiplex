@@ -39,4 +39,4 @@ private:
 
 }
 
-#endif //LIBNET_DISTRIBUTION_SOCKET_H
+#endif

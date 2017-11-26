@@ -125,4 +125,4 @@ private:
 
 }
 
-#endif //LIBNET_DISTRIBUTION_CONNECTION_H
+#endif

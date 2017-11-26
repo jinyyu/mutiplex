@@ -61,4 +61,4 @@ private:
 }
 
 
-#endif //LIBNET_DISTRIBUTION_CIRCULARBUFFER_H
+#endif

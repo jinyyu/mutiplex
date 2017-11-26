@@ -20,4 +20,4 @@ protected:
 
 }
 
-#endif //LIBNET_DISTRIBUTION_NONCOPYABLE_H
+#endif

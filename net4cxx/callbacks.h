@@ -37,4 +37,4 @@ typedef std::function<void(const Timestamp&)> TimeoutCallback;
 }
 
 
-#endif //LIBNET_DISTRIBUTION_CALLBACKS_H
+#endif

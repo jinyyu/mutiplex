@@ -115,4 +115,4 @@ inline int Slice::compare(const Slice& b) const
 
 }
 
-#endif //LIBNET_DISTRIBUTION_SLICE_H
+#endif

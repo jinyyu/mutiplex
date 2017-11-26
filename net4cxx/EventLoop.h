@@ -71,4 +71,4 @@ private:
 
 }
 
-#endif //LIBNET_DISTRIBUTION_EVENTLOOP_H
+#endif

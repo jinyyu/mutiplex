@@ -81,4 +81,4 @@ private:
 
 }
 
-#endif //Net_STATUS_H
+#endif

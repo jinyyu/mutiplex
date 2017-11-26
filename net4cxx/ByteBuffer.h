@@ -83,4 +83,4 @@ typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 
 }
 
-#endif //LIBNET_DISTRIBUTION_BYTEBUFFER_H
+#endif

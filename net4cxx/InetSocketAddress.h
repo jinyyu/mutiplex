@@ -52,4 +52,4 @@ private:
 }
 
 
-#endif //LIBNET_DISTRIBUTION_INETSOCKETADDRESS_H
+#endif

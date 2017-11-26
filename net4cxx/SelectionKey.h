@@ -88,4 +88,4 @@ private:
 
 }
 
-#endif //LIBNET_DISTRIBUTION_SELECTIONKEY_H
+#endif

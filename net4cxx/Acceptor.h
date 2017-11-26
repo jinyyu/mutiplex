@@ -39,4 +39,4 @@ private:
 }
 
 
-#endif //LIBNET_DISTRIBUTION_ACCEPTOR_H
+#endif
