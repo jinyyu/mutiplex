@@ -5,9 +5,14 @@ using namespace net4cxx;
 
 TEST(consstruct, test_bytebuffer)
 {
+
     ByteBuffer buffer(4);
+    ASSERT_TRUE(buffer.capacity() == 4);
+
     ASSERT_TRUE(buffer.has_remaining());
     ASSERT_TRUE(buffer.remaining() == 4);
+
+
     int a = 7;
     buffer.put(&a, sizeof(a));
 
@@ -27,9 +32,12 @@ TEST(consstruct, test_bytebuffer)
     ASSERT_TRUE(buffer.position() == 0);
 }
 
+
 TEST(test_reset, test_bytebuffer)
 {
     ByteBuffer buffer(10);
+    ASSERT_TRUE(buffer.capacity() == 10);
+
     int a = 9;
     buffer.put(&a, sizeof(a));
 
@@ -50,6 +58,7 @@ TEST(test_reset, test_bytebuffer)
     ASSERT_TRUE(b == c);
     ASSERT_TRUE(buffer.remaining() == 2);
 }
+
 
 int main(int argc, char *argv[])
 {

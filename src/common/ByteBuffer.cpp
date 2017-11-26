@@ -1,8 +1,10 @@
 #include <string.h>
+#include <netinet/in.h>
 #include "net4cxx/common/ByteBuffer.h"
 #include <stdlib.h>
 #include <assert.h>
 #include <log4cxx/logger.h>
+
 
 namespace net4cxx
 {
@@ -12,15 +14,26 @@ static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 ByteBuffer::ByteBuffer(int capacity)
     : position_(0),
       limit_(capacity),
-      capacity_(capacity),
       mark_(-1)
 {
-    data_ = (char*) malloc(capacity);
+    if (capacity < 0) {
+        LOG4CXX_ERROR(logger, "invalid capacity " << capacity);
+    }
+    int cap = htonl(capacity);
+    data_ = (char*) malloc(capacity + sizeof(int));
+    memcpy(data_, &cap, sizeof(int));
 }
 
 ByteBuffer::~ByteBuffer()
 {
     free(data_);
+}
+
+int ByteBuffer::capacity() const
+{
+    int cap;
+    memcpy(&cap, data_, sizeof(int));
+    return ntohl(cap);
 }
 
 void ByteBuffer::position(int p)
@@ -38,7 +51,7 @@ void ByteBuffer::position(int p)
 
 void ByteBuffer::limit(int limit)
 {
-    if (limit <= capacity_ && limit >= 0) {
+    if (limit <= capacity() && limit >= 0) {
         limit_ = limit;
         if (position_ > limit_) {
             position_ = limit_;
@@ -66,7 +79,7 @@ void ByteBuffer::reset()
 void ByteBuffer::clear()
 {
     position_ = 0;
-    limit_ = capacity_;
+    limit_ = capacity();
     mark_ = -1;
 }
 
@@ -89,7 +102,7 @@ void ByteBuffer::put(const void* data, int len)
         LOG4CXX_ERROR(logger, "len > remaining, len = " << len << " remaining " << remaining());
     }
     else {
-        memcpy(this->data(), data, len);
+        memcpy(this->data() , data, len);
         position_ += len;
     }
 }

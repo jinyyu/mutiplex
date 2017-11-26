@@ -14,8 +14,7 @@ public:
     ~ByteBuffer();
 
     //Returns this buffer's capacity
-    int capacity() const
-    { return capacity_; }
+    int capacity() const;
 
     //Returns this buffer's position
     int position() const
@@ -60,10 +59,10 @@ public:
     { return position_ < limit_; }
 
     const void *data() const
-    { return data_ + position_; }
+    { return data_ + sizeof(int) + position_; }
 
     void *data()
-    { return data_ + position_; }
+    { return data_ + sizeof(int) + position_; }
 
     //bulk get method
     int get(void *buffer, int len);
@@ -72,10 +71,12 @@ public:
     void put(const void *data, int len);
 
 private:
+/*
+| capacity 4 bytes  |  data bytes      |
+*/
     int limit_;
     int mark_;
     int position_;
-    const int capacity_;
     char *data_;
 };
 
