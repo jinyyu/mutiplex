@@ -13,11 +13,11 @@ class Timestamp;
 class Channel: NonCopyable
 {
 public:
-    explicit Channel(Selector *selector, int fd);
+    explicit Channel(Selector* selector, int fd);
 
     ~Channel();
 
-    void enable_reading(const SelectionCallback &callback);
+    void enable_reading(const SelectionCallback& callback);
 
     void disable_reading();
 
@@ -25,27 +25,27 @@ public:
 
     void disable_writing();
 
-    void set_writing_selection_callback(const SelectionCallback &callback)
+    void set_writing_selection_callback(const SelectionCallback& callback)
     { write_callback_ = callback; }
 
-    void set_error_selection_callback(const SelectionCallback &callback)
+    void set_error_selection_callback(const SelectionCallback& callback)
     { error_callback_ = callback; }
 
     void reset_fd(int fd);
 
-    void handle_read(const Timestamp &timestamp) const
+    void handle_read(const Timestamp& timestamp) const
     {
         if (read_callback_)
             read_callback_(timestamp, selection_key_);
     }
 
-    void handle_wirte(const Timestamp &timestamp) const
+    void handle_wirte(const Timestamp& timestamp) const
     {
         if (write_callback_)
             write_callback_(timestamp, selection_key_);
     }
 
-    void handle_error(const Timestamp &timestamp) const
+    void handle_error(const Timestamp& timestamp) const
     {
         if (error_callback_)
             error_callback_(timestamp, selection_key_);
@@ -71,8 +71,8 @@ private:
     };
 
     int fd_;
-    Selector *selector_;
-    SelectionKey *selection_key_;
+    Selector* selector_;
+    SelectionKey* selection_key_;
     int status_;
     SelectionCallback read_callback_;
     SelectionCallback write_callback_;

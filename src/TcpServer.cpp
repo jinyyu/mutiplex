@@ -26,12 +26,12 @@ void TcpServer::run()
     io_loops_.resize(num_io_threads_, NULL);
     auto run_cb = [this](int index)
     {
-        EventLoop *loop = new EventLoop();
+        EventLoop* loop = new EventLoop();
         loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
         NewConnectionCallback cb = [this, loop](int fd,
-                                                const Timestamp &timestamp,
-                                                const InetSocketAddress &local,
-                                                const InetSocketAddress &peer)
+                                                const Timestamp& timestamp,
+                                                const InetSocketAddress& local,
+                                                const InetSocketAddress& peer)
         {
             ConnectionPtr conn(new Connection(fd, loop, local, peer));
             conn->connection_established_callback(connection_established_callback_);

@@ -27,24 +27,24 @@ Selector::~Selector()
     ::close(epoll_fd_);
 }
 
-void Selector::add(SelectionKey *selection_key)
+void Selector::add(SelectionKey* selection_key)
 {
     control(EPOLL_CTL_ADD, selection_key);
     ++selecting_events_;
 }
 
-void Selector::modify(SelectionKey *selection_key)
+void Selector::modify(SelectionKey* selection_key)
 {
     control(EPOLL_CTL_MOD, selection_key);
 }
 
-void Selector::remove(SelectionKey *selection_key)
+void Selector::remove(SelectionKey* selection_key)
 {
     control(EPOLL_CTL_DEL, selection_key);
     --selecting_events_;
 }
 
-void Selector::control(int op, SelectionKey *selection_key)
+void Selector::control(int op, SelectionKey* selection_key)
 {
     struct epoll_event event;
     bzero(&event, sizeof(event));
@@ -56,7 +56,7 @@ void Selector::control(int op, SelectionKey *selection_key)
     }
 }
 
-Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey *> &active_key)
+Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey*>& active_key)
 {
     int n_events = epoll_wait(epoll_fd_, events_.data(), events_.size(), timeout_milliseconds);
     Timestamp cur = Timestamp::currentTime();
@@ -68,7 +68,7 @@ Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey *>
     }
     else {
         for (int i = 0; i < n_events; ++i) {
-            SelectionKey *key = (SelectionKey *) events_[i].data.ptr;
+            SelectionKey* key = (SelectionKey*) events_[i].data.ptr;
             key->ready_ops(events_[i].events);
             active_key.push_back(key);
         }

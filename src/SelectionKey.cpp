@@ -19,7 +19,7 @@ const uint32_t
     SelectionKey::OP_HUP = EPOLLHUP; //Hung up (the connection has been broken, usually for pipes and sockets)
 
 
-Selector *SelectionKey::selector() const
+Selector* SelectionKey::selector() const
 {
     return channel_->selector_;
 }

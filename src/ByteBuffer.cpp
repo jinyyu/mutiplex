@@ -15,17 +15,7 @@ ByteBuffer::ByteBuffer(int capacity)
       capacity_(capacity),
       mark_(-1)
 {
-    data_ = (char *) malloc(capacity);
-}
-
-ByteBuffer::ByteBuffer(const ByteBuffer &buffer)
-    : limit_(buffer.limit_),
-      mark_(buffer.mark_),
-      position_(buffer.position_),
-      capacity_(buffer.capacity_)
-{
-    data_ = (char *) malloc(capacity_);
-    memcpy(data_, buffer.data_, capacity_);
+    data_ = (char*) malloc(capacity);
 }
 
 ByteBuffer::~ByteBuffer()
@@ -93,7 +83,7 @@ void ByteBuffer::rewind()
     mark_ = -1;
 }
 
-void ByteBuffer::put(const void *data, int len)
+void ByteBuffer::put(const void* data, int len)
 {
     if (len > remaining()) {
         LOG4CXX_ERROR(logger, "len > remaining, len = " << len << " remaining " << remaining());
@@ -104,7 +94,7 @@ void ByteBuffer::put(const void *data, int len)
     }
 }
 
-int ByteBuffer::get(void *buffer, int len)
+int ByteBuffer::get(void* buffer, int len)
 {
     len = std::min(len, remaining());
     memcpy(buffer, data(), len);

@@ -26,7 +26,7 @@ CircularBuffer::CircularBuffer(uint32_t capacity)
         capacity_ = roundup_pow_of_two(cap);
     }
 
-    data_ = (char *) malloc(capacity_);
+    data_ = (char*) malloc(capacity_);
 }
 
 CircularBuffer::~CircularBuffer()
@@ -34,7 +34,7 @@ CircularBuffer::~CircularBuffer()
     free(data_);
 }
 
-void CircularBuffer::put(const void *buffer, uint32_t length)
+void CircularBuffer::put(const void* buffer, uint32_t length)
 {
     if (buffer_remaining() < length) {
         resize(buffer, length);
@@ -49,13 +49,13 @@ void CircularBuffer::put(const void *buffer, uint32_t length)
         memcpy(data_ + in_index, buffer, len);
 
         /* then put the rest (if any) at the beginning of the buffer */
-        memcpy(data_, (char *) buffer + len, length - len);
+        memcpy(data_, (char*) buffer + len, length - len);
 
         in_ += length;
     }
 }
 
-uint32_t CircularBuffer::get(void *buffer, uint32_t length)
+uint32_t CircularBuffer::get(void* buffer, uint32_t length)
 {
     uint32_t size = std::min(length, buffer_len());
 
@@ -66,16 +66,16 @@ uint32_t CircularBuffer::get(void *buffer, uint32_t length)
     memcpy(buffer, data_ + out_index, len);
 
     /* then get the rest (if any) from the beginning of the buffer */
-    memcpy((char *) buffer + len, data_, size - len);
+    memcpy((char*) buffer + len, data_, size - len);
 
     out_ += size;
     return size;
 }
 
-void CircularBuffer::resize(const void *buffer, uint32_t length)
+void CircularBuffer::resize(const void* buffer, uint32_t length)
 {
     uint32_t cap = roundup_pow_of_two(length + capacity_);
-    char *data = (char *) malloc(cap);
+    char* data = (char*) malloc(cap);
 
     uint32_t buff_len = buffer_len();
     uint32_t out_index = out();
@@ -106,7 +106,7 @@ void CircularBuffer::resize(const void *buffer, uint32_t length)
     capacity_ = cap;
 }
 
-int CircularBuffer::write_to_fd(Connection *conn, const Timestamp &timestamp)
+int CircularBuffer::write_to_fd(Connection* conn, const Timestamp& timestamp)
 {
     if (empty()) {
         LOG4CXX_ERROR(logger, "buffer is empty");
@@ -123,7 +123,7 @@ int CircularBuffer::write_to_fd(Connection *conn, const Timestamp &timestamp)
         //case out_ == (n) capacity_, in_ == (n+1) capacity_
         n = ::write(conn->fd_, data_, capacity_);
         if (n < 0) {
-            LOG4CXX_ERROR(logger,"write error " << errno);
+            LOG4CXX_ERROR(logger, "write error " << errno);
             return n;
         }
     }

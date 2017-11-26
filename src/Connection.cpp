@@ -15,9 +15,9 @@ namespace net4cxx
 static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Connection::Connection(int fd,
-                       EventLoop *loop,
-                       const InetSocketAddress &local,
-                       const InetSocketAddress &peer)
+                       EventLoop* loop,
+                       const InetSocketAddress& local,
+                       const InetSocketAddress& peer)
     : channel_(nullptr),
       fd_(fd),
       peer_(peer),
@@ -53,9 +53,9 @@ void Connection::setup_callbacks()
     }
     channel_ = new Channel(loop_->selector(), fd_);
 
-    SelectionCallback read_cb = [this](const Timestamp &timestamp, SelectionKey *key)
+    SelectionCallback read_cb = [this](const Timestamp& timestamp, SelectionKey* key)
     {
-        ByteBuffer *buffer = loop_->recv_buffer_;
+        ByteBuffer* buffer = loop_->recv_buffer_;
         buffer->clear();
         ssize_t n = ::read(fd_, buffer->data(), buffer->remaining());
         int err = errno;
@@ -65,7 +65,7 @@ void Connection::setup_callbacks()
             }
             force_close();
             if (err != 104) {
-                LOG4CXX_ERROR(logger, "read error fd = " << fd_  << " error = " << err);
+                LOG4CXX_ERROR(logger, "read error fd = " << fd_ << " error = " << err);
             }
         }
         else if (n == 0) {
@@ -85,13 +85,13 @@ void Connection::setup_callbacks()
 
     channel_->enable_reading(read_cb);
 
-    SelectionCallback write_cb = [this](const Timestamp &timestamp, SelectionKey *)
+    SelectionCallback write_cb = [this](const Timestamp& timestamp, SelectionKey*)
     {
         this->handle_write(timestamp);
     };
     channel_->set_writing_selection_callback(write_cb);
 
-    SelectionCallback error_cb = [this](const Timestamp &timestamp, SelectionKey *)
+    SelectionCallback error_cb = [this](const Timestamp& timestamp, SelectionKey*)
     {
         this->force_close();
     };
@@ -142,27 +142,26 @@ void Connection::force_close()
     loop_->post(cb);
 }
 
-bool Connection::write(const ByteBuffer &buffer)
+bool Connection::write(const ByteBufferPtr& buffer)
 {
     if (is_closed()) {
         return false;
     }
     if (loop_->is_in_loop_thread()) {
-        do_write(buffer.data(), buffer.remaining());
+        do_write(buffer->data(), buffer->remaining());
 
     }
     else {
-        ByteBuffer buff(buffer);
-        auto callback = [this, buff]
+        auto callback = [this, buffer]
         {
-            this->do_write(buff.data(), buff.remaining());
+            this->do_write(buffer->data(), buffer->remaining());
         };
         loop_->post(callback);
     }
     return true;
 }
 
-bool Connection::write(const void *data, uint32_t len)
+bool Connection::write(const void* data, uint32_t len)
 {
     if (is_closed()) {
         return false;
@@ -171,21 +170,21 @@ bool Connection::write(const void *data, uint32_t len)
         do_write(data, len);
     }
     else {
-        ByteBuffer buffer(len);
-        buffer.put(data, len);
-        buffer.flip();
+        ByteBufferPtr buffer(new ByteBuffer(len));
+        buffer->put(data, len);
+        buffer->flip();
 
         //copy buffer
         auto callback = [this, buffer]()
         {
-            this->do_write(buffer.data(), buffer.remaining());
+            this->do_write(buffer->data(), static_cast<uint32_t>(buffer->remaining()));
         };
         loop_->post(callback);
     }
     return true;
 }
 
-void Connection::do_write(const void *data, uint32_t len)
+void Connection::do_write(const void* data, uint32_t len)
 {
     if (state_ == Closed) {
         force_close();
@@ -200,7 +199,7 @@ void Connection::do_write(const void *data, uint32_t len)
     }
 }
 
-void Connection::handle_write(const Timestamp &timestamp)
+void Connection::handle_write(const Timestamp& timestamp)
 {
     assert(!buffer_out_->empty());
 

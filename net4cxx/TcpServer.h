@@ -19,13 +19,13 @@ public:
 
     ~TcpServer();
 
-    void connection_established_callback(const ConnectionEstablishedCallback &cb)
+    void connection_established_callback(const ConnectionEstablishedCallback& cb)
     { connection_established_callback_ = cb; }
 
-    void read_message_callback(const ReadMessageCallback &cb)
+    void read_message_callback(const ReadMessageCallback& cb)
     { read_message_callback_ = cb; }
 
-    void connection_closed_callback(const ConnectionClosedCallback &cb)
+    void connection_closed_callback(const ConnectionClosedCallback& cb)
     { connection_closed_callback_ = cb; }
 
     void run();

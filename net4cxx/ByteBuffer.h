@@ -1,6 +1,7 @@
 #ifndef NET4CXX_DISTRIBUTION_BYTEBUFFER_H
 #define NET4CXX_DISTRIBUTION_BYTEBUFFER_H
 #include <net4cxx/NonCopyable.h>
+#include <boost/asio/detail/shared_ptr.hpp>
 
 namespace net4cxx
 {
@@ -9,8 +10,6 @@ class ByteBuffer: NonCopyable
 {
 public:
     explicit ByteBuffer(int capacity);
-
-    explicit ByteBuffer(const ByteBuffer &buffer);
 
     ~ByteBuffer();
 
@@ -73,14 +72,14 @@ public:
     void put(const void *data, int len);
 
 private:
-
     int limit_;
     int mark_;
     int position_;
     const int capacity_;
     char *data_;
-
 };
+
+typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 
 }
 

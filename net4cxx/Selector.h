@@ -18,17 +18,17 @@ public:
 
     ~Selector();
 
-    void add(SelectionKey *selection_key);
+    void add(SelectionKey* selection_key);
 
-    void modify(SelectionKey *selection_key);
+    void modify(SelectionKey* selection_key);
 
-    void remove(SelectionKey *selection_key);
+    void remove(SelectionKey* selection_key);
 
-    Timestamp select(int timeout_milliseconds, std::vector<SelectionKey *> &active_key);
+    Timestamp select(int timeout_milliseconds, std::vector<SelectionKey*>& active_key);
 
 
 private:
-    void control(int op, SelectionKey *selection_key);
+    void control(int op, SelectionKey* selection_key);
 
     pthread_t pthread_id_;
     int epoll_fd_;

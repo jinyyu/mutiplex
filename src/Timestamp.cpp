@@ -7,7 +7,7 @@ namespace net4cxx
 
 static int MICROSECONDS_PER_SECOND = 1000 * 1000;
 
-static void timestamp_get_timeval(uint64_t timestamp, struct timeval &tm)
+static void timestamp_get_timeval(uint64_t timestamp, struct timeval& tm)
 {
     tm.tv_sec = timestamp / MICROSECONDS_PER_SECOND;
     tm.tv_usec = timestamp % MICROSECONDS_PER_SECOND;

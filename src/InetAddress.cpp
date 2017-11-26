@@ -12,7 +12,7 @@ namespace net4cxx
 
 static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
-InetAddress InetAddress::get_by_address(const char *addr, int family, Status &status)
+InetAddress InetAddress::get_by_address(const char* addr, int family, Status& status)
 {
     InetAddress address(family);
     if (inet_pton(family, addr, &address.addr6_) != 1) {
@@ -42,12 +42,12 @@ InetAddress InetAddress::any(int family)
     return address;
 }
 
-InetAddress InetAddress::get_by_host(const char *hostname, Status &status)
+InetAddress InetAddress::get_by_host(const char* hostname, Status& status)
 {
     InetAddress addr(AF_INET);
     char buf[8192];
     struct hostent hent;
-    struct hostent *he = NULL;
+    struct hostent* he = NULL;
     int herrno = 0;
     bzero(&hent, sizeof(hent));
 
@@ -75,7 +75,7 @@ std::string InetAddress::to_string() const
     return str;
 }
 
-bool InetAddress::operator==(const InetAddress &address)
+bool InetAddress::operator==(const InetAddress& address)
 {
     if (this->famliy_ != address.famliy_) {
         return false;
@@ -89,7 +89,7 @@ bool InetAddress::operator==(const InetAddress &address)
     }
 }
 
-bool InetAddress::operator!=(const InetAddress &address)
+bool InetAddress::operator!=(const InetAddress& address)
 {
     return !InetAddress::operator==(address);
 }

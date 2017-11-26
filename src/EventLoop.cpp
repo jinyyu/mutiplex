@@ -33,7 +33,7 @@ EventLoop::EventLoop()
 
     //setup wakeup channel
     wakeup_channel_ = new Channel(selector_, wakeup_fd_);
-    wakeup_channel_->enable_reading([this](const Timestamp &, SelectionKey *)
+    wakeup_channel_->enable_reading([this](const Timestamp&, SelectionKey*)
                                     {
                                         uint64_t n;
                                         if (eventfd_read(wakeup_fd_, &n) < 0) {
@@ -69,8 +69,8 @@ void EventLoop::run()
             continue;
         }
 
-        for (SelectionKey *key: active_keys_) {
-            Channel *channel = key->channel();
+        for (SelectionKey* key: active_keys_) {
+            Channel* channel = key->channel();
             if (key->is_error()) {
                 channel->handle_error(time);
             }
@@ -110,7 +110,7 @@ void EventLoop::wake_up()
     }
 }
 
-void EventLoop::post(const Callback &callback)
+void EventLoop::post(const Callback& callback)
 {
     if (is_in_loop_thread()) {
         callback();
@@ -124,7 +124,7 @@ void EventLoop::post(const Callback &callback)
     }
 }
 
-void EventLoop::on_new_connection(ConnectionPtr& conn, const Timestamp &timestamp)
+void EventLoop::on_new_connection(ConnectionPtr& conn, const Timestamp& timestamp)
 {
     conn->setup_callbacks();
 

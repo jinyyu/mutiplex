@@ -19,9 +19,9 @@ public:
     ~ServerSocket();
 
     //Binds the ServerSocket to a specific address (IP address and port number)
-    Status bind(const InetSocketAddress &addr);
+    Status bind(const InetSocketAddress& addr);
 
-    int accept(InetSocketAddress &addr);
+    int accept(InetSocketAddress& addr);
 
     //Enable/disable the SO_REUSEADDR socket option
     void reuse_address(bool on);

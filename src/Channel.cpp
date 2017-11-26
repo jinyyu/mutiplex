@@ -5,7 +5,7 @@
 namespace net4cxx
 {
 
-Channel::Channel(Selector *selector, int fd)
+Channel::Channel(Selector* selector, int fd)
     : selector_(selector),
       selection_key_(new SelectionKey(this)),
       status_(NEW),
@@ -21,7 +21,7 @@ Channel::~Channel()
     delete selection_key_;
 }
 
-void Channel::enable_reading(const SelectionCallback &callback)
+void Channel::enable_reading(const SelectionCallback& callback)
 {
     selection_key_->enable_ops(SelectionKey::OP_IN);
     read_callback_ = callback;

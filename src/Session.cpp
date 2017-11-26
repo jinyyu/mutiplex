@@ -15,7 +15,7 @@ namespace net4cxx
 
 static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
-Session::Session(EventLoop *loop, const InetSocketAddress &local)
+Session::Session(EventLoop* loop, const InetSocketAddress& local)
     : loop_(loop),
       local_(local),
       channel_(nullptr)
@@ -33,11 +33,11 @@ Session::~Session()
     }
 }
 
-void Session::connect(const InetSocketAddress &peer)
+void Session::connect(const InetSocketAddress& peer)
 {
     peer_ = peer;
     channel_ = new Channel(loop_->selector_, fd_);
-    SelectionCallback write_cb = [this](const Timestamp &timestamp, SelectionKey *key)
+    SelectionCallback write_cb = [this](const Timestamp& timestamp, SelectionKey* key)
     {
         this->handle_connected(timestamp, key);
     };
@@ -54,7 +54,7 @@ void Session::connect(const InetSocketAddress &peer)
     }
 }
 
-void Session::handle_connected(const Timestamp &timestamp, SelectionKey *key)
+void Session::handle_connected(const Timestamp& timestamp, SelectionKey* key)
 {
     channel_->disable_all();
 
@@ -86,7 +86,7 @@ void Session::handle_connected(const Timestamp &timestamp, SelectionKey *key)
     loop_->on_new_connection(conn, timestamp);
 }
 
-bool Session::do_connect(const InetSocketAddress &addr)
+bool Session::do_connect(const InetSocketAddress& addr)
 {
     int len = addr.family() == AF_INET ? sizeof(addr.sockaddr_) : sizeof(addr.sockaddr6_);
     int ret = ::connect(fd_, addr.sockaddr_cast(), len);
@@ -100,7 +100,7 @@ bool Session::do_connect(const InetSocketAddress &addr)
 
 }
 
-void Session::handle_error(const Timestamp &timestamp)
+void Session::handle_error(const Timestamp& timestamp)
 {
     LOG4CXX_ERROR(logger, "error happened " << timestamp.to_string());
     if (connect_error_callback_) {

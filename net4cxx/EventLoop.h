@@ -27,9 +27,9 @@ public:
     void run();
 
     //Request the EventLoop to invoke the given callback and return immediately
-    void post(const Callback &callback);
+    void post(const Callback& callback);
 
-    void on_new_connection(ConnectionPtr& conn, const Timestamp &timestamp);
+    void on_new_connection(ConnectionPtr& conn, const Timestamp& timestamp);
 
     void allocate_receive_buffer(uint32_t capacity);
 
@@ -38,7 +38,7 @@ public:
     bool is_in_loop_thread() const
     { return pthread_id_ == pthread_self(); }
 
-    Selector *selector() const
+    Selector* selector() const
     { return selector_; }
 
 private:
@@ -55,18 +55,18 @@ private:
 
     friend class Acceptor;
     friend class Session;
-    Selector *selector_;
-    std::vector<SelectionKey *> active_keys_;
+    Selector* selector_;
+    std::vector<SelectionKey*> active_keys_;
 
     int wakeup_fd_;
-    Channel *wakeup_channel_;
+    Channel* wakeup_channel_;
 
     pthread_mutex_t mutex_;
     std::vector<Callback> callbacks_; //lock by mutex_
 
     std::unordered_map<int, ConnectionPtr> connections_;
 
-    ByteBuffer *recv_buffer_;
+    ByteBuffer* recv_buffer_;
 };
 
 }

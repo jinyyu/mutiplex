@@ -14,7 +14,7 @@ public:
         : timestamp_(0)
     {}
 
-    Timestamp(const Timestamp &timestamp)
+    Timestamp(const Timestamp& timestamp)
         : timestamp_(timestamp.timestamp_)
     {}
 
@@ -23,28 +23,28 @@ public:
         : timestamp_(timestamp)
     {}
 
-    Timestamp &operator=(const Timestamp &timestamp)
+    Timestamp& operator=(const Timestamp& timestamp)
     {
         this->timestamp_ = timestamp.timestamp_;
         return *this;
     }
 
-    bool operator<(const Timestamp &timestamp) const
+    bool operator<(const Timestamp& timestamp) const
     { return this->timestamp_ < timestamp.timestamp_; }
 
-    bool operator>(const Timestamp &timestamp) const
+    bool operator>(const Timestamp& timestamp) const
     { return this->timestamp_ > timestamp.timestamp_; }
 
-    bool operator==(const Timestamp &timestamp) const
+    bool operator==(const Timestamp& timestamp) const
     { return this->timestamp_ == timestamp.timestamp_; }
 
-    bool operator!=(const Timestamp &timestamp) const
+    bool operator!=(const Timestamp& timestamp) const
     { return this->timestamp_ != timestamp.timestamp_; }
 
-    bool operator<=(const Timestamp &timestamp) const
+    bool operator<=(const Timestamp& timestamp) const
     { return this->timestamp_ <= timestamp.timestamp_; }
 
-    bool operator>=(const Timestamp &timestamp) const
+    bool operator>=(const Timestamp& timestamp) const
     { return this->timestamp_ >= timestamp.timestamp_; }
 
     static Timestamp currentTime();

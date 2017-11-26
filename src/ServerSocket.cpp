@@ -27,7 +27,7 @@ ServerSocket::~ServerSocket()
     ::close(fd_);
 }
 
-Status ServerSocket::bind(const InetSocketAddress &addr)
+Status ServerSocket::bind(const InetSocketAddress& addr)
 {
     int ret = ::bind(fd_, addr.sockaddr_cast(), sizeof(sockaddr_in6));
     if (ret < 0) {
@@ -45,7 +45,7 @@ void ServerSocket::listen()
     }
 }
 
-int ServerSocket::accept(InetSocketAddress &addr)
+int ServerSocket::accept(InetSocketAddress& addr)
 {
     uint32_t len = sizeof(addr.sockaddr6_);
     int fd = ::accept4(fd_, addr.sockaddr_cast(), &len, SOCK_NONBLOCK | SOCK_CLOEXEC);

@@ -21,7 +21,7 @@ public:
     static const uint32_t OP_ERR;
     static const uint32_t OP_HUP;
 
-    explicit SelectionKey(Channel *channel)
+    explicit SelectionKey(Channel* channel)
         : channel_(channel), interest_ops_(0), ready_ops_(0)
     {}
 
@@ -29,7 +29,7 @@ public:
     void cancel();
 
     //Returns the channel for which this key was created
-    Channel *channel() const
+    Channel* channel() const
     { return channel_; }
 
     //Retrieves this key's interest set
@@ -63,7 +63,7 @@ public:
     void ready_ops(uint32_t ops)
     { ready_ops_ = ops; }
 
-    Selector *selector() const;
+    Selector* selector() const;
 
     int fd() const;
 
@@ -79,8 +79,8 @@ private:
     { interest_ops_ &= ~op; }
 
 private:
-    Channel *channel_;
-    Selector *selector_;
+    Channel* channel_;
+    Selector* selector_;
     uint32_t interest_ops_;
     uint32_t ready_ops_;
 
