@@ -2,7 +2,7 @@
 #define NET4CXX_DISTRIBUTION_ACCEPTOR_H
 
 #include <net4cxx/common/NonCopyable.h>
-#include <net4cxx/reactor/callbacks.h>
+#include <net4cxx/common/callbacks.h>
 
 namespace net4cxx
 {

@@ -5,7 +5,7 @@
 
 #include <net4cxx/common/InetSocketAddress.h>
 #include <net4cxx/common/InetAddress.h>
-#include <net4cxx/reactor/callbacks.h>
+#include <net4cxx/common/callbacks.h>
 #include <net4cxx/reactor/Context.h>
 
 

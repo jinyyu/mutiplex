@@ -98,6 +98,7 @@ void EventLoop::run()
 void EventLoop::stop()
 {
     is_quit_ = true;
+    wake_up();
 }
 
 void EventLoop::wake_up()

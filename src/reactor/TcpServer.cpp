@@ -3,10 +3,12 @@
 #include "net4cxx/reactor/Acceptor.h"
 #include "net4cxx/reactor/Connection.h"
 #include "net4cxx/common/Timestamp.h"
-#include "net4cxx/common/InetAddress.h"
-#include "net4cxx/common/InetSocketAddress.h"
+#include <log4cxx/logger.h>
+
 namespace net4cxx
 {
+
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 TcpServer::TcpServer(int port, int num_io_threads)
     : port_(port),
@@ -16,6 +18,9 @@ TcpServer::TcpServer(int port, int num_io_threads)
 
 TcpServer::~TcpServer()
 {
+    for (auto i = 0; i < threads_.size(); ++i) {
+        threads_[i].join();
+    }
     for (auto it = io_loops_.begin(); it < io_loops_.end(); ++it) {
         delete (*it);
     }
@@ -43,14 +48,21 @@ void TcpServer::run()
         acceptor.new_connection_callback(cb);
         io_loops_[index] = loop;
         loop->run();
+        LOG4CXX_INFO(logger, "loop exit " << index);
+
+        std::unique_lock<std::mutex> lock(mutex_);
+        --count_down_;
+        cv_.notify_one();
     };
 
-    for (int i = 1; i < num_io_threads_; ++i) {
-        std::thread thread(std::bind(run_cb, i));
-        thread.detach();
+    count_down_ = num_io_threads_;
+    for (int i = 0; i < num_io_threads_; ++i) {
+        threads_.emplace_back(std::bind(run_cb, i));
     }
-
-    run_cb(0);
+    std::unique_lock<std::mutex> lock(mutex_);
+    while (count_down_ > 0) {
+        cv_.wait(lock);
+    }
 }
 
 void TcpServer::shutdown()

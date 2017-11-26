@@ -4,7 +4,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include <net4cxx/reactor/callbacks.h>
+#include <net4cxx/common/callbacks.h>
 #include <net4cxx/common/NonCopyable.h>
 
 namespace net4cxx

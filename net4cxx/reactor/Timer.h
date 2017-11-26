@@ -6,7 +6,7 @@
 #include <inttypes.h>
 #include <net4cxx/reactor/Channel.h>
 #include <net4cxx/common/NonCopyable.h>
-#include <net4cxx/reactor/callbacks.h>
+#include <net4cxx/common/callbacks.h>
 
 namespace net4cxx
 {

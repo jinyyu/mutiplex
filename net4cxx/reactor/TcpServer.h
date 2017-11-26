@@ -1,10 +1,12 @@
 #ifndef NET4CXX_DISTRIBUTION_TCPSERVER_H
 #define NET4CXX_DISTRIBUTION_TCPSERVER_H
 #include <net4cxx/common/NonCopyable.h>
-#include <net4cxx/reactor/callbacks.h>
+#include <net4cxx/common/callbacks.h>
 #include <vector>
 #include <thread>
 #include <memory>
+#include <condition_variable>
+#include <mutex>
 
 namespace net4cxx
 {
@@ -35,11 +37,14 @@ private:
     int port_;
     int num_io_threads_;
     std::vector<EventLoop*> io_loops_;
-
+    std::vector<std::thread> threads_;
     ConnectionEstablishedCallback connection_established_callback_;
     ReadMessageCallback read_message_callback_;
     ConnectionClosedCallback connection_closed_callback_;
 
+    std::mutex mutex_;
+    std::condition_variable cv_;
+    int count_down_;
 };
 
 }

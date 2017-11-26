@@ -36,5 +36,4 @@ typedef std::function<void(const Timestamp&)> TimeoutCallback;
 
 }
 
-
 #endif

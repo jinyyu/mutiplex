@@ -1,7 +1,7 @@
 #ifndef NET4CXX_DISTRIBUTION_SESSION_H
 #define NET4CXX_DISTRIBUTION_SESSION_H
 
-#include <net4cxx/reactor/callbacks.h>
+#include <net4cxx/common/callbacks.h>
 #include <net4cxx/common/InetSocketAddress.h>
 
 namespace net4cxx
