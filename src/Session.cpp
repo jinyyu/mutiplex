@@ -6,6 +6,7 @@
 #include "net4cxx/Selector.h"
 #include "net4cxx/SelectionKey.h"
 #include "net4cxx/EventLoop.h"
+#include "net4cxx/Channel.h"
 
 #include <log4cxx/logger.h>
 

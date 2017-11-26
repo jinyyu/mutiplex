@@ -41,8 +41,6 @@ public:
     Selector *selector() const
     { return selector_; }
 
-    void enable_timing_wheel(int seconds);
-
 private:
     friend class Connection;
 
@@ -69,8 +67,6 @@ private:
     std::unordered_map<int, ConnectionPtr> connections_;
 
     ByteBuffer *recv_buffer_;
-
-    TimingWheel *timing_wheel_;
 };
 
 }

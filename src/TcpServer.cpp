@@ -28,7 +28,6 @@ void TcpServer::run()
     {
         EventLoop *loop = new EventLoop();
         loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
-        loop->enable_timing_wheel(30);
         NewConnectionCallback cb = [this, loop](int fd,
                                                 const Timestamp &timestamp,
                                                 const InetSocketAddress &local,

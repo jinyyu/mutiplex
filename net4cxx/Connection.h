@@ -6,7 +6,6 @@
 #include <net4cxx/InetSocketAddress.h>
 #include <net4cxx/InetAddress.h>
 #include <net4cxx/callbacks.h>
-#include <net4cxx/TimingWheel.h>
 #include <net4cxx/Context.h>
 
 
@@ -80,11 +79,6 @@ public:
     EventLoop *loop() const
     { return loop_; }
 
-    void context(WeakConnectionEntry &entry)
-    { entry_ = entry; }
-
-    void set_default_timeout();
-
     ContextPtr& context()
     { return ctx_; }
 
@@ -125,7 +119,6 @@ private:
 
     friend class CircularBuffer;
     CircularBuffer *buffer_out_;
-    WeakConnectionEntry entry_;
     ContextPtr ctx_;
 };
 

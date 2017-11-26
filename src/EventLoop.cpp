@@ -6,7 +6,6 @@
 #include "net4cxx/InetSocketAddress.h"
 #include "net4cxx/Connection.h"
 #include "net4cxx/ByteBuffer.h"
-#include "net4cxx/TimingWheel.h"
 #include <log4cxx/logger.h>
 
 #include <sys/eventfd.h>
@@ -22,8 +21,7 @@ EventLoop::EventLoop()
       selector_(new Selector(pthread_id_)),
       active_keys_(128),
       wakeup_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK)),
-      recv_buffer_(nullptr),
-      timing_wheel_(nullptr)
+      recv_buffer_(nullptr)
 {
     pthread_mutex_init(&mutex_, NULL);
 
@@ -57,8 +55,6 @@ EventLoop::~EventLoop()
     if (recv_buffer_) {
         delete (recv_buffer_);
     }
-
-    delete (timing_wheel_);
     LOG4CXX_INFO(logger, "loop delete " << pthread_id_);
 
 }
@@ -137,22 +133,11 @@ void EventLoop::on_new_connection(ConnectionPtr& conn, const Timestamp &timestam
     if (conn->connection_established_callback_) {
         conn->connection_established_callback_(conn, timestamp);
     }
-
-    SharedConnectionEntry entry(new ConnectionEntry(conn));
-    WeakConnectionEntry weak_entry(entry);
-    conn->context(weak_entry);
-
-    conn->set_default_timeout();
 }
 
 void EventLoop::allocate_receive_buffer(uint32_t capacity)
 {
     recv_buffer_ = new ByteBuffer(capacity);
-}
-
-void EventLoop::enable_timing_wheel(int seconds)
-{
-    timing_wheel_ = new TimingWheel(this, seconds);
 }
 
 }

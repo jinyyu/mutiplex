@@ -17,10 +17,7 @@ void closed(ConnectionPtr conn, const Timestamp &timestamp)
 
 void read_cb(ConnectionPtr conn, ByteBuffer *buf, const Timestamp &)
 {
-
     conn->write(buf->data(), static_cast<uint32_t>(buf->remaining()));
-    conn->set_default_timeout();
-
 }
 
 int main(int argc, char *argv[])

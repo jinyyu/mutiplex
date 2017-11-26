@@ -13,6 +13,29 @@ if (log4cxx_FOUND)
             ${LIBS} ${log4cxx_LIBRARIES})
 endif (log4cxx_FOUND)
 
+set(net4cxx_HEARERS
+        net4cxx/utils.h
+        net4cxx/Acceptor.h
+        net4cxx/ByteBuffer.h
+        net4cxx/callbacks.h
+        net4cxx/Channel.h
+        net4cxx/CircularBuffer.h
+        net4cxx/Connection.h
+        net4cxx/Context.h
+        net4cxx/EventLoop.h
+        net4cxx/InetAddress.h
+        net4cxx/InetSocketAddress.h
+        net4cxx/NonCopyable.h
+        net4cxx/SelectionKey.h
+        net4cxx/ServerSocket.h
+        net4cxx/Selector.h
+        net4cxx/Session.h
+        net4cxx/Slice.h
+        net4cxx/Status.h
+        net4cxx/TcpServer.h
+        net4cxx/Timer.h
+        net4cxx/Timestamp.h)
+
 set(net4cxx_SRCS
         src/utils.cpp
         src/Status.cpp
@@ -30,10 +53,9 @@ set(net4cxx_SRCS
         src/Connection.cpp
         src/CircularBuffer.cpp
         src/Session.cpp
-        src/Timer.cpp
-        src/TimingWheel.cpp)
+        src/Timer.cpp)
 
-add_library(net4cxx ${net4cxx_SRCS})
+add_library(net4cxx ${net4cxx_SRCS} ${net4cxx_HEARERS})
 target_link_libraries(net4cxx ${LIBS})
 
 pkg_check_modules(GoogleTest gtest gtest_main)

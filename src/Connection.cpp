@@ -55,7 +55,6 @@ void Connection::setup_callbacks()
 
     SelectionCallback read_cb = [this](const Timestamp &timestamp, SelectionKey *key)
     {
-        set_default_timeout();
         ByteBuffer *buffer = loop_->recv_buffer_;
         buffer->clear();
         ssize_t n = ::read(fd_, buffer->data(), buffer->remaining());
@@ -234,15 +233,6 @@ void Connection::handle_write(const Timestamp &timestamp)
 bool Connection::has_bytes_to_write() const
 {
     return buffer_out_ && !buffer_out_->empty();
-}
-
-void Connection::set_default_timeout()
-{
-    TimingWheel* wheel = loop_->timing_wheel_;
-    if (wheel) {
-        wheel->set_default_timeout(entry_.lock());
-    }
-
 }
 
 }
