@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <net4cxx/Timestamp.h>
+#include <net4cxx/common/Timestamp.h>
 #include <unistd.h>
 
 using namespace net4cxx;

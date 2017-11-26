@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include <net4cxx/InetAddress.h>
-#include <net4cxx/Status.h>
+#include <net4cxx/common/InetAddress.h>
+#include <net4cxx/common/Status.h>
 
 using namespace net4cxx;
 

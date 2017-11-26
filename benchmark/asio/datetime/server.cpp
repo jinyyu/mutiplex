@@ -3,7 +3,7 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 
-#include <net4cxx/Timestamp.h>
+#include <net4cxx/common/Timestamp.h>
 
 using boost::asio::ip::tcp;
 

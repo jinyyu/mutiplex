@@ -1,7 +1,7 @@
-#include <net4cxx/TcpServer.h>
-#include <net4cxx/CircularBuffer.h>
-#include <net4cxx/Connection.h>
-#include <net4cxx/ByteBuffer.h>
+#include <net4cxx/reactor/TcpServer.h>
+#include <net4cxx/reactor/CircularBuffer.h>
+#include <net4cxx/reactor/Connection.h>
+#include <net4cxx/common/ByteBuffer.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/basicconfigurator.h>
 

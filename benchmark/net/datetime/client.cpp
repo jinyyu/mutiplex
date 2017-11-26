@@ -1,8 +1,8 @@
-#include <net4cxx/Session.h>
-#include <net4cxx/EventLoop.h>
-#include <net4cxx/ByteBuffer.h>
-#include <net4cxx/Timestamp.h>
-#include <net4cxx/Connection.h>
+#include <net4cxx/reactor/Session.h>
+#include <net4cxx/reactor/EventLoop.h>
+#include <net4cxx/common/ByteBuffer.h>
+#include <net4cxx/common/Timestamp.h>
+#include <net4cxx/reactor/Connection.h>
 
 using namespace net4cxx;
 

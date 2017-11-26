@@ -1,12 +1,12 @@
-#include <net4cxx/Session.h>
-#include <net4cxx/EventLoop.h>
-#include <net4cxx/InetSocketAddress.h>
+#include <net4cxx/reactor/Session.h>
+#include <net4cxx/reactor/EventLoop.h>
+#include <net4cxx/common/InetSocketAddress.h>
 #include <sys/timerfd.h>
-#include <net4cxx/Timestamp.h>
-#include <net4cxx/Channel.h>
+#include <net4cxx/common/Timestamp.h>
+#include <net4cxx/reactor/Channel.h>
 #include <sys/time.h>
-#include <net4cxx/ByteBuffer.h>
-#include <net4cxx/Connection.h>
+#include <net4cxx/common/ByteBuffer.h>
+#include <net4cxx/reactor/Connection.h>
 #include <unistd.h>
 #include <thread>
 

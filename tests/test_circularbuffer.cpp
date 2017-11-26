@@ -1,6 +1,6 @@
-#include <net4cxx/utils.h>
+#include <net4cxx/common/utils.h>
 #include <gtest/gtest.h>
-#include <net4cxx/CircularBuffer.h>
+#include <net4cxx/reactor/CircularBuffer.h>
 #include <string>
 
 using namespace net4cxx;

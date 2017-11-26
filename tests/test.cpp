@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <inttypes.h>
-#include <net4cxx/utils.h>
+#include <net4cxx/common/utils.h>
 
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>

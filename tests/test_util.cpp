@@ -1,4 +1,4 @@
-#include <net4cxx/utils.h>
+#include <net4cxx/common/utils.h>
 #include <gtest/gtest.h>
 #include <math.h>
 

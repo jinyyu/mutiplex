@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <net4cxx/ByteBuffer.h>
+#include <net4cxx/common/ByteBuffer.h>
 
 using namespace net4cxx;
 

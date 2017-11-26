@@ -1,8 +1,8 @@
-#include <net4cxx/EventLoop.h>
-#include <net4cxx/Acceptor.h>
+#include <net4cxx/reactor/EventLoop.h>
+#include <net4cxx/reactor/Acceptor.h>
 #include <unistd.h>
-#include <net4cxx/Timestamp.h>
-#include <net4cxx/InetSocketAddress.h>
+#include <net4cxx/common/Timestamp.h>
+#include <net4cxx/common/InetSocketAddress.h>
 
 #include <log4cxx/logger.h>
 
