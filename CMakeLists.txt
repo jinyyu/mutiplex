@@ -3,6 +3,9 @@ project(net4cxx-distribution)
 
 set(CMAKE_CXX_STANDARD 11)
 
+set(NET4CXX_VERSION "0.1")
+set(NET4CXX_BUILD   "1")
+
 include_directories(${CMAKE_SOURCE_DIR})
 
 find_package(PkgConfig REQUIRED)
@@ -77,6 +80,11 @@ if (Boost_FOUND)
 endif (Boost_FOUND)
 
 add_subdirectory(benchmark/net)
+configure_file(net4cxx.spec.in net4cxx.spec)
 
+install(TARGETS  net4cxx
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
 
 

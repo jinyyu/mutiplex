@@ -1,0 +1,27 @@
+Name:    net4cxx
+Version: ${NET4CXX_VERSION}
+Release: ${NET4CXX_BUILD}
+Summary: net4cxx
+URL:     https://github.com/jinyyu/net4cxx
+License: GPLv3+
+
+%description
+
+%prep
+
+%build
+cd net4cxx
+mkdir -p build
+cd build
+cmake3 .. -DCMAKE_INSTALL_PREFIX=/usr
+%make_build
+
+%install
+cd net4cxx
+%make_install
+
+
+%files
+/usr/lib/libnet4cxx.a
+
+%changelog
