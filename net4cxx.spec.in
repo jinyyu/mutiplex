@@ -17,11 +17,11 @@ cmake3 .. -DCMAKE_INSTALL_PREFIX=/usr
 %make_build
 
 %install
-cd net4cxx
+cd net4cxx/build
 %make_install
 
 
 %files
-/usr/lib/libnet4cxx.a
+/*
 
 %changelog

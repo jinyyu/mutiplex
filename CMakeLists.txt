@@ -83,8 +83,9 @@ add_subdirectory(benchmark/net)
 configure_file(net4cxx.spec.in net4cxx.spec)
 
 install(TARGETS  net4cxx
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib)
+
+install(DIRECTORY net4cxx
+        DESTINATION include)
 
 
