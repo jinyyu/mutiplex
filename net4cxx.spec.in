@@ -22,6 +22,7 @@ cd net4cxx/build
 
 
 %files
-/*
+/usr/include/net4cxx/*
+/usr/lib/libnet4cxx.a
 
 %changelog

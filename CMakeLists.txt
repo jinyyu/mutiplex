@@ -88,4 +88,3 @@ install(TARGETS  net4cxx
 install(DIRECTORY net4cxx
         DESTINATION include)
 
-
