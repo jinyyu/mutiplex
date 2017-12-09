@@ -28,7 +28,7 @@ set(net4cxx_HEARERS
         net4cxx/common/SingalHandler.h
         net4cxx/reactor/Acceptor.h
         net4cxx/reactor/Channel.h
-        net4cxx/reactor/CircularBuffer.h
+        net4cxx/common/CircularBuffer.h
         net4cxx/reactor/Connection.h
         net4cxx/reactor/Context.h
         net4cxx/reactor/EventLoop.h

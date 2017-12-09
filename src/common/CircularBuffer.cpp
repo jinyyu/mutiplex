@@ -1,4 +1,4 @@
-#include "net4cxx/reactor/CircularBuffer.h"
+#include "net4cxx/common/CircularBuffer.h"
 #include "net4cxx/common/utils.h"
 #include "net4cxx/reactor/Connection.h"
 #include <stdlib.h>

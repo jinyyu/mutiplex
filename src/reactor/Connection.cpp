@@ -3,7 +3,7 @@
 #include "net4cxx/reactor/EventLoop.h"
 #include "net4cxx/reactor/SelectionKey.h"
 #include "net4cxx/common/ByteBuffer.h"
-#include "net4cxx/reactor/CircularBuffer.h"
+#include "net4cxx/common/CircularBuffer.h"
 #include "net4cxx/common/Timestamp.h"
 
 #include <unistd.h>
@@ -103,19 +103,19 @@ void Connection::setup_callbacks()
 
 void Connection::close()
 {
-    auto cb = [this]
+    auto cb = [self = shared_from_this()]
     {
-        if (!has_bytes_to_write()) {
+        if (!self->has_bytes_to_write()) {
             //closed it
-            state_ = Closed;
-            if (connection_closed_callback_) {
-                connection_closed_callback_(shared_from_this(), Timestamp::currentTime());
+            self->state_ = Closed;
+            if (self->connection_closed_callback_) {
+                self->connection_closed_callback_(self, Timestamp::currentTime());
             }
-            loop_->remove_connection(fd_);
+            self->loop_->remove_connection(self->fd_);
         }
         else {
             //has bytes to write
-            state_ = Disconnecting;
+            self->state_ = Disconnecting;
         }
     };
     loop_->post(cb);
@@ -123,23 +123,29 @@ void Connection::close()
 
 void Connection::force_close()
 {
-    auto cb = [this]()
+    auto cb = [self = shared_from_this()]()
     {
-        state_ = Closed;
-        buffer_out_->clear();
-        channel_->disable_all();
+        self->state_ = Closed;
+        self->buffer_out_->clear();
+        self->channel_->disable_all();
 
-        if (loop_->connections_.find(fd_) != loop_->connections_.end()) {
+        if (self->loop_->connections_.find(self->fd_) != self->loop_->connections_.end()) {
 
-            if (connection_closed_callback_) {
-                connection_closed_callback_(shared_from_this(), Timestamp::currentTime());
+            if (self->connection_closed_callback_) {
+                self->connection_closed_callback_(self, Timestamp::currentTime());
             }
 
-            loop_->remove_connection(fd_);
+            self->loop_->remove_connection(self->fd_);
         }
 
     };
-    loop_->post(cb);
+
+    if (loop_->is_in_loop_thread()) {
+        cb();
+    }
+    else {
+        loop_->post(cb);
+    }
 }
 
 bool Connection::write(const ByteBufferPtr& buffer)
@@ -147,14 +153,15 @@ bool Connection::write(const ByteBufferPtr& buffer)
     if (is_closed()) {
         return false;
     }
+
     if (loop_->is_in_loop_thread()) {
         do_write(buffer->data(), buffer->remaining());
 
     }
     else {
-        auto callback = [this, buffer]
+        auto callback = [self = shared_from_this(), buffer]
         {
-            this->do_write(buffer->data(), buffer->remaining());
+            self->do_write(buffer->data(), buffer->remaining());
         };
         loop_->post(callback);
     }
