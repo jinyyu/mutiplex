@@ -80,6 +80,7 @@ endif (Boost_FOUND)
 
 add_subdirectory(benchmark/net)
 configure_file(net4cxx.spec.in net4cxx.spec)
+configure_file(log4cxx.conf.in log4cxx.conf)
 
 install(TARGETS  net4cxx
         ARCHIVE DESTINATION lib)
