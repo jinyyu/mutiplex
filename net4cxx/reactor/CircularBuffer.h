@@ -1,7 +1,7 @@
 #ifndef NET4CXX_DISTRIBUTION_CIRCULARBUFFER_H
 #define NET4CXX_DISTRIBUTION_CIRCULARBUFFER_H
 
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 #include <inttypes.h>
 
 namespace net4cxx
@@ -9,7 +9,7 @@ namespace net4cxx
 class Timestamp;
 class Connection;
 
-class CircularBuffer: NonCopyable
+class CircularBuffer: boost::noncopyable
 {
 public:
     explicit CircularBuffer(uint32_t capacity);

@@ -1,7 +1,7 @@
 #ifndef NET4CXX_DISTRIBUTION_ACCEPTOR_H
 #define NET4CXX_DISTRIBUTION_ACCEPTOR_H
 
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 #include <net4cxx/common/callbacks.h>
 
 namespace net4cxx
@@ -14,7 +14,7 @@ class EventLoop;
 class InetSocketAddress;
 class EventLoop;
 
-class Acceptor: NonCopyable
+class Acceptor: boost::noncopyable
 {
 public:
     Acceptor(EventLoop* loop, int port);

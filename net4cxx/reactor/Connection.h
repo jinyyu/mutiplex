@@ -1,6 +1,6 @@
 #ifndef NET4CXX_DISTRIBUTION_CONNECTION_H
 #define NET4CXX_DISTRIBUTION_CONNECTION_H
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 #include <memory>
 
 #include <net4cxx/common/InetSocketAddress.h>
@@ -20,7 +20,7 @@ class Channel;
 class CircularBuffer;
 class ByteBuffer;
 
-class Connection: public std::enable_shared_from_this<Connection>, NonCopyable
+class Connection: public std::enable_shared_from_this<Connection>, boost::noncopyable
 {
 public:
     explicit Connection(int fd,

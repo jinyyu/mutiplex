@@ -1,6 +1,6 @@
 #ifndef NET4CXX_DISTRIBUTION_TCPSERVER_H
 #define NET4CXX_DISTRIBUTION_TCPSERVER_H
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 #include <net4cxx/common/callbacks.h>
 #include <vector>
 #include <thread>
@@ -14,7 +14,7 @@ class EventLoop;
 class Timestamp;
 class InetSocketAddress;
 
-class TcpServer: NonCopyable
+class TcpServer: boost::noncopyable
 {
 public:
     explicit TcpServer(int port, int num_io_threads);

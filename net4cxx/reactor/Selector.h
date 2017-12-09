@@ -1,6 +1,6 @@
 #ifndef NET4CXX_DISTRIBUTION_SELECTOR_H
 #define NET4CXX_DISTRIBUTION_SELECTOR_H
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 #include <net4cxx/common/Timestamp.h>
 #include <vector>
 #include <sys/epoll.h>
@@ -11,7 +11,7 @@ namespace net4cxx
 
 class SelectionKey;
 
-class Selector: NonCopyable
+class Selector: boost::noncopyable
 {
 public:
     explicit Selector(pthread_t pthread_id);

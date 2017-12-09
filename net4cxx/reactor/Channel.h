@@ -1,6 +1,6 @@
 #ifndef NET4CXX_DISTRIBUTION_CHANNEL_H
 #define NET4CXX_DISTRIBUTION_CHANNEL_H
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 #include <net4cxx/common/callbacks.h>
 
 
@@ -10,7 +10,7 @@ class Selector;
 class SelectionKey;
 class Timestamp;
 
-class Channel: NonCopyable
+class Channel: boost::noncopyable
 {
 public:
     explicit Channel(Selector* selector, int fd);

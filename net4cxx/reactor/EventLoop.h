@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 #include <net4cxx/common/callbacks.h>
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 
 namespace net4cxx
 {
@@ -16,7 +16,7 @@ class SelectionKey;
 class ByteBuffer;
 class TimingWheel;
 
-class EventLoop: NonCopyable
+class EventLoop: boost::noncopyable
 {
 public:
     explicit EventLoop();

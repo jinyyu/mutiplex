@@ -3,7 +3,7 @@
 #include <inttypes.h>
 #include <string>
 
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 
 namespace net4cxx
 {
@@ -11,7 +11,7 @@ namespace net4cxx
 class Channel;
 class Selector;
 
-class SelectionKey: NonCopyable
+class SelectionKey: boost::noncopyable
 {
 
 public:
@@ -80,7 +80,6 @@ private:
 
 private:
     Channel* channel_;
-    Selector* selector_;
     uint32_t interest_ops_;
     uint32_t ready_ops_;
 

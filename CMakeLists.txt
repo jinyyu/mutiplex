@@ -20,7 +20,6 @@ set(net4cxx_HEARERS
         net4cxx/common/utils.h
         net4cxx/common/InetAddress.h
         net4cxx/common/InetSocketAddress.h
-        net4cxx/common/NonCopyable.h
         net4cxx/common/Timestamp.h
         net4cxx/common/Slice.h
         net4cxx/common/Status.h

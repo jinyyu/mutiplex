@@ -5,17 +5,17 @@
 
 #include <inttypes.h>
 #include <net4cxx/reactor/Channel.h>
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 #include <net4cxx/common/callbacks.h>
 
 namespace net4cxx
 {
 class EventLoop;
 
-class Timer: NonCopyable
+class Timer: boost::noncopyable
 {
 public:
-    Timer(EventLoop* loop);
+    explicit Timer(EventLoop* loop);
 
     ~Timer();
 

@@ -2,15 +2,14 @@
 #define NET4CXX_DISTRIBUTION_SOCKET_H
 
 #include <net4cxx/common/Status.h>
-#include <net4cxx/common/NonCopyable.h>
-
+#include <boost/noncopyable.hpp>
 
 namespace net4cxx
 {
 
 class InetSocketAddress;
 
-class ServerSocket: NonCopyable
+class ServerSocket: boost::noncopyable
 {
 public:
     //Creates an unbound server socket

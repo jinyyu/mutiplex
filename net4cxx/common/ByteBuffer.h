@@ -1,12 +1,12 @@
 #ifndef NET4CXX_DISTRIBUTION_BYTEBUFFER_H
 #define NET4CXX_DISTRIBUTION_BYTEBUFFER_H
-#include <net4cxx/common/NonCopyable.h>
+#include <boost/noncopyable.hpp>
 #include <boost/asio/detail/shared_ptr.hpp>
 
 namespace net4cxx
 {
 
-class ByteBuffer: NonCopyable
+class ByteBuffer: boost::noncopyable
 {
 public:
     explicit ByteBuffer(int capacity);
