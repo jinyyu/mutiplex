@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(net4cxx-distribution)
+project(libreactor-distribution)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -16,51 +16,51 @@ if (log4cxx_FOUND)
             ${LIBS} ${log4cxx_LIBRARIES})
 endif (log4cxx_FOUND)
 
-set(net4cxx_HEARERS
-        net4cxx/common/utils.h
-        net4cxx/common/InetAddress.h
-        net4cxx/common/InetSocketAddress.h
-        net4cxx/common/Timestamp.h
-        net4cxx/common/Slice.h
-        net4cxx/common/Status.h
-        net4cxx/common/ByteBuffer.h
-        net4cxx/common/callbacks.h
-        net4cxx/common/SingalHandler.h
-        net4cxx/reactor/Acceptor.h
-        net4cxx/reactor/Channel.h
-        net4cxx/common/CircularBuffer.h
-        net4cxx/reactor/Connection.h
-        net4cxx/reactor/Context.h
-        net4cxx/reactor/EventLoop.h
-        net4cxx/reactor/SelectionKey.h
-        net4cxx/reactor/ServerSocket.h
-        net4cxx/reactor/Selector.h
-        net4cxx/reactor/Session.h
-        net4cxx/reactor/TcpServer.h
-        net4cxx/reactor/Timer.h)
+set(reactor_HEARERS
+        reactor/utils.h
+        reactor/InetAddress.h
+        reactor/InetSocketAddress.h
+        reactor/Timestamp.h
+        reactor/Slice.h
+        reactor/Status.h
+        reactor/ByteBuffer.h
+        reactor/callbacks.h
+        reactor/SingalHandler.h
+        reactor/Acceptor.h
+        reactor/Channel.h
+        reactor/CircularBuffer.h
+        reactor/Connection.h
+        reactor/Context.h
+        reactor/EventLoop.h
+        reactor/SelectionKey.h
+        reactor/ServerSocket.h
+        reactor/Selector.h
+        reactor/Session.h
+        reactor/TcpServer.h
+        reactor/Timer.h)
 
-set(net4cxx_SRCS
-        src/common/utils.cpp
-        src/common/Status.cpp
-        src/common/ByteBuffer.cpp
-        src/common/Timestamp.cpp
-        src/common/InetAddress.cpp
-        src/common/InetSocketAddress.cpp
-        src/common/CircularBuffer.cpp
-        src/common/SingalHandler.cpp
-        src/reactor/SelectionKey.cpp
-        src/reactor/Selector.cpp
-        src/reactor/Channel.cpp
-        src/reactor/EventLoop.cpp
-        src/reactor/ServerSocket.cpp
-        src/reactor/Acceptor.cpp
-        src/reactor/TcpServer.cpp
-        src/reactor/Connection.cpp
-        src/reactor/Session.cpp
-        src/reactor/Timer.cpp)
+set(reactor_SRCS
+        src/utils.cpp
+        src/Status.cpp
+        src/ByteBuffer.cpp
+        src/Timestamp.cpp
+        src/InetAddress.cpp
+        src/InetSocketAddress.cpp
+        src/CircularBuffer.cpp
+        src/SingalHandler.cpp
+        src/SelectionKey.cpp
+        src/Selector.cpp
+        src/Channel.cpp
+        src/EventLoop.cpp
+        src/ServerSocket.cpp
+        src/Acceptor.cpp
+        src/TcpServer.cpp
+        src/Connection.cpp
+        src/Session.cpp
+        src/Timer.cpp)
 
-add_library(net4cxx ${net4cxx_SRCS} ${net4cxx_HEARERS})
-target_link_libraries(net4cxx ${LIBS})
+add_library(reactor ${reactor_SRCS} ${reactor_HEARERS})
+target_link_libraries(reactor ${LIBS})
 
 pkg_check_modules(GoogleTest gtest gtest_main)
 if (GoogleTest_FOUND)
@@ -79,12 +79,12 @@ if (Boost_FOUND)
 endif (Boost_FOUND)
 
 add_subdirectory(benchmark/net)
-configure_file(net4cxx.spec.in net4cxx.spec)
-configure_file(log4cxx.conf.in log4cxx.conf)
+configure_file(reactor.spec.in reactor.spec)
+configure_file(reactor.conf.in reactor.conf)
 
-install(TARGETS  net4cxx
+install(TARGETS  reactor
         ARCHIVE DESTINATION lib)
 
-install(DIRECTORY net4cxx
+install(DIRECTORY reactor
         DESTINATION include)
 
