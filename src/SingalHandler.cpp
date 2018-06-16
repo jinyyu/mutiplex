@@ -6,6 +6,7 @@ namespace reactor
 {
 
 static std::unordered_map<int, Callback> g_callback_map;
+
 static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 static void handle_signal(int signum)

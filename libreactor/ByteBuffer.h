@@ -58,17 +58,17 @@ public:
     bool has_remaining() const
     { return position_ < limit_; }
 
-    const void *data() const
+    const void* data() const
     { return data_ + sizeof(int) + position_; }
 
-    void *data()
+    void* data()
     { return data_ + sizeof(int) + position_; }
 
     //bulk get method
-    int get(void *buffer, int len);
+    int get(void* buffer, int len);
 
     //bulk put method
-    void put(const void *data, int len);
+    void put(const void* data, int len);
 
 private:
 /*
@@ -77,7 +77,7 @@ private:
     int limit_;
     int mark_;
     int position_;
-    char *data_;
+    char* data_;
 };
 
 typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;

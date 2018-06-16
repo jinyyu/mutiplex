@@ -13,7 +13,7 @@ static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 void cb(int fd, const Timestamp &timestamp, const InetSocketAddress &local, const InetSocketAddress &peer)
 {
 
-    const char *str = "goodby\n";
+    const char *str = "good bye\n";
     ::write(fd, str, strlen(str));
     LOG4CXX_INFO(logger,timestamp.to_string() << " " << local.to_string() << " " << peer.to_string());
     ::close(fd);

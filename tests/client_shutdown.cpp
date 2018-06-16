@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
-    int n = ::write(fd, "helo", 4);
+    int n = ::write(fd, "hello", 4);
 
     printf("write n = %d\n", n);
 
