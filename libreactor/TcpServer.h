@@ -1,7 +1,6 @@
-#ifndef NET4CXX_DISTRIBUTION_TCPSERVER_H
-#define NET4CXX_DISTRIBUTION_TCPSERVER_H
+#pragma once
 #include <boost/noncopyable.hpp>
-#include <net4cxx/common/callbacks.h>
+#include <libreactor/callbacks.h>
 #include <vector>
 #include <thread>
 #include <memory>
@@ -48,6 +47,3 @@ private:
 };
 
 }
-
-
-#endif

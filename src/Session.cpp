@@ -1,12 +1,12 @@
-#include "net4cxx/reactor/Session.h"
+#include "libreactor/Session.h"
 #include <unistd.h>
 
-#include "net4cxx/common/Timestamp.h"
-#include "net4cxx/reactor/Connection.h"
-#include "net4cxx/reactor/Selector.h"
-#include "net4cxx/reactor/SelectionKey.h"
-#include "net4cxx/reactor/EventLoop.h"
-#include "net4cxx/reactor/Channel.h"
+#include "libreactor/Timestamp.h"
+#include "libreactor/Connection.h"
+#include "libreactor/Selector.h"
+#include "libreactor/SelectionKey.h"
+#include "libreactor/EventLoop.h"
+#include "libreactor/Channel.h"
 
 #include <log4cxx/logger.h>
 

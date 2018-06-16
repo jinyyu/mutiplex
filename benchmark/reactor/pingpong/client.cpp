@@ -1,16 +1,16 @@
-#include <net4cxx/reactor/Session.h>
-#include <net4cxx/reactor/EventLoop.h>
-#include <net4cxx/common/InetSocketAddress.h>
+#include <libreactor/Session.h>
+#include <libreactor/EventLoop.h>
+#include <libreactor/InetSocketAddress.h>
 #include <sys/timerfd.h>
-#include <net4cxx/common/Timestamp.h>
-#include <net4cxx/reactor/Channel.h>
+#include <libreactor/Timestamp.h>
+#include <libreactor/Channel.h>
 #include <sys/time.h>
-#include <net4cxx/common/ByteBuffer.h>
-#include <net4cxx/reactor/Connection.h>
+#include <libreactor/ByteBuffer.h>
+#include <libreactor/Connection.h>
 #include <unistd.h>
 #include <thread>
 
-using namespace net4cxx;
+using namespace reactor;
 
 std::vector<uint64_t> totals;
 

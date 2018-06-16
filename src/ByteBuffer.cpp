@@ -1,6 +1,6 @@
 #include <string.h>
 #include <netinet/in.h>
-#include "net4cxx/common/ByteBuffer.h"
+#include "libreactor/ByteBuffer.h"
 #include <stdlib.h>
 #include <assert.h>
 #include <log4cxx/logger.h>

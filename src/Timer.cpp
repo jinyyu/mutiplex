@@ -1,9 +1,9 @@
-#include "net4cxx/reactor/Timer.h"
+#include "libreactor/Timer.h"
 
 #include <unistd.h>
 
-#include "net4cxx/reactor/EventLoop.h"
-#include "net4cxx/common/Timestamp.h"
+#include "libreactor/EventLoop.h"
+#include "libreactor/Timestamp.h"
 #include <log4cxx/logger.h>
 
 namespace reactor

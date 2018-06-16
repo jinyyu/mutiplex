@@ -1,8 +1,7 @@
-#ifndef NET4CXX_DISTRIBUTION_ACCEPTOR_H
-#define NET4CXX_DISTRIBUTION_ACCEPTOR_H
+#pragma once
 
 #include <boost/noncopyable.hpp>
-#include <net4cxx/common/callbacks.h>
+#include <libreactor/callbacks.h>
 
 namespace reactor
 {
@@ -38,5 +37,3 @@ private:
 
 }
 
-
-#endif

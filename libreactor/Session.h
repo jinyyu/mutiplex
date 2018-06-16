@@ -1,8 +1,7 @@
-#ifndef NET4CXX_DISTRIBUTION_SESSION_H
-#define NET4CXX_DISTRIBUTION_SESSION_H
+#pragma once
 
-#include <net4cxx/common/callbacks.h>
-#include <net4cxx/common/InetSocketAddress.h>
+#include <libreactor/callbacks.h>
+#include <libreactor/InetSocketAddress.h>
 
 namespace reactor
 {
@@ -54,5 +53,3 @@ private:
 
 }
 
-
-#endif

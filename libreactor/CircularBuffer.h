@@ -1,5 +1,4 @@
-#ifndef NET4CXX_DISTRIBUTION_CIRCULARBUFFER_H
-#define NET4CXX_DISTRIBUTION_CIRCULARBUFFER_H
+#pragma once
 
 #include <boost/noncopyable.hpp>
 #include <inttypes.h>
@@ -60,5 +59,3 @@ private:
 
 }
 
-
-#endif

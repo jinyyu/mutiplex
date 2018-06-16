@@ -1,5 +1,4 @@
-#ifndef NET4CXX_DISTRIBUTION_SLICE_H
-#define NET4CXX_DISTRIBUTION_SLICE_H
+#pragma once
 
 #include <assert.h>
 #include <stddef.h>
@@ -114,5 +113,3 @@ inline int Slice::compare(const Slice& b) const
 }
 
 }
-
-#endif

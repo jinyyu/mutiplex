@@ -1,9 +1,9 @@
-#include <net4cxx/reactor/TcpServer.h>
-#include <net4cxx/common/CircularBuffer.h>
-#include <net4cxx/reactor/Connection.h>
-#include <net4cxx/common/ByteBuffer.h>
+#include <libreactor/TcpServer.h>
+#include <libreactor/CircularBuffer.h>
+#include <libreactor/Connection.h>
+#include <libreactor/ByteBuffer.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 class EchoServer
 {

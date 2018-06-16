@@ -1,12 +1,12 @@
-#include <net4cxx/reactor/TcpServer.h>
-#include <net4cxx/common/CircularBuffer.h>
-#include <net4cxx/reactor/Connection.h>
-#include <net4cxx/common/ByteBuffer.h>
-#include <net4cxx/common/SingalHandler.h>
+#include <libreactor/TcpServer.h>
+#include <libreactor/CircularBuffer.h>
+#include <libreactor/Connection.h>
+#include <libreactor/ByteBuffer.h>
+#include <libreactor/SingalHandler.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/propertyconfigurator.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 static log4cxx::LoggerPtr logger(log4cxx::Logger::getRootLogger());
 

@@ -1,7 +1,6 @@
-#ifndef NET4CXX_DISTRIBUTION_CHANNEL_H
-#define NET4CXX_DISTRIBUTION_CHANNEL_H
+#pragma once
 #include <boost/noncopyable.hpp>
-#include <net4cxx/common/callbacks.h>
+#include <libreactor/callbacks.h>
 
 
 namespace reactor
@@ -81,4 +80,3 @@ private:
 
 }
 
-#endif

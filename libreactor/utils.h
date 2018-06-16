@@ -1,5 +1,4 @@
-#ifndef NET4CXX_UTILS_H
-#define NET4CXX_UTILS_H
+#pragma once
 
 #include <pthread.h>
 #include <stdio.h>
@@ -39,5 +38,3 @@ bool is_pow_of_two(uint32_t v);
 uint32_t roundup_pow_of_two(uint32_t v);
 
 }
-
-#endif

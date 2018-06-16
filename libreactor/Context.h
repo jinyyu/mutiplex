@@ -1,5 +1,4 @@
-#ifndef NET4CXX_DISTRIBUTION_CONTEXT_H
-#define NET4CXX_DISTRIBUTION_CONTEXT_H
+#pragma once
 
 #include <memory>
 
@@ -16,4 +15,3 @@ typedef std::unique_ptr<Context> ContextPtr;
 
 }
 
-#endif

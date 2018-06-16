@@ -1,5 +1,5 @@
-#ifndef NET4CXX_DISTRIBUTION_BYTEBUFFER_H
-#define NET4CXX_DISTRIBUTION_BYTEBUFFER_H
+#pragma once
+
 #include <boost/noncopyable.hpp>
 #include <boost/asio/detail/shared_ptr.hpp>
 
@@ -84,4 +84,3 @@ typedef std::shared_ptr<ByteBuffer> ByteBufferPtr;
 
 }
 
-#endif

@@ -1,7 +1,6 @@
-#ifndef NET4CXX_DISTRIBUTION_SELECTOR_H
-#define NET4CXX_DISTRIBUTION_SELECTOR_H
+#pragma once
 #include <boost/noncopyable.hpp>
-#include <net4cxx/common/Timestamp.h>
+#include <libreactor/Timestamp.h>
 #include <vector>
 #include <sys/epoll.h>
 #include <pthread.h>
@@ -38,5 +37,3 @@ private:
 };
 
 }
-
-#endif

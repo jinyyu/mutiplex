@@ -1,5 +1,5 @@
-#include "net4cxx/common/InetAddress.h"
-#include "net4cxx/common/Status.h"
+#include "libreactor/InetAddress.h"
+#include "libreactor/Status.h"
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>

@@ -1,5 +1,5 @@
-#include "net4cxx/reactor/SelectionKey.h"
-#include "net4cxx/reactor/Channel.h"
+#include "libreactor/SelectionKey.h"
+#include "libreactor/Channel.h"
 
 #include <sys/epoll.h>
 #include <inttypes.h>

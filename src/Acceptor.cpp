@@ -1,10 +1,10 @@
-#include "net4cxx/reactor/Acceptor.h"
-#include "net4cxx/reactor/ServerSocket.h"
-#include "net4cxx/common/InetSocketAddress.h"
-#include "net4cxx/reactor/Channel.h"
-#include "net4cxx/reactor/EventLoop.h"
-#include "net4cxx/common/Timestamp.h"
-#include "net4cxx/reactor/Connection.h"
+#include "libreactor/Acceptor.h"
+#include "libreactor/ServerSocket.h"
+#include "libreactor/InetSocketAddress.h"
+#include "libreactor/Channel.h"
+#include "libreactor/EventLoop.h"
+#include "libreactor/Timestamp.h"
+#include "libreactor/Connection.h"
 #include <log4cxx/logger.h>
 
 namespace reactor

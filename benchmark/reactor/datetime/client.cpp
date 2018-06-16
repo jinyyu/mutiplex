@@ -1,10 +1,10 @@
-#include <net4cxx/reactor/Session.h>
-#include <net4cxx/reactor/EventLoop.h>
-#include <net4cxx/common/ByteBuffer.h>
-#include <net4cxx/common/Timestamp.h>
-#include <net4cxx/reactor/Connection.h>
+#include <libreactor/Session.h>
+#include <libreactor/EventLoop.h>
+#include <libreactor/ByteBuffer.h>
+#include <libreactor/Timestamp.h>
+#include <libreactor/Connection.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 void read_cb(ConnectionPtr conn, ByteBuffer *buffer, const Timestamp &timestamp)
 {

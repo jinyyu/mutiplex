@@ -1,10 +1,10 @@
-#include "net4cxx/reactor/Connection.h"
-#include "net4cxx/reactor/Channel.h"
-#include "net4cxx/reactor/EventLoop.h"
-#include "net4cxx/reactor/SelectionKey.h"
-#include "net4cxx/common/ByteBuffer.h"
-#include "net4cxx/common/CircularBuffer.h"
-#include "net4cxx/common/Timestamp.h"
+#include "libreactor/Connection.h"
+#include "libreactor/Channel.h"
+#include "libreactor/EventLoop.h"
+#include "libreactor/SelectionKey.h"
+#include "libreactor/ByteBuffer.h"
+#include "libreactor/CircularBuffer.h"
+#include "libreactor/Timestamp.h"
 
 #include <unistd.h>
 #include <assert.h>

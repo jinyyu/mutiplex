@@ -1,12 +1,11 @@
-#ifndef NET4CXX_DISTRIBUTION_TIMER_H
-#define NET4CXX_DISTRIBUTION_TIMER_H
+#pragma once
 #include <sys/timerfd.h>
 #include <string.h>
 
 #include <inttypes.h>
-#include <net4cxx/reactor/Channel.h>
+#include <libreactor/Channel.h>
 #include <boost/noncopyable.hpp>
-#include <net4cxx/common/callbacks.h>
+#include <libreactor/callbacks.h>
 
 namespace reactor
 {
@@ -36,5 +35,3 @@ private:
 };
 
 }
-
-#endif

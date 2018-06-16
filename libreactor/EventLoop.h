@@ -1,10 +1,9 @@
-#ifndef NET4CXX_DISTRIBUTION_EVENTLOOP_H
-#define NET4CXX_DISTRIBUTION_EVENTLOOP_H
+#pragma once
 #include <pthread.h>
 #include <vector>
 #include <unordered_map>
 
-#include <net4cxx/common/callbacks.h>
+#include <libreactor/callbacks.h>
 #include <boost/noncopyable.hpp>
 
 namespace reactor
@@ -71,4 +70,3 @@ private:
 
 }
 
-#endif

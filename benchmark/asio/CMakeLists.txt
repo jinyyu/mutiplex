@@ -1,5 +1,5 @@
 set(LIBS
-        ${LIBS} net4cxx)
+        ${LIBS} reactor)
 
 
 add_executable(asio_echo_server echo/server.cpp)

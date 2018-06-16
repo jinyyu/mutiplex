@@ -1,6 +1,6 @@
-#include "net4cxx/reactor/Channel.h"
-#include "net4cxx/reactor/SelectionKey.h"
-#include "net4cxx/reactor/Selector.h"
+#include "libreactor/Channel.h"
+#include "libreactor/SelectionKey.h"
+#include "libreactor/Selector.h"
 
 namespace reactor
 {

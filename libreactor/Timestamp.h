@@ -1,5 +1,4 @@
-#ifndef NET4CXX_DISTRIBUTION_TIMESTAMP_H
-#define NET4CXX_DISTRIBUTION_TIMESTAMP_H
+#pragma once
 
 #include <inttypes.h>
 #include <string>
@@ -57,5 +56,3 @@ private:
 };
 
 }
-
-#endif

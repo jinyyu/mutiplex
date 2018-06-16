@@ -1,6 +1,6 @@
-#include "net4cxx/reactor/ServerSocket.h"
-#include "net4cxx/common/InetSocketAddress.h"
-#include "net4cxx/common/InetAddress.h"
+#include "libreactor/ServerSocket.h"
+#include "libreactor/InetSocketAddress.h"
+#include "libreactor/InetAddress.h"
 
 #include <unistd.h>
 #include <sys/types.h>

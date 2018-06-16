@@ -1,16 +1,15 @@
-#ifndef NET4CXX_DISTRIBUTION_CONNECTION_H
-#define NET4CXX_DISTRIBUTION_CONNECTION_H
+#pragma once
 #include <boost/noncopyable.hpp>
 #include <memory>
 
-#include <net4cxx/common/InetSocketAddress.h>
-#include <net4cxx/common/InetAddress.h>
-#include <net4cxx/common/callbacks.h>
-#include <net4cxx/reactor/Context.h>
+#include <libreactor/InetSocketAddress.h>
+#include <libreactor/InetAddress.h>
+#include <libreactor/callbacks.h>
+#include <libreactor/Context.h>
 
 
 #include <deque>
-#include "net4cxx/common/ByteBuffer.h"
+#include "libreactor/ByteBuffer.h"
 
 namespace reactor
 {
@@ -125,4 +124,3 @@ private:
 
 }
 
-#endif

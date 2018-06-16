@@ -1,5 +1,4 @@
-#ifndef NET4CXX_STATUS_H
-#define NET4CXX_STATUS_H
+#pragma once
 
 #include <string>
 
@@ -80,5 +79,3 @@ private:
 };
 
 }
-
-#endif

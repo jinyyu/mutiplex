@@ -1,6 +1,6 @@
-#include "net4cxx/common/CircularBuffer.h"
-#include "net4cxx/common/utils.h"
-#include "net4cxx/reactor/Connection.h"
+#include "libreactor/CircularBuffer.h"
+#include "libreactor/utils.h"
+#include "libreactor/Connection.h"
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>

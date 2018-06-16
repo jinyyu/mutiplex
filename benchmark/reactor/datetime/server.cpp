@@ -1,10 +1,10 @@
-#include <net4cxx/reactor/TcpServer.h>
-#include <net4cxx/common/CircularBuffer.h>
-#include <net4cxx/reactor/Connection.h>
-#include <net4cxx/common/ByteBuffer.h>
-#include <net4cxx/common/Timestamp.h>
+#include <libreactor/TcpServer.h>
+#include <libreactor/CircularBuffer.h>
+#include <libreactor/Connection.h>
+#include <libreactor/ByteBuffer.h>
+#include <libreactor/Timestamp.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 #define NUM_THREADS 2
 

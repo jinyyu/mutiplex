@@ -1,8 +1,8 @@
-#include "net4cxx/reactor/TcpServer.h"
-#include "net4cxx/reactor/EventLoop.h"
-#include "net4cxx/reactor/Acceptor.h"
-#include "net4cxx/reactor/Connection.h"
-#include "net4cxx/common/Timestamp.h"
+#include "libreactor/TcpServer.h"
+#include "libreactor/EventLoop.h"
+#include "libreactor/Acceptor.h"
+#include "libreactor/Connection.h"
+#include "libreactor/Timestamp.h"
 #include <log4cxx/logger.h>
 
 namespace reactor

@@ -1,5 +1,4 @@
-#ifndef LIBNET_DISTRIBUTION_CALLBACKS_H
-#define LIBNET_DISTRIBUTION_CALLBACKS_H
+#pragma once
 
 #include <functional>
 #include <memory>
@@ -36,4 +35,3 @@ typedef std::function<void(const Timestamp&)> TimeoutCallback;
 
 }
 
-#endif

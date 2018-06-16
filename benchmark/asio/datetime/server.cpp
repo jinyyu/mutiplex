@@ -3,7 +3,7 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 
-#include <net4cxx/common/Timestamp.h>
+#include <libreactor/Timestamp.h>
 
 using boost::asio::ip::tcp;
 
@@ -22,7 +22,7 @@ public:
 
     void start()
     {
-        std::string timestamp = net4cxx::Timestamp::currentTime().to_string();
+        std::string timestamp = reactor::Timestamp::currentTime().to_string();
         timestamp.push_back('\n');
 
         socket_.async_write_some(boost::asio::buffer(timestamp.c_str(), timestamp.size()),

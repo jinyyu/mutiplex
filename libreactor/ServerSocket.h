@@ -1,7 +1,6 @@
-#ifndef NET4CXX_DISTRIBUTION_SOCKET_H
-#define NET4CXX_DISTRIBUTION_SOCKET_H
+#pragma once
 
-#include <net4cxx/common/Status.h>
+#include <libreactor/Status.h>
 #include <boost/noncopyable.hpp>
 
 namespace reactor
@@ -38,4 +37,3 @@ private:
 
 }
 
-#endif

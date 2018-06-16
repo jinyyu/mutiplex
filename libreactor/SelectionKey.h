@@ -1,5 +1,4 @@
-#ifndef NET4CXX_DISTRIBUTION_SELECTIONKEY_H
-#define NET4CXX_DISTRIBUTION_SELECTIONKEY_H
+#pragma once
 #include <inttypes.h>
 #include <string>
 
@@ -86,5 +85,3 @@ private:
 };
 
 }
-
-#endif

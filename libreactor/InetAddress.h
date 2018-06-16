@@ -1,5 +1,4 @@
-#ifndef NET4CXX_DISTRIBUTION_INETADDRESS_H
-#define NET4CXX_DISTRIBUTION_INETADDRESS_H
+#pragma once
 #include <stdlib.h>
 #include <string.h>
 #include <arpa/inet.h>
@@ -69,5 +68,3 @@ private:
 };
 
 }
-
-#endif

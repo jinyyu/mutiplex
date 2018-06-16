@@ -1,6 +1,5 @@
-#ifndef NET4CXX_DISTRIBUTION_INETSOCKETADDRESS_H
-#define NET4CXX_DISTRIBUTION_INETSOCKETADDRESS_H
-#include <net4cxx/common/InetAddress.h>
+#pragma once
+#include <libreactor/InetAddress.h>
 
 namespace reactor
 {
@@ -51,5 +50,3 @@ private:
 
 }
 
-
-#endif

@@ -1,8 +1,7 @@
-#ifndef NET4CXX_DISTRIBUTION_SINGALHANDLER_H
-#define NET4CXX_DISTRIBUTION_SINGALHANDLER_H
+#pragma once
 #include <signal.h>
 #include <functional>
-#include <net4cxx/common/callbacks.h>
+#include <libreactor/callbacks.h>
 
 namespace reactor
 {
@@ -11,6 +10,3 @@ void AddSignalHandler(int signum, Callback callback);
 
 }
 
-
-
-#endif //NET4CXX_DISTRIBUTION_SINGALHANDLER_H

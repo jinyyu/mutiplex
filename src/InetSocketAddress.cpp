@@ -1,5 +1,5 @@
-#include "net4cxx/common/Status.h"
-#include "net4cxx/common/InetSocketAddress.h"
+#include "libreactor/Status.h"
+#include "libreactor/InetSocketAddress.h"
 #include <log4cxx/logger.h>
 
 
