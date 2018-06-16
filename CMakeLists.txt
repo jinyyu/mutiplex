@@ -82,6 +82,6 @@ add_subdirectory(benchmark/reactor)
 install(TARGETS reactor
         ARCHIVE DESTINATION lib)
 
-install(DIRECTORY reactor
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/libreactor
         DESTINATION include)
 
