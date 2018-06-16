@@ -1,9 +1,9 @@
-#include <net4cxx/common/utils.h>
+#include <libreactor/utils.h>
 #include <gtest/gtest.h>
 #include <math.h>
 
 
-using namespace net4cxx;
+using namespace reactor;
 
 
 TEST(test_pow_of_two, test_pow_of_two)

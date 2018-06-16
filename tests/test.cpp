@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <inttypes.h>
-#include <net4cxx/common/utils.h>
+#include <libreactor/utils.h>
 
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>
 #include <cstdlib>
 
-using namespace net4cxx;
+using namespace reactor;
 
 int main(int argc, char *argv[])
 {

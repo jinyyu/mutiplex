@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include <net4cxx/common/Timestamp.h>
+#include <libreactor/Timestamp.h>
 #include <unistd.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 TEST(test_timestamp, test_timestamp)
 {

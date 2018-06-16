@@ -1,12 +1,12 @@
-#include <net4cxx/reactor/EventLoop.h>
-#include <net4cxx/reactor/Acceptor.h>
+#include <libreactor/EventLoop.h>
+#include <libreactor/Acceptor.h>
 #include <unistd.h>
-#include <net4cxx/common/Timestamp.h>
-#include <net4cxx/common/InetSocketAddress.h>
+#include <libreactor/Timestamp.h>
+#include <libreactor/InetSocketAddress.h>
 
 #include <log4cxx/logger.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 

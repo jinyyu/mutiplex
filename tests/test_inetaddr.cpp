@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include <net4cxx/common/InetAddress.h>
-#include <net4cxx/common/Status.h>
+#include <libreactor/InetAddress.h>
+#include <libreactor/Status.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 TEST(test_addr, test_addr)
 {

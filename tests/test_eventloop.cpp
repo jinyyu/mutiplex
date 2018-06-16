@@ -1,9 +1,9 @@
-#include <net4cxx/reactor/EventLoop.h>
+#include <libreactor/EventLoop.h>
 #include <thread>
 #include <unistd.h>
-#include <net4cxx/common/Timestamp.h>
+#include <libreactor/Timestamp.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 
 auto fun = []()

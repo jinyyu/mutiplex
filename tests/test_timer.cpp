@@ -1,9 +1,9 @@
-#include <net4cxx/reactor/Timer.h>
-#include <net4cxx/reactor/EventLoop.h>
-#include <net4cxx/common/Timestamp.h>
+#include <libreactor/Timer.h>
+#include <libreactor/EventLoop.h>
+#include <libreactor/Timestamp.h>
 #include <log4cxx/logger.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 

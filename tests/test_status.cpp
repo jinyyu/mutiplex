@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include <net4cxx/common/Status.h>
+#include <libreactor/Status.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 TEST(test_status, test_status)
 {

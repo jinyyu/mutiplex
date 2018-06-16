@@ -1,6 +1,6 @@
 
 set(LIBS
-        ${LIBS} net4cxx)
+        ${LIBS} reactor)
 
 
 add_executable(Tx test.cpp)

@@ -1,9 +1,9 @@
-#include <net4cxx/common/utils.h>
+#include <libreactor/utils.h>
 #include <gtest/gtest.h>
-#include <net4cxx/common/CircularBuffer.h>
+#include <libreactor/CircularBuffer.h>
 #include <string>
 
-using namespace net4cxx;
+using namespace reactor;
 
 
 TEST(test_cirularbuffer, test_cirularbuffer)

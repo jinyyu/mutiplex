@@ -1,9 +1,9 @@
-#include <net4cxx/common/InetSocketAddress.h>
+#include <libreactor/InetSocketAddress.h>
 #include <gtest/gtest.h>
-#include <net4cxx/common/InetAddress.h>
-#include <net4cxx/common/Status.h>
+#include <libreactor/InetAddress.h>
+#include <libreactor/Status.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 TEST(test, test)
 {

@@ -1,9 +1,9 @@
-#include <net4cxx/reactor/TcpServer.h>
-#include <net4cxx/common/ByteBuffer.h>
-#include <net4cxx/reactor/Connection.h>
-#include <net4cxx/common/Timestamp.h>
+#include <libreactor/TcpServer.h>
+#include <libreactor/ByteBuffer.h>
+#include <libreactor/Connection.h>
+#include <libreactor/Timestamp.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 void connection_com(ConnectionPtr conn, const Timestamp &timestamp)
 {

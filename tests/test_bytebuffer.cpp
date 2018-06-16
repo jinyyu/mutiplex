@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include <net4cxx/common/ByteBuffer.h>
+#include <libreactor/ByteBuffer.h>
 
-using namespace net4cxx;
+using namespace reactor;
 
 TEST(consstruct, test_bytebuffer)
 {
