@@ -3,12 +3,8 @@
 #include <libreactor/Connection.h>
 #include <libreactor/ByteBuffer.h>
 #include <libreactor/SingalHandler.h>
-#include <log4cxx/logger.h>
-#include <log4cxx/propertyconfigurator.h>
 
 using namespace reactor;
-
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getRootLogger());
 
 #define NUM_THREADS 4
 
@@ -18,8 +14,7 @@ public:
     EchoServer(int port)
         : server_(port, NUM_THREADS)
     {
-        ReadMessageCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, const Timestamp& timestamp)
-        {
+        ReadMessageCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, const Timestamp& timestamp) {
             this->hande_read(conn, buf, timestamp);
         };
 
@@ -28,7 +23,7 @@ public:
 
     void run()
     {
-        AddSignalHandler(SIGINT, [this](){
+        AddSignalHandler(SIGINT, [this]() {
             server_.shutdown();
         });
         server_.run();
@@ -49,9 +44,7 @@ int main(int argc, char* argv[])
         printf("usage %s <port> <config>\n", argv[0]);
         return -1;
     }
-    log4cxx::PropertyConfigurator::configure(argv[2]);
 
-    LOG4CXX_INFO(logger, "start");
     int port = atoi(argv[1]);
 
     EchoServer server(port);

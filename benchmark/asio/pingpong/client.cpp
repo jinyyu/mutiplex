@@ -58,7 +58,7 @@ private:
 class session
 {
 public:
-    session(asio::io_service &ios, size_t block_size, stats &s)
+    session(asio::io_service& ios, size_t block_size, stats& s)
         : strand_(ios),
           socket_(ios),
           block_size_(block_size),
@@ -96,7 +96,7 @@ public:
     }
 
 private:
-    void handle_connect(const boost::system::error_code &err,
+    void handle_connect(const boost::system::error_code& err,
                         asio::ip::tcp::resolver::iterator endpoint_iterator)
     {
         if (!err) {
@@ -128,7 +128,7 @@ private:
         }
     }
 
-    void handle_read(const boost::system::error_code &err, size_t length)
+    void handle_read(const boost::system::error_code& err, size_t length)
     {
         if (!err) {
             bytes_read_ += length;
@@ -153,7 +153,7 @@ private:
         }
     }
 
-    void handle_write(const boost::system::error_code &err, size_t length)
+    void handle_write(const boost::system::error_code& err, size_t length)
     {
         if (!err && length > 0) {
             bytes_written_ += length;
@@ -186,13 +186,13 @@ private:
     asio::io_service::strand strand_;
     asio::ip::tcp::socket socket_;
     size_t block_size_;
-    char *read_data_;
+    char* read_data_;
     size_t read_data_length_;
-    char *write_data_;
+    char* write_data_;
     int unwritten_count_;
     size_t bytes_written_;
     size_t bytes_read_;
-    stats &stats_;
+    stats& stats_;
     handler_allocator read_allocator_;
     handler_allocator write_allocator_;
 };
@@ -200,7 +200,7 @@ private:
 class client
 {
 public:
-    client(asio::io_service &ios,
+    client(asio::io_service& ios,
            const asio::ip::tcp::resolver::iterator endpoint_iterator,
            size_t block_size, size_t session_count, int timeout)
         : io_service_(ios),
@@ -212,7 +212,7 @@ public:
         stop_timer_.async_wait(boost::bind(&client::handle_timeout, this));
 
         for (size_t i = 0; i < session_count; ++i) {
-            session *new_session = new session(io_service_, block_size, stats_);
+            session* new_session = new session(io_service_, block_size, stats_);
             new_session->start(endpoint_iterator);
             sessions_.push_back(new_session);
         }
@@ -235,13 +235,13 @@ public:
     }
 
 private:
-    asio::io_service &io_service_;
+    asio::io_service& io_service_;
     asio::deadline_timer stop_timer_;
-    std::list<session *> sessions_;
+    std::list<session*> sessions_;
     stats stats_;
 };
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     try {
         if (argc != 7) {
@@ -251,8 +251,8 @@ int main(int argc, char *argv[])
         }
 
         using namespace std; // For atoi.
-        const char *host = argv[1];
-        const char *port = argv[2];
+        const char* host = argv[1];
+        const char* port = argv[2];
         int thread_count = atoi(argv[3]);
         size_t block_size = atoi(argv[4]);
         size_t session_count = atoi(argv[5]);
@@ -266,9 +266,9 @@ int main(int argc, char *argv[])
 
         client c(ios, iter, block_size, session_count, timeout);
 
-        std::list<boost::thread *> threads;
+        std::list<boost::thread*> threads;
         while (--thread_count > 0) {
-            boost::thread *new_thread = new boost::thread(
+            boost::thread* new_thread = new boost::thread(
                 boost::bind(&asio::io_service::run, &ios));
             threads.push_back(new_thread);
         }
@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
             threads.pop_front();
         }
     }
-    catch (std::exception &e) {
+    catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << "\n";
     }
 

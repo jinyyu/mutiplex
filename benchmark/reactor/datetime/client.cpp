@@ -6,13 +6,13 @@
 
 using namespace reactor;
 
-void read_cb(ConnectionPtr conn, ByteBuffer *buffer, const Timestamp &timestamp)
+void read_cb(ConnectionPtr conn, ByteBuffer* buffer, const Timestamp& timestamp)
 {
-    std::string str((char *) buffer->data(), buffer->remaining());
+    std::string str((char*) buffer->data(), buffer->remaining());
     printf("%s\n", str.c_str());
 }
 
-void close_cb(ConnectionPtr conn, const Timestamp &timestamp)
+void close_cb(ConnectionPtr conn, const Timestamp& timestamp)
 {
     conn->loop()->stop();
 }
@@ -20,7 +20,7 @@ void close_cb(ConnectionPtr conn, const Timestamp &timestamp)
 class DatetimeClient
 {
 public:
-    DatetimeClient(const char *ip, int port)
+    DatetimeClient(const char* ip, int port)
         : ip_(ip), port_(port)
     {
         loop.allocate_receive_buffer(10240);
@@ -49,12 +49,12 @@ public:
 private:
     EventLoop loop;
 
-    Session *session;
-    const char *ip_;
+    Session* session;
+    const char* ip_;
     int port_;
 };
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (argc != 3) {
         printf("usage %s <ip> <port>\n", argv[0]);

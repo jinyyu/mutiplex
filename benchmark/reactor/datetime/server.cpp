@@ -14,8 +14,7 @@ public:
     EchoServer(int port)
         : server_(port, NUM_THREADS)
     {
-        ConnectionEstablishedCallback cb = [this](ConnectionPtr conn, const Timestamp &timestamp)
-        {
+        ConnectionEstablishedCallback cb = [this](ConnectionPtr conn, const Timestamp& timestamp) {
             this->hande_conn(conn, timestamp);
         };
 
@@ -28,7 +27,7 @@ public:
     }
 
 private:
-    void hande_conn(ConnectionPtr conn, const Timestamp &timestamp)
+    void hande_conn(ConnectionPtr conn, const Timestamp& timestamp)
     {
         std::string str = timestamp.to_string();
         str.push_back('\n');
@@ -40,7 +39,7 @@ private:
     TcpServer server_;
 };
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (argc != 2) {
         printf("usage %s <port>\n", argv[0]);

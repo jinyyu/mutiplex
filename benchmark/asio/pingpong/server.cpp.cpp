@@ -22,7 +22,7 @@ using namespace boost;
 class session
 {
 public:
-    session(asio::io_service &ios, size_t block_size)
+    session(asio::io_service& ios, size_t block_size)
         : io_service_(ios),
           strand_(ios),
           socket_(ios),
@@ -41,7 +41,7 @@ public:
         delete[] write_data_;
     }
 
-    asio::ip::tcp::socket &socket()
+    asio::ip::tcp::socket& socket()
     {
         return socket_;
     }
@@ -65,7 +65,7 @@ public:
         }
     }
 
-    void handle_read(const boost::system::error_code &err, size_t length)
+    void handle_read(const boost::system::error_code& err, size_t length)
     {
         --op_count_;
 
@@ -93,7 +93,7 @@ public:
             io_service_.post(boost::bind(&session::destroy, this));
     }
 
-    void handle_write(const boost::system::error_code &err)
+    void handle_write(const boost::system::error_code& err)
     {
         --op_count_;
 
@@ -120,19 +120,19 @@ public:
             io_service_.post(boost::bind(&session::destroy, this));
     }
 
-    static void destroy(session *s)
+    static void destroy(session* s)
     {
         delete s;
     }
 
 private:
-    asio::io_service &io_service_;
+    asio::io_service& io_service_;
     asio::io_service::strand strand_;
     asio::ip::tcp::socket socket_;
     size_t block_size_;
-    char *read_data_;
+    char* read_data_;
     size_t read_data_length_;
-    char *write_data_;
+    char* write_data_;
     int unsent_count_;
     int op_count_;
     handler_allocator read_allocator_;
@@ -142,7 +142,7 @@ private:
 class server
 {
 public:
-    server(asio::io_service &ios, const asio::ip::tcp::endpoint &endpoint,
+    server(asio::io_service& ios, const asio::ip::tcp::endpoint& endpoint,
            size_t block_size)
         : io_service_(ios),
           acceptor_(ios),
@@ -153,13 +153,13 @@ public:
         acceptor_.bind(endpoint);
         acceptor_.listen();
 
-        session *new_session = new session(io_service_, block_size_);
+        session* new_session = new session(io_service_, block_size_);
         acceptor_.async_accept(new_session->socket(),
                                boost::bind(&server::handle_accept, this, new_session,
                                            asio::placeholders::error));
     }
 
-    void handle_accept(session *new_session, const boost::system::error_code &err)
+    void handle_accept(session* new_session, const boost::system::error_code& err)
     {
         if (!err) {
             new_session->start();
@@ -174,12 +174,12 @@ public:
     }
 
 private:
-    asio::io_service &io_service_;
+    asio::io_service& io_service_;
     asio::ip::tcp::acceptor acceptor_;
     size_t block_size_;
 };
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     try {
         if (argc != 5) {
@@ -198,9 +198,9 @@ int main(int argc, char *argv[])
         server s(ios, asio::ip::tcp::endpoint(address, port), block_size);
 
         // Threads not currently supported in this test.
-        std::list<boost::thread *> threads;
+        std::list<boost::thread*> threads;
         while (--thread_count > 0) {
-            boost::thread *new_thread = new boost::thread(
+            boost::thread* new_thread = new boost::thread(
                 boost::bind(&asio::io_service::run, &ios));
             threads.push_back(new_thread);
         }
@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
             threads.pop_front();
         }
     }
-    catch (std::exception &e) {
+    catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << "\n";
     }
 

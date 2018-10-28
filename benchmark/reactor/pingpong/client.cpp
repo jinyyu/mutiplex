@@ -17,7 +17,7 @@ std::vector<uint64_t> totals;
 class Client
 {
 public:
-    Client(const InetSocketAddress &addr, int session_count, int timeout, int block_size, int index)
+    Client(const InetSocketAddress& addr, int session_count, int timeout, int block_size, int index)
         : server_addr_(addr),
           session_count_(session_count),
           timeout_(timeout),
@@ -37,7 +37,7 @@ public:
     ~Client()
     {
         delete (timer_channel_);
-        for (Session *session : sessions_) {
+        for (Session* session : sessions_) {
             delete (session);
         }
 
@@ -57,7 +57,7 @@ public:
 
 private:
 
-    void handle_timeout(const Timestamp &timestamp)
+    void handle_timeout(const Timestamp& timestamp)
     {
         printf("stop %s\n", timestamp.to_string().c_str());
         loop_.stop();
@@ -72,8 +72,7 @@ private:
         }
 
         timer_channel_ = new Channel(loop_.selector(), fd);
-        SelectionCallback timeout = [this](const Timestamp &timestamp, SelectionKey *)
-        {
+        SelectionCallback timeout = [this](const Timestamp& timestamp, SelectionKey*) {
             this->handle_timeout(timestamp);
         };
 
@@ -104,15 +103,13 @@ private:
     {
         InetSocketAddress local;
         for (int i = 0; i < session_count_; ++i) {
-            Session *session = new Session(&loop_, local);
+            Session* session = new Session(&loop_, local);
 
-            ReadMessageCallback read_cb = [this](ConnectionPtr conn, ByteBuffer *buffer, const Timestamp &timestamp)
-            {
+            ReadMessageCallback read_cb = [this](ConnectionPtr conn, ByteBuffer* buffer, const Timestamp& timestamp) {
                 this->read_callback(conn, buffer, timestamp);
             };
             session->read_message_callback(read_cb);
-            ConnectionEstablishedCallback connect_cb = [this](ConnectionPtr conn, const Timestamp &)
-            {
+            ConnectionEstablishedCallback connect_cb = [this](ConnectionPtr conn, const Timestamp&) {
                 this->on_connect_success(conn);
             };
             session->connection_established_callback(connect_cb);
@@ -127,7 +124,7 @@ private:
         conn->write(buffer_, block_size_);
     }
 
-    void read_callback(ConnectionPtr conn, ByteBuffer *buffer, const Timestamp &timestamp)
+    void read_callback(ConnectionPtr conn, ByteBuffer* buffer, const Timestamp& timestamp)
     {
         //LOG_INFO("read n = %d", buffer->remaining());
         int len = buffer->remaining();
@@ -142,24 +139,24 @@ private:
     int timeout_;
     int block_size_;
     InetSocketAddress server_addr_;
-    Channel *timer_channel_;
+    Channel* timer_channel_;
 
-    std::vector<Session *> sessions_;
+    std::vector<Session*> sessions_;
 
-    void *buffer_;
+    void* buffer_;
 
     uint64_t total_;
     int index_;
 
 };
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (argc != 7) {
         printf("usage %s <ip> <port> <session_count> <timeout> <block_size>\n", argv[0]);
         return -1;
     }
-    const char *ip = argv[1];
+    const char* ip = argv[1];
     int port = std::atoi(argv[2]);
     int session_count = std::atoi(argv[3]);
     int timeout = std::atoi(argv[4]);
@@ -184,8 +181,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < threads; ++i) {
         totals[i] = 0;
 
-        auto cb = [address, per_thread, timeout, block_size, i]()
-        {
+        auto cb = [address, per_thread, timeout, block_size, i]() {
 
             Client client(address, per_thread, timeout, block_size, i);
             client.run();

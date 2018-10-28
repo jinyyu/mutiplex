@@ -9,7 +9,7 @@ TEST(test_status, test_status)
     status.to_string();
     ASSERT_TRUE(status.is_ok());
 
-    const char *msg = "test msg";
+    const char* msg = "test msg";
     status = Status::invalid_argument(msg);
     ASSERT_TRUE(status.is_invalid_argument());
 
@@ -36,7 +36,7 @@ TEST(test_status, test_status)
 
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

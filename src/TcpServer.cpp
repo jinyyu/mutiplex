@@ -3,12 +3,11 @@
 #include "libreactor/Acceptor.h"
 #include "libreactor/Connection.h"
 #include "libreactor/Timestamp.h"
-#include <log4cxx/logger.h>
+#include "Debug.h"
 
 namespace reactor
 {
 
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 TcpServer::TcpServer(int port, int num_io_threads)
     : port_(port),
@@ -29,15 +28,13 @@ TcpServer::~TcpServer()
 void TcpServer::run()
 {
     io_loops_.resize(num_io_threads_, NULL);
-    auto run_cb = [this](int index)
-    {
+    auto run_cb = [this](int index) {
         EventLoop* loop = new EventLoop();
         loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
         NewConnectionCallback cb = [this, loop](int fd,
                                                 const Timestamp& timestamp,
                                                 const InetSocketAddress& local,
-                                                const InetSocketAddress& peer)
-        {
+                                                const InetSocketAddress& peer) {
             ConnectionPtr conn(new Connection(fd, loop, local, peer));
             conn->connection_established_callback(connection_established_callback_);
             conn->read_message_callback(read_message_callback_);
@@ -48,7 +45,7 @@ void TcpServer::run()
         acceptor.new_connection_callback(cb);
         io_loops_[index] = loop;
         loop->run();
-        LOG4CXX_INFO(logger, "loop exit " << index);
+        LOG_DEBUG( "loop exit %d", index);
 
         std::unique_lock<std::mutex> lock(mutex_);
         --count_down_;

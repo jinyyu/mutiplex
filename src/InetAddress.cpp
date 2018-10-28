@@ -5,18 +5,16 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
-#include <log4cxx/logger.h>
+#include <assert.h>
+#include "Debug.h"
 
 namespace reactor
 {
-
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 InetAddress InetAddress::get_by_address(const char* addr, int family, Status& status)
 {
     InetAddress address(family);
     if (inet_pton(family, addr, &address.addr6_) != 1) {
-        LOG4CXX_ERROR(logger, "invalid address " << addr);
         status = Status::invalid_argument("invalid address");
     }
     return address;
@@ -36,7 +34,7 @@ InetAddress InetAddress::any(int family)
             break;
         }
         default:
-            LOG4CXX_ERROR(logger, "unknown family " << family);
+            assert(false);
     }
 
     return address;
@@ -58,7 +56,6 @@ InetAddress InetAddress::get_by_host(const char* hostname, Status& status)
         status = Status::ok();
     }
     else {
-        LOG4CXX_ERROR(logger, "invalid hostname " << hostname);
         status = Status::invalid_argument("invalid hostname");
     }
     return addr;
@@ -70,7 +67,7 @@ std::string InetAddress::to_string() const
     int af = v4() ? AF_INET : AF_INET6;
 
     if (inet_ntop(af, &addr_, str, INET6_ADDRSTRLEN) == NULL) {
-        LOG4CXX_ERROR(logger, "inet_ntop error : " << errno);
+        LOG_DEBUG("invalid addr");
     }
     return str;
 }

@@ -11,8 +11,7 @@ public:
     EchoServer(int port, int threads)
         : server_(port, threads)
     {
-        ReadMessageCallback cb = [this](ConnectionPtr conn, ByteBuffer *buf, const Timestamp &timestamp)
-        {
+        ReadMessageCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, const Timestamp& timestamp) {
             this->hande_read(conn, buf, timestamp);
         };
 
@@ -25,7 +24,7 @@ public:
     }
 
 private:
-    void hande_read(ConnectionPtr conn, ByteBuffer *buf, const Timestamp &)
+    void hande_read(ConnectionPtr conn, ByteBuffer* buf, const Timestamp&)
     {
         conn->write(buf->data(), buf->remaining());
     }
@@ -33,7 +32,7 @@ private:
     TcpServer server_;
 };
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (argc != 3) {
         printf("usage %s <port> <threads>\n", argv[0]);

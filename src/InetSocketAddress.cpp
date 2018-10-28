@@ -1,12 +1,10 @@
 #include "libreactor/Status.h"
 #include "libreactor/InetSocketAddress.h"
-#include <log4cxx/logger.h>
+#include "Debug.h"
 
 
 namespace reactor
 {
-
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 InetSocketAddress::InetSocketAddress()
 {
@@ -43,7 +41,7 @@ InetSocketAddress::InetSocketAddress(const char* hostname, int port)
     Status s;
     InetAddress addr = InetAddress::get_by_host(hostname, s);
     if (!s.is_ok()) {
-        LOG4CXX_ERROR(logger, "invalid hostname " << hostname);
+        LOG_DEBUG("invalid hostname %s", hostname);
     }
 
     from_address(addr, port);

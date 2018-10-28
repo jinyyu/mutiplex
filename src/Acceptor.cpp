@@ -5,12 +5,9 @@
 #include "libreactor/EventLoop.h"
 #include "libreactor/Timestamp.h"
 #include "libreactor/Connection.h"
-#include <log4cxx/logger.h>
 
 namespace reactor
 {
-
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Acceptor::Acceptor(EventLoop* loop, int port)
     : Acceptor(loop, InetSocketAddress(port))
@@ -27,14 +24,12 @@ Acceptor::Acceptor(EventLoop* loop, const InetSocketAddress& addr)
 
     Status status = server_socket_->bind(addr);
     if (!status.is_ok()) {
-        LOG4CXX_ERROR(logger, "bind error " << status.to_string());
         exit(EXIT_FAILURE);
     }
 
     accept_channel_ = new Channel(loop->selector_, server_socket_->fd());
 
-    SelectionCallback cb = [this](const Timestamp& timestamp, SelectionKey* key)
-    {
+    SelectionCallback cb = [this](const Timestamp& timestamp, SelectionKey* key) {
         int fd = server_socket_->accept(*this->peer_addr_);
 
         if (this->callback_) {

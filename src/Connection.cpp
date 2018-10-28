@@ -5,14 +5,13 @@
 #include "libreactor/ByteBuffer.h"
 #include "libreactor/CircularBuffer.h"
 #include "libreactor/Timestamp.h"
+#include "Debug.h"
 
 #include <unistd.h>
 #include <assert.h>
-#include <log4cxx/logger.h>
 
 namespace reactor
 {
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Connection::Connection(int fd,
                        EventLoop* loop,
@@ -28,7 +27,7 @@ Connection::Connection(int fd,
       buffer_out_(nullptr),
       ctx_(nullptr)
 {
-    LOG4CXX_ERROR(logger, "new connection " << fd_);
+    LOG_DEBUG("new connection %d", fd_);
 }
 
 Connection::~Connection()
@@ -42,19 +41,16 @@ Connection::~Connection()
         delete buffer_out_;
     }
 
-    LOG4CXX_ERROR(logger, "connection closed " << fd_);
+    LOG_DEBUG("connection closed %d", fd_);
 
 }
 
 void Connection::setup_callbacks()
 {
-    if (state_ != New) {
-        LOG4CXX_ERROR(logger, "state = " << state_);
-    }
+    assert (state_ != New);
     channel_ = new Channel(loop_->selector(), fd_);
 
-    SelectionCallback read_cb = [this](const Timestamp& timestamp, SelectionKey* key)
-    {
+    SelectionCallback read_cb = [this](const Timestamp& timestamp, SelectionKey* key) {
         ByteBuffer* buffer = loop_->recv_buffer_;
         buffer->clear();
         ssize_t n = ::read(fd_, buffer->data(), buffer->remaining());
@@ -65,7 +61,7 @@ void Connection::setup_callbacks()
             }
             force_close();
             if (err != 104) {
-                LOG4CXX_ERROR(logger, "read error fd = " << fd_ << " error = " << err);
+                LOG_DEBUG("read error %d", errno);
             }
         }
         else if (n == 0) {
@@ -85,14 +81,12 @@ void Connection::setup_callbacks()
 
     channel_->enable_reading(read_cb);
 
-    SelectionCallback write_cb = [this](const Timestamp& timestamp, SelectionKey*)
-    {
+    SelectionCallback write_cb = [this](const Timestamp& timestamp, SelectionKey*) {
         this->handle_write(timestamp);
     };
     channel_->set_writing_selection_callback(write_cb);
 
-    SelectionCallback error_cb = [this](const Timestamp& timestamp, SelectionKey*)
-    {
+    SelectionCallback error_cb = [this](const Timestamp& timestamp, SelectionKey*) {
         this->force_close();
     };
     channel_->set_error_selection_callback(error_cb);
@@ -103,8 +97,7 @@ void Connection::setup_callbacks()
 
 void Connection::close()
 {
-    auto cb = [self = shared_from_this()]
-    {
+    auto cb = [self = shared_from_this()] {
         if (!self->has_bytes_to_write()) {
             //closed it
             self->state_ = Closed;
@@ -123,8 +116,7 @@ void Connection::close()
 
 void Connection::force_close()
 {
-    auto cb = [self = shared_from_this()]()
-    {
+    auto cb = [self = shared_from_this()]() {
         self->state_ = Closed;
         self->buffer_out_->clear();
         self->channel_->disable_all();
@@ -159,8 +151,7 @@ bool Connection::write(const ByteBufferPtr& buffer)
 
     }
     else {
-        auto callback = [self = shared_from_this(), buffer]
-        {
+        auto callback = [self = shared_from_this(), buffer] {
             self->do_write(buffer->data(), buffer->remaining());
         };
         loop_->post(callback);
@@ -182,8 +173,7 @@ bool Connection::write(const void* data, uint32_t len)
         buffer->flip();
 
         //copy buffer
-        auto callback = [this, buffer]()
-        {
+        auto callback = [this, buffer]() {
             this->do_write(buffer->data(), static_cast<uint32_t>(buffer->remaining()));
         };
         loop_->post(callback);

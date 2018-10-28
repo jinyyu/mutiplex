@@ -3,13 +3,10 @@
 #include <memory.h>
 #include "libreactor/Channel.h"
 #include "libreactor/SelectionKey.h"
-
-#include <log4cxx/logger.h>
-
+#include "Debug.h"
 
 namespace reactor
 {
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Selector::Selector(pthread_t pthread_id)
     : events_(64),
@@ -18,7 +15,7 @@ Selector::Selector(pthread_t pthread_id)
 {
     epoll_fd_ = epoll_create1(EPOLL_CLOEXEC);
     if (epoll_fd_ == -1) {
-        LOG4CXX_ERROR(logger, "epoll_create1 error " << errno);
+        LOG_DEBUG("poll_create1 error %d", errno);
     }
 }
 
@@ -52,7 +49,7 @@ void Selector::control(int op, SelectionKey* selection_key)
     event.events = selection_key->interest_ops();
 
     if (epoll_ctl(epoll_fd_, op, selection_key->fd(), &event) != 0) {
-        LOG4CXX_ERROR(logger, "epoll_ctl error, op  " << op << " error " << errno);
+        LOG_DEBUG("epoll_ctl error %d, %d", op, errno);
     }
 }
 
@@ -61,7 +58,7 @@ Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey*>&
     int n_events = epoll_wait(epoll_fd_, events_.data(), events_.size(), timeout_milliseconds);
     Timestamp cur = Timestamp::currentTime();
     if (n_events == -1) {
-        LOG4CXX_ERROR(logger, "epoll_wait error " << errno);
+        LOG_DEBUG("epoll_wait error %d", errno);
     }
     else if (n_events == 0) {
         return cur;

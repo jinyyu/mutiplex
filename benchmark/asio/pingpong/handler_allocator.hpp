@@ -27,7 +27,7 @@ public:
     {
     }
 
-    void *allocate(std::size_t size)
+    void* allocate(std::size_t size)
     {
         if (!in_use_ && size < storage_.size) {
             in_use_ = true;
@@ -37,7 +37,7 @@ public:
         return ::operator new(size);
     }
 
-    void deallocate(void *pointer)
+    void deallocate(void* pointer)
     {
         if (pointer == storage_.address()) {
             in_use_ = false;
@@ -62,7 +62,7 @@ template<typename Handler>
 class custom_alloc_handler
 {
 public:
-    custom_alloc_handler(handler_allocator &a, Handler h)
+    custom_alloc_handler(handler_allocator& a, Handler h)
         : allocator_(a),
           handler_(h)
     {
@@ -80,27 +80,27 @@ public:
         handler_(arg1, arg2);
     }
 
-    friend void *asio_handler_allocate(std::size_t size,
-                                       custom_alloc_handler<Handler> *this_handler)
+    friend void* asio_handler_allocate(std::size_t size,
+                                       custom_alloc_handler<Handler>* this_handler)
     {
         return this_handler->allocator_.allocate(size);
     }
 
-    friend void asio_handler_deallocate(void *pointer, std::size_t /*size*/,
-                                        custom_alloc_handler<Handler> *this_handler)
+    friend void asio_handler_deallocate(void* pointer, std::size_t /*size*/,
+                                        custom_alloc_handler<Handler>* this_handler)
     {
         this_handler->allocator_.deallocate(pointer);
     }
 
 private:
-    handler_allocator &allocator_;
+    handler_allocator& allocator_;
     Handler handler_;
 };
 
 // Helper function to wrap a handler object to add custom allocation.
 template<typename Handler>
 inline custom_alloc_handler<Handler> make_custom_alloc_handler(
-    handler_allocator &a, Handler h)
+    handler_allocator& a, Handler h)
 {
     return custom_alloc_handler<Handler>(a, h);
 }

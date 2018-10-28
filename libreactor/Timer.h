@@ -24,7 +24,7 @@ public:
 
 private:
 
-    void set_timmer(struct itimerspec spec, const TimeoutCallback& timeout_callback);
+    void set_timer(struct itimerspec spec, const TimeoutCallback& timeout_callback);
 
     void handle_timeout(const Timestamp& timestamp, SelectionKey* key, const TimeoutCallback& callback);
 

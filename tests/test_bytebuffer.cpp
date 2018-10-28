@@ -32,7 +32,6 @@ TEST(consstruct, test_bytebuffer)
     ASSERT_TRUE(buffer.position() == 0);
 }
 
-
 TEST(test_reset, test_bytebuffer)
 {
     ByteBuffer buffer(10);
@@ -59,8 +58,7 @@ TEST(test_reset, test_bytebuffer)
     ASSERT_TRUE(buffer.remaining() == 2);
 }
 
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

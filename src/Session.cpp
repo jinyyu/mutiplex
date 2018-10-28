@@ -7,13 +7,10 @@
 #include "libreactor/SelectionKey.h"
 #include "libreactor/EventLoop.h"
 #include "libreactor/Channel.h"
-
-#include <log4cxx/logger.h>
+#include "Debug.h"
 
 namespace reactor
 {
-
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 Session::Session(EventLoop* loop, const InetSocketAddress& local)
     : loop_(loop),
@@ -22,7 +19,7 @@ Session::Session(EventLoop* loop, const InetSocketAddress& local)
 {
     fd_ = ::socket(local.family(), SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
     if (fd_ < 0) {
-        LOG4CXX_ERROR(logger, "socket error " << errno);
+        LOG_DEBUG("socket error %d", errno);
     }
 }
 
@@ -37,8 +34,7 @@ void Session::connect(const InetSocketAddress& peer)
 {
     peer_ = peer;
     channel_ = new Channel(loop_->selector_, fd_);
-    SelectionCallback write_cb = [this](const Timestamp& timestamp, SelectionKey* key)
-    {
+    SelectionCallback write_cb = [this](const Timestamp& timestamp, SelectionKey* key) {
         this->handle_connected(timestamp, key);
     };
     channel_->set_writing_selection_callback(write_cb);
@@ -59,7 +55,7 @@ void Session::handle_connected(const Timestamp& timestamp, SelectionKey* key)
     channel_->disable_all();
 
     if (key->is_error()) {
-        LOG4CXX_INFO(logger, "error");
+        LOG_DEBUG("error");
         handle_error(timestamp);
         return;
     }
@@ -70,7 +66,7 @@ void Session::handle_connected(const Timestamp& timestamp, SelectionKey* key)
 
     if (err != 0) {
         //error
-        LOG4CXX_ERROR(logger, "connect error " << err);
+        LOG_DEBUG("connect error %d", err);
         handle_error(timestamp);
         return;
 
@@ -93,7 +89,7 @@ bool Session::do_connect(const InetSocketAddress& addr)
     int err = errno;
 
     if (ret < 0 && err != EINPROGRESS) {
-        LOG4CXX_ERROR(logger, "connect error " << errno);
+        LOG_DEBUG("connect error %d", errno);
         return false;
     }
     return true;
@@ -102,7 +98,6 @@ bool Session::do_connect(const InetSocketAddress& addr)
 
 void Session::handle_error(const Timestamp& timestamp)
 {
-    LOG4CXX_ERROR(logger, "error happened " << timestamp.to_string());
     if (connect_error_callback_) {
         connect_error_callback_(timestamp);
     }

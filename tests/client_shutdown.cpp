@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <errno.h>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     if (argc != 3) {
         printf("usage : %s : <ip> <port>", argv[0]);
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     socket_addr.sin_port = htons(port);
 
 
-    if (0 != ::connect(fd, (sockaddr *) &socket_addr, sizeof(sockaddr_in))) {
+    if (0 != ::connect(fd, (sockaddr*) &socket_addr, sizeof(sockaddr_in))) {
         printf("connect error %d\n", errno);
         exit(-1);
     }

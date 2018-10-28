@@ -6,14 +6,13 @@
 #include "libreactor/InetSocketAddress.h"
 #include "libreactor/Connection.h"
 #include "libreactor/ByteBuffer.h"
-#include <log4cxx/logger.h>
 
 #include <sys/eventfd.h>
 #include <unistd.h>
+#include "Debug.h"
 
 namespace reactor
 {
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 EventLoop::EventLoop()
     : pthread_id_(pthread_self()),
@@ -28,18 +27,17 @@ EventLoop::EventLoop()
     active_keys_.reserve(128);
 
     if (wakeup_fd_ == -1) {
-        LOG4CXX_ERROR(logger, "eventfd error " << errno);
+        LOG_DEBUG("eventfd error %d", errno);
     }
 
     //setup wakeup channel
     wakeup_channel_ = new Channel(selector_, wakeup_fd_);
-    wakeup_channel_->enable_reading([this](const Timestamp&, SelectionKey*)
-                                    {
-                                        uint64_t n;
-                                        if (eventfd_read(wakeup_fd_, &n) < 0) {
-                                            LOG4CXX_ERROR(logger, "eventfd_read error " << errno);
-                                        }
-                                    });
+    wakeup_channel_->enable_reading([this](const Timestamp&, SelectionKey*) {
+        uint64_t n;
+        if (eventfd_read(wakeup_fd_, &n) < 0) {
+            LOG_DEBUG("eventfd_read error %d", errno);
+        }
+    });
 }
 
 EventLoop::~EventLoop()
@@ -55,7 +53,7 @@ EventLoop::~EventLoop()
     if (recv_buffer_) {
         delete (recv_buffer_);
     }
-    LOG4CXX_INFO(logger, "loop delete " << pthread_id_);
+    LOG_DEBUG("loop delete %d" ,pthread_id_);
 
 }
 
@@ -107,7 +105,7 @@ void EventLoop::wake_up()
         return;
 
     if (eventfd_write(wakeup_fd_, 1) < 0) {
-        LOG4CXX_ERROR(logger, "eventfd_write error " << errno);
+        LOG_DEBUG("eventfd_write error %d", errno);
     }
 }
 

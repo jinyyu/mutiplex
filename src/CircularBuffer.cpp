@@ -6,12 +6,11 @@
 #include <math.h>
 #include <algorithm>
 #include <unistd.h>
-#include <log4cxx/logger.h>
+#include <assert.h>
+#include "Debug.h"
 
 namespace reactor
 {
-
-static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("net4cxx"));
 
 CircularBuffer::CircularBuffer(uint32_t capacity)
     : in_(0),
@@ -108,10 +107,7 @@ void CircularBuffer::resize(const void* buffer, uint32_t length)
 
 int CircularBuffer::write_to_fd(Connection* conn, const Timestamp& timestamp)
 {
-    if (empty()) {
-        LOG4CXX_ERROR(logger, "buffer is empty");
-        return -1;
-    }
+    assert(!empty());
 
     uint32_t buff_len = buffer_len();
 
@@ -123,7 +119,7 @@ int CircularBuffer::write_to_fd(Connection* conn, const Timestamp& timestamp)
         //case out_ == (n) capacity_, in_ == (n+1) capacity_
         n = ::write(conn->fd_, data_, capacity_);
         if (n < 0) {
-            LOG4CXX_ERROR(logger, "write error " << errno);
+            LOG_DEBUG("write error %d", errno);
             return n;
         }
     }
@@ -139,7 +135,7 @@ int CircularBuffer::write_to_fd(Connection* conn, const Timestamp& timestamp)
 
         n = ::writev(conn->fd_, iov, (iov[1].iov_len == 0) ? 1 : 2);
         if (n < 0) {
-            LOG4CXX_ERROR(logger, "writev error fd = " << conn->fd_ << " error = " << errno);
+            LOG_DEBUG("write error %d", errno);
             return n;
         }
     }

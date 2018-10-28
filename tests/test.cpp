@@ -8,10 +8,10 @@
 
 using namespace reactor;
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 
-    char *p = (char *) malloc(6 * 1024 * 1024);
+    char* p = (char*) malloc(6 * 1024 * 1024);
     if (!p) {
         printf("error");
     }
