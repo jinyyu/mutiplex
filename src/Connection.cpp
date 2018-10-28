@@ -47,7 +47,6 @@ Connection::~Connection()
 
 void Connection::setup_callbacks()
 {
-    assert (state_ != New);
     channel_ = new Channel(loop_->selector(), fd_);
 
     SelectionCallback read_cb = [this](const Timestamp& timestamp, SelectionKey* key) {

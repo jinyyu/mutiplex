@@ -153,7 +153,7 @@ private:
 int main(int argc, char* argv[])
 {
     if (argc != 7) {
-        printf("usage %s <ip> <port> <session_count> <timeout> <block_size>\n", argv[0]);
+        printf("usage %s <ip> <port> <session_count> <timeout> <block_size> <threads>\n", argv[0]);
         return -1;
     }
     const char* ip = argv[1];
