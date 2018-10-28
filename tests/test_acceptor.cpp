@@ -12,7 +12,7 @@ void cb(int fd, const Timestamp& timestamp, const InetSocketAddress& local, cons
 
     const char* str = "good bye\n";
     ::write(fd, str, strlen(str));
-    fprintf(stderr, "%s %s - > %s", timestamp.to_string().c_str(), local.to_string().c_str(), peer.to_string().c_str());
+    fprintf(stderr, "%s %s - > %s\n", timestamp.to_string().c_str(), local.to_string().c_str(), peer.to_string().c_str());
     ::close(fd);
 }
 
