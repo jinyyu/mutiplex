@@ -9,18 +9,21 @@ namespace ev
 
 typedef std::function<void(uint64_t)> EventCallback;
 
+class EventLoop;
 class EventSource
 {
 public:
-    explicit EventSource(int fd)
+    explicit EventSource(int fd, EventLoop* loop)
         : ready_ops_(0),
           interest_ops_(0),
-          fd_(fd)
+          fd_(fd),
+          state_(StateNew),
+          loop_(loop)
     {
 
     }
 
-    ~EventSource() = default;
+    ~EventSource();
 
     int fd()
     {
@@ -109,16 +112,19 @@ public:
 
 private:
 
-    void enable_ops(uint32_t op)
-    {
-        interest_ops_ |= op;
-    }
+    void enable_ops(uint32_t op);
 
-    void disable_ops(uint32_t op)
-    {
-        interest_ops_ &= ~op;
-    }
+    void disable_ops(uint32_t op);
 
+    enum State
+    {
+        StateNew = 0,
+        StateExists = 1,
+        StateDeleted = 2
+    };
+
+    uint8_t state_;
+    EventLoop* loop_;
     int fd_;
     uint32_t interest_ops_;
     uint32_t ready_ops_;

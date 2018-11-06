@@ -22,7 +22,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetSocketAddress& addr)
         throw std::runtime_error(status.to_string());
     }
 
-    accept_event_ = new EventSource(server_socket_.fd());
+    accept_event_ = new EventSource(server_socket_.fd(), loop_);
 
     accept_event_->enable_reading();
     accept_event_->set_reading_callback([this](uint64_t timestamp){
@@ -32,8 +32,6 @@ Acceptor::Acceptor(EventLoop* loop, const InetSocketAddress& addr)
             this->on_new_connection_(fd, timestamp, local_addr_, this->peer_addr_);
         }
     });
-
-    loop_->register_event(accept_event_);
 }
 
 Acceptor::~Acceptor()

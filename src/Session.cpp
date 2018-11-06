@@ -30,7 +30,7 @@ Session::~Session()
 void Session::connect(const InetSocketAddress& peer)
 {
     peer_ = peer;
-    event_source_ = new EventSource(fd_);
+    event_source_ = new EventSource(fd_, loop_);
     event_source_->set_writing_callback([this](uint64_t timestamp){
         handle_connected(timestamp);
     });
@@ -39,7 +39,6 @@ void Session::connect(const InetSocketAddress& peer)
         handle_error(timestamp);
     });
 
-    loop_->register_event(event_source_);
 
     if (!do_connect(peer)) {
         //handle connect error

@@ -45,7 +45,7 @@ Connection::~Connection()
 
 void Connection::register_event()
 {
-    event_source_ = new EventSource(fd_);
+    event_source_ = new EventSource(fd_, loop_);
 
     event_source_->enable_reading();
     event_source_->set_reading_callback([this](uint64_t timestamp) {

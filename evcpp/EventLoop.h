@@ -40,6 +40,7 @@ private:
         connections_.erase(fd);
     }
 
+    friend class EventSource;
     void register_event(EventSource* ev);
 
     void unregister_event(EventSource* ev);

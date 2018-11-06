@@ -24,7 +24,7 @@ EventLoop::EventLoop()
     }
 
     //setup wakeup channel
-    wakeup_event_ = new EventSource(wakeup_fd_);
+    wakeup_event_ = new EventSource(wakeup_fd_, this);
     wakeup_event_->enable_reading();
     wakeup_event_->set_reading_callback([this](uint64_t timestamp) {
         uint64_t n;
