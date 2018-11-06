@@ -53,10 +53,10 @@ void Selector::control(int op, SelectionKey* selection_key)
     }
 }
 
-Timestamp Selector::select(int timeout_milliseconds, std::vector<SelectionKey*>& active_key)
+uint64_t Selector::select(int timeout_milliseconds, std::vector<SelectionKey*>& active_key)
 {
     int n_events = epoll_wait(epoll_fd_, events_.data(), events_.size(), timeout_milliseconds);
-    Timestamp cur = Timestamp::currentTime();
+    uint64_t cur = Timestamp::current();
     if (n_events == -1) {
         LOG_DEBUG("epoll_wait error %d", errno);
     }

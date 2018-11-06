@@ -49,7 +49,7 @@ private:
     { return in_ & (capacity_ - 1); }
 
     friend class Connection;
-    int write_to_fd(Connection* conn, const Timestamp& timestamp);
+    int write_to_fd(Connection* conn, uint64_t timestamp);
 private:
     char* data_;
     uint32_t capacity_;

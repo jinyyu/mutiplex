@@ -5,26 +5,20 @@
 namespace ev
 {
 
-static int MICROSECONDS_PER_SECOND = 1000 * 1000;
+#define MICROSECONDS_PER_SECOND  (1000 * 1000)
 
-static void timestamp_get_timeval(uint64_t timestamp, struct timeval& tm)
-{
-    tm.tv_sec = timestamp / MICROSECONDS_PER_SECOND;
-    tm.tv_usec = timestamp % MICROSECONDS_PER_SECOND;
-}
-
-Timestamp Timestamp::currentTime()
+uint64_t Timestamp::current()
 {
     struct timeval tv;
     gettimeofday(&tv, nullptr);
-    uint64_t tm = static_cast<uint64_t>(tv.tv_sec * MICROSECONDS_PER_SECOND + tv.tv_usec);
-    return Timestamp(tm);
+    return static_cast<uint64_t>(tv.tv_sec * MICROSECONDS_PER_SECOND + tv.tv_usec);
 }
 
-std::string Timestamp::to_string() const
+std::string Timestamp::to_string(uint64_t timestamp)
 {
     struct timeval tm;
-    timestamp_get_timeval(timestamp_, tm);
+    tm.tv_sec = timestamp / MICROSECONDS_PER_SECOND;
+    tm.tv_usec = timestamp % MICROSECONDS_PER_SECOND;
 
     struct tm result;
     localtime_r(&tm.tv_sec, &result);

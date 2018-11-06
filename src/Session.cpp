@@ -34,7 +34,7 @@ void Session::connect(const InetSocketAddress& peer)
 {
     peer_ = peer;
     channel_ = new Channel(loop_->selector_, fd_);
-    SelectionCallback write_cb = [this](const Timestamp& timestamp, SelectionKey* key) {
+    SelectionCallback write_cb = [this](uint64_t timestamp, SelectionKey* key) {
         this->handle_connected(timestamp, key);
     };
     channel_->set_writing_selection_callback(write_cb);
@@ -42,7 +42,7 @@ void Session::connect(const InetSocketAddress& peer)
 
     if (!do_connect(peer)) {
         //handle connect error
-        handle_error(Timestamp::currentTime());
+        handle_error(Timestamp::current());
         return;
     }
     else {
@@ -50,7 +50,7 @@ void Session::connect(const InetSocketAddress& peer)
     }
 }
 
-void Session::handle_connected(const Timestamp& timestamp, SelectionKey* key)
+void Session::handle_connected(uint64_t timestamp, SelectionKey* key)
 {
     channel_->disable_all();
 
@@ -96,7 +96,7 @@ bool Session::do_connect(const InetSocketAddress& addr)
 
 }
 
-void Session::handle_error(const Timestamp& timestamp)
+void Session::handle_error(uint64_t timestamp)
 {
     if (connect_error_callback_) {
         connect_error_callback_(timestamp);

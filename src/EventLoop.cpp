@@ -32,7 +32,7 @@ EventLoop::EventLoop()
 
     //setup wakeup channel
     wakeup_channel_ = new Channel(selector_, wakeup_fd_);
-    wakeup_channel_->enable_reading([this](const Timestamp&, SelectionKey*) {
+    wakeup_channel_->enable_reading([this](uint64_t timestamp, SelectionKey*) {
         uint64_t n;
         if (eventfd_read(wakeup_fd_, &n) < 0) {
             LOG_DEBUG("eventfd_read error %d", errno);
@@ -62,7 +62,7 @@ void EventLoop::run()
     pthread_id_ = pthread_self();
     while (!is_quit_) {
         active_keys_.clear();
-        Timestamp time = selector_->select(8000, active_keys_);
+        uint64_t tm = selector_->select(8000, active_keys_);
         if (active_keys_.empty()) {
             continue;
         }
@@ -70,14 +70,14 @@ void EventLoop::run()
         for (SelectionKey* key: active_keys_) {
             Channel* channel = key->channel();
             if (key->is_error()) {
-                channel->handle_error(time);
+                channel->handle_error(tm);
             }
             else {
                 if (key->is_readable()) {
-                    channel->handle_read(time);
+                    channel->handle_read(tm);
                 }
                 if (key->is_writable()) {
-                    channel->handle_wirte(time);
+                    channel->handle_wirte(tm);
                 }
             }
         }
@@ -123,7 +123,7 @@ void EventLoop::post(const Callback& callback)
     }
 }
 
-void EventLoop::on_new_connection(ConnectionPtr& conn, const Timestamp& timestamp)
+void EventLoop::on_new_connection(ConnectionPtr& conn, uint64_t timestamp)
 {
     conn->setup_callbacks();
 

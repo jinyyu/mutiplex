@@ -14,7 +14,7 @@ public:
     EchoServer(int port)
         : server_(port, NUM_THREADS)
     {
-        ConnectionEstablishedCallback cb = [this](ConnectionPtr conn, const Timestamp& timestamp) {
+        ConnectionEstablishedCallback cb = [this](ConnectionPtr conn, uint64_t timestamp) {
             this->hande_conn(conn, timestamp);
         };
 
@@ -27,9 +27,9 @@ public:
     }
 
 private:
-    void hande_conn(ConnectionPtr conn, const Timestamp& timestamp)
+    void hande_conn(ConnectionPtr conn, uint64_t timestamp)
     {
-        std::string str = timestamp.to_string();
+        std::string str = ev::Timestamp::to_string(timestamp);
         str.push_back('\n');
 
         conn->write(str.c_str(), str.size());

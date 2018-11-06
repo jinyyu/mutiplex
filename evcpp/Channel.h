@@ -32,19 +32,19 @@ public:
 
     void reset_fd(int fd);
 
-    void handle_read(const Timestamp& timestamp) const
+    void handle_read(uint64_t timestamp) const
     {
         if (read_callback_)
             read_callback_(timestamp, selection_key_);
     }
 
-    void handle_wirte(const Timestamp& timestamp) const
+    void handle_wirte(uint64_t timestamp) const
     {
         if (write_callback_)
             write_callback_(timestamp, selection_key_);
     }
 
-    void handle_error(const Timestamp& timestamp) const
+    void handle_error(uint64_t timestamp) const
     {
         if (error_callback_)
             error_callback_(timestamp, selection_key_);

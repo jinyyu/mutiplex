@@ -6,13 +6,13 @@
 
 using namespace ev;
 
-void read_cb(ConnectionPtr conn, ByteBuffer* buffer, const Timestamp& timestamp)
+void read_cb(ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp)
 {
     std::string str((char*) buffer->data(), buffer->remaining());
     printf("%s\n", str.c_str());
 }
 
-void close_cb(ConnectionPtr conn, const Timestamp& timestamp)
+void close_cb(ConnectionPtr conn, uint64_t timestamp)
 {
     conn->loop()->stop();
 }

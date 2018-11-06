@@ -29,7 +29,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetSocketAddress& addr)
 
     accept_channel_ = new Channel(loop->selector_, server_socket_->fd());
 
-    SelectionCallback cb = [this](const Timestamp& timestamp, SelectionKey* key) {
+    SelectionCallback cb = [this](uint64_t timestamp, SelectionKey* key) {
         int fd = server_socket_->accept(*this->peer_addr_);
 
         if (this->callback_) {

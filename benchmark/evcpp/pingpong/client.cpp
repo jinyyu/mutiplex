@@ -57,9 +57,9 @@ public:
 
 private:
 
-    void handle_timeout(const Timestamp& timestamp)
+    void handle_timeout(uint64_t timestamp)
     {
-        printf("stop %s\n", timestamp.to_string().c_str());
+        printf("stop \n");
         loop_.stop();
 
     }
@@ -72,7 +72,7 @@ private:
         }
 
         timer_channel_ = new Channel(loop_.selector(), fd);
-        SelectionCallback timeout = [this](const Timestamp& timestamp, SelectionKey*) {
+        SelectionCallback timeout = [this](uint64_t timestamp, SelectionKey*) {
             this->handle_timeout(timestamp);
         };
 
@@ -105,11 +105,11 @@ private:
         for (int i = 0; i < session_count_; ++i) {
             Session* session = new Session(&loop_, local);
 
-            ReadMessageCallback read_cb = [this](ConnectionPtr conn, ByteBuffer* buffer, const Timestamp& timestamp) {
+            ReadMessageCallback read_cb = [this](ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp) {
                 this->read_callback(conn, buffer, timestamp);
             };
             session->read_message_callback(read_cb);
-            ConnectionEstablishedCallback connect_cb = [this](ConnectionPtr conn, const Timestamp&) {
+            ConnectionEstablishedCallback connect_cb = [this](ConnectionPtr conn, uint64_t timestamp) {
                 this->on_connect_success(conn);
             };
             session->connection_established_callback(connect_cb);
@@ -124,7 +124,7 @@ private:
         conn->write(buffer_, block_size_);
     }
 
-    void read_callback(ConnectionPtr conn, ByteBuffer* buffer, const Timestamp& timestamp)
+    void read_callback(ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp)
     {
         //LOG_INFO("read n = %d", buffer->remaining());
         int len = buffer->remaining();

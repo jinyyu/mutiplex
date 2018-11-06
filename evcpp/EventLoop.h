@@ -28,7 +28,7 @@ public:
     //Request the EventLoop to invoke the given callback and return immediately
     void post(const Callback& callback);
 
-    void on_new_connection(ConnectionPtr& conn, const Timestamp& timestamp);
+    void on_new_connection(ConnectionPtr& conn, uint64_t timestamp);
 
     void allocate_receive_buffer(uint32_t capacity);
 

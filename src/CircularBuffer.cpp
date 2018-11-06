@@ -105,7 +105,7 @@ void CircularBuffer::resize(const void* buffer, uint32_t length)
     capacity_ = cap;
 }
 
-int CircularBuffer::write_to_fd(Connection* conn, const Timestamp& timestamp)
+int CircularBuffer::write_to_fd(Connection* conn, uint64_t timestamp)
 {
     assert(!empty());
 

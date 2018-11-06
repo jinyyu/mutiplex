@@ -32,11 +32,11 @@ public:
     void connect(const InetSocketAddress& peer);
 
 private:
-    void handle_connected(const Timestamp& timestamp, SelectionKey* key);
+    void handle_connected(uint64_t timestamp, SelectionKey* key);
 
     bool do_connect(const InetSocketAddress& addr);
 
-    void handle_error(const Timestamp& timestamp);
+    void handle_error(uint64_t timestamp);
 
 private:
     int fd_;

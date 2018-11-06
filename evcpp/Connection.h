@@ -91,7 +91,7 @@ private:
 
     void do_write(const void* data, uint32_t len);
 
-    void handle_write(const Timestamp& timestamp);
+    void handle_write(uint64_t timestamp);
 
     bool has_bytes_to_write() const;
 private:

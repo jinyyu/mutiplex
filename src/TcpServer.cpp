@@ -32,7 +32,7 @@ void TcpServer::run()
         EventLoop* loop = new EventLoop();
         loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
         NewConnectionCallback cb = [this, loop](int fd,
-                                                const Timestamp& timestamp,
+                                                uint64_t timestamp,
                                                 const InetSocketAddress& local,
                                                 const InetSocketAddress& peer) {
             ConnectionPtr conn(new Connection(fd, loop, local, peer));

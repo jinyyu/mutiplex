@@ -11,7 +11,7 @@ public:
     EchoServer(int port, int threads)
         : server_(port, threads)
     {
-        ReadMessageCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, const Timestamp& timestamp) {
+        ReadMessageCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, uint64_t timestamp) {
             this->hande_read(conn, buf, timestamp);
         };
 
@@ -24,7 +24,7 @@ public:
     }
 
 private:
-    void hande_read(ConnectionPtr conn, ByteBuffer* buf, const Timestamp&)
+    void hande_read(ConnectionPtr conn, ByteBuffer* buf, uint64_t timestamp)
     {
         conn->write(buf->data(), buf->remaining());
     }

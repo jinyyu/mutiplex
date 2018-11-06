@@ -49,7 +49,7 @@ void Connection::setup_callbacks()
 {
     channel_ = new Channel(loop_->selector(), fd_);
 
-    SelectionCallback read_cb = [this](const Timestamp& timestamp, SelectionKey* key) {
+    SelectionCallback read_cb = [this](uint64_t timestamp, SelectionKey* key) {
         ByteBuffer* buffer = loop_->recv_buffer_;
         buffer->clear();
         ssize_t n = ::read(fd_, buffer->data(), buffer->remaining());
@@ -80,12 +80,12 @@ void Connection::setup_callbacks()
 
     channel_->enable_reading(read_cb);
 
-    SelectionCallback write_cb = [this](const Timestamp& timestamp, SelectionKey*) {
+    SelectionCallback write_cb = [this](uint64_t timestamp, SelectionKey*) {
         this->handle_write(timestamp);
     };
     channel_->set_writing_selection_callback(write_cb);
 
-    SelectionCallback error_cb = [this](const Timestamp& timestamp, SelectionKey*) {
+    SelectionCallback error_cb = [this](uint64_t timestamp, SelectionKey*) {
         this->force_close();
     };
     channel_->set_error_selection_callback(error_cb);
@@ -101,7 +101,7 @@ void Connection::close()
             //closed it
             self->state_ = Closed;
             if (self->connection_closed_callback_) {
-                self->connection_closed_callback_(self, Timestamp::currentTime());
+                self->connection_closed_callback_(self, Timestamp::current());
             }
             self->loop_->remove_connection(self->fd_);
         }
@@ -123,7 +123,7 @@ void Connection::force_close()
         if (self->loop_->connections_.find(self->fd_) != self->loop_->connections_.end()) {
 
             if (self->connection_closed_callback_) {
-                self->connection_closed_callback_(self, Timestamp::currentTime());
+                self->connection_closed_callback_(self, Timestamp::current());
             }
 
             self->loop_->remove_connection(self->fd_);
@@ -195,7 +195,7 @@ void Connection::do_write(const void* data, uint32_t len)
     }
 }
 
-void Connection::handle_write(const Timestamp& timestamp)
+void Connection::handle_write(uint64_t timestamp)
 {
     assert(!buffer_out_->empty());
 

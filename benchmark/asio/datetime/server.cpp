@@ -22,7 +22,9 @@ public:
 
     void start()
     {
-        std::string timestamp = ev::Timestamp::currentTime().to_string();
+        uint64_t tm = ev::Timestamp::current();
+
+        std::string timestamp = ev::Timestamp::to_string(tm);
         timestamp.push_back('\n');
 
         socket_.async_write_some(boost::asio::buffer(timestamp.c_str(), timestamp.size()),

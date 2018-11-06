@@ -27,7 +27,7 @@ void Timer::set_timer(uint32_t millisecond, const TimeoutCallback& timeout_callb
 {
     if (millisecond == 0) {
         Callback cb = [timeout_callback]() {
-            timeout_callback(Timestamp::currentTime());
+            timeout_callback(Timestamp::current());
         };
         loop_->post(cb);
         return;
@@ -63,13 +63,13 @@ void Timer::set_timer(struct itimerspec spec, const TimeoutCallback& timeout_cal
        LOG_DEBUG("set_timer error %d", errno);
     }
 
-    SelectionCallback cb = [this, timeout_callback](const Timestamp& timestamp, SelectionKey* key) {
+    SelectionCallback cb = [this, timeout_callback](uint64_t timestamp, SelectionKey* key) {
         this->handle_timeout(timestamp, key, timeout_callback);
     };
     channel_.enable_reading(cb);
 }
 
-void Timer::handle_timeout(const Timestamp& timestamp, SelectionKey* key, const TimeoutCallback& callback)
+void Timer::handle_timeout(uint64_t timestamp, SelectionKey* key, const TimeoutCallback& callback)
 {
     uint64_t exp;
     if (read(fd_, &exp, sizeof(uint64_t)) != sizeof(uint64_t)) {
