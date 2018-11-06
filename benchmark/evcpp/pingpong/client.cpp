@@ -3,7 +3,6 @@
 #include <evcpp/InetSocketAddress.h>
 #include <sys/timerfd.h>
 #include <evcpp/Timestamp.h>
-#include <evcpp/Channel.h>
 #include <sys/time.h>
 #include <evcpp/ByteBuffer.h>
 #include <evcpp/Connection.h>
@@ -30,13 +29,10 @@ public:
 
         setup_sessions();
 
-        setup_timer();
-
     }
 
     ~Client()
     {
-        delete (timer_channel_);
         for (Session* session : sessions_) {
             delete (session);
         }
@@ -62,41 +58,6 @@ private:
         printf("stop \n");
         loop_.stop();
 
-    }
-
-    void setup_timer()
-    {
-        int fd = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
-        if (fd < 0) {
-            printf("timerfd_create error %d\n", errno);
-        }
-
-        timer_channel_ = new Channel(loop_.selector(), fd);
-        SelectionCallback timeout = [this](uint64_t timestamp, SelectionKey*) {
-            this->handle_timeout(timestamp);
-        };
-
-        timer_channel_->enable_reading(timeout);
-
-        struct timeval timeval_now;
-        struct timeval timeval_exp;
-        struct timeval timeval_res;
-
-        gettimeofday(&timeval_now, NULL);
-
-        timeval_exp.tv_sec = timeval_now.tv_sec + timeout_;
-        timeval_exp.tv_usec = timeval_now.tv_usec;
-
-        timersub(&timeval_exp, &timeval_now, &timeval_res);
-
-        struct itimerspec timer;
-        bzero(&timer, sizeof(itimerspec));
-        timer.it_value.tv_sec = timeval_res.tv_sec;
-        timer.it_value.tv_nsec = timeval_res.tv_usec * 1000;
-
-        if (timerfd_settime(fd, 0, &timer, NULL) != 0) {
-            printf("timerfd_settime error %d\n", errno);
-        }
     }
 
     void setup_sessions()
@@ -139,7 +100,6 @@ private:
     int timeout_;
     int block_size_;
     InetSocketAddress server_addr_;
-    Channel* timer_channel_;
 
     std::vector<Session*> sessions_;
 

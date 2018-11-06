@@ -8,7 +8,7 @@ namespace ev
 
 class EventLoop;
 class InetSocketAddress;
-class Channel;
+class EventSource;
 
 class Session
 {
@@ -36,7 +36,7 @@ public:
     void connect(const InetSocketAddress& peer);
 
 private:
-    void handle_connected(uint64_t timestamp, SelectionKey* key);
+    void handle_connected(uint64_t timestamp);
 
     bool do_connect(const InetSocketAddress& addr);
 
@@ -47,7 +47,7 @@ private:
     EventLoop* loop_;
     InetSocketAddress local_;
     InetSocketAddress peer_;
-    Channel* channel_;
+    EventSource* event_source_;
 
     ConnectErrorCallback connect_error_callback_;
     ConnectionEstablishedCallback connection_established_callback_;

@@ -7,13 +7,13 @@
 #include <evcpp/callbacks.h>
 
 #include <deque>
-#include "evcpp/ByteBuffer.h"
+#include <evcpp/ByteBuffer.h>
 
 namespace ev
 {
+
+class EventSource;
 class EventLoop;
-class Selector;
-class Channel;
 class CircularBuffer;
 class ByteBuffer;
 
@@ -67,7 +67,7 @@ public:
         return fd_;
     }
 
-    void connection_established_callback(const ConnectionEstablishedCallback& cb)
+    void set_established_callback(const ConnectionEstablishedCallback& cb)
     {
         connection_established_callback_ = cb;
     }
@@ -107,7 +107,7 @@ public:
 
 private:
     friend class EventLoop;
-    void setup_callbacks();
+    void register_event();
 
     void do_write(const void* data, uint32_t len);
 
@@ -128,7 +128,7 @@ private:
     uint8_t state_;
     uint32_t buffer_size_;
     EventLoop* loop_;
-    Channel* channel_;
+    EventSource* event_source_;
     InetSocketAddress local_;
     InetSocketAddress peer_;
 

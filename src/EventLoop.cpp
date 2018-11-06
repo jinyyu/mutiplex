@@ -1,11 +1,9 @@
 #include "evcpp/EventLoop.h"
-#include "evcpp/Selector.h"
-#include "evcpp/Channel.h"
-#include "evcpp/SelectionKey.h"
 #include "evcpp/InetSocketAddress.h"
 #include "evcpp/Connection.h"
 #include "evcpp/ByteBuffer.h"
-
+#include "EventSource.h"
+#include "evcpp/Timestamp.h"
 #include <sys/eventfd.h>
 #include <unistd.h>
 #include "Debug.h"
@@ -15,111 +13,160 @@ namespace ev
 
 EventLoop::EventLoop()
     : pthread_id_(pthread_self()),
-      is_quit_(false),
-      selector_(new Selector(pthread_id_)),
-      active_keys_(128),
+      running_(true),
+      epoll_events_(64),
       wakeup_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK)),
-      recv_buffer_(nullptr)
+      recv_buffer_(nullptr),
+      epoll_fd_(epoll_create1(EPOLL_CLOEXEC))
 {
-    active_keys_.reserve(128);
-
     if (wakeup_fd_ == -1) {
         LOG_DEBUG("eventfd error %d", errno);
     }
 
     //setup wakeup channel
-    wakeup_channel_ = new Channel(selector_, wakeup_fd_);
-    wakeup_channel_->enable_reading([this](uint64_t timestamp, SelectionKey*) {
+    wakeup_event_ = new EventSource(wakeup_fd_);
+    wakeup_event_->enable_reading();
+    wakeup_event_->set_reading_callback([this](uint64_t timestamp) {
         uint64_t n;
         if (eventfd_read(wakeup_fd_, &n) < 0) {
             LOG_DEBUG("eventfd_read error %d", errno);
         }
     });
+
+    register_event(wakeup_event_);
+
 }
 
 EventLoop::~EventLoop()
 {
-    delete (wakeup_channel_);
+    ::close(epoll_fd_);
+    delete (wakeup_event_);
     ::close(wakeup_fd_);
 
-    delete (selector_);
 
     if (recv_buffer_) {
         delete (recv_buffer_);
     }
-    LOG_DEBUG("loop delete %d" ,pthread_id_);
+    LOG_DEBUG("loop delete %d", pthread_id_);
 
 }
 
 void EventLoop::run()
 {
     pthread_id_ = pthread_self();
-    while (!is_quit_) {
-        active_keys_.clear();
-        uint64_t tm = selector_->select(8000, active_keys_);
-        if (active_keys_.empty()) {
-            continue;
-        }
+    std::vector<EventSource*> active_events;
 
-        for (SelectionKey* key: active_keys_) {
-            Channel* channel = key->channel();
-            if (key->is_error()) {
-                channel->handle_error(tm);
-            }
-            else {
-                if (key->is_readable()) {
-                    channel->handle_read(tm);
-                }
-                if (key->is_writable()) {
-                    channel->handle_wirte(tm);
-                }
-            }
+    while (running_) {
+        active_events.clear();
+        int ret = pull_events(active_events);
+        if (ret == -1) {
+            break;
+        }
+        uint64_t now = Timestamp::current();
+
+        for (int i = 0; i < active_events.size(); ++i) {
+            active_events[i]->handle_events(now);
         }
 
         std::vector<Callback> callbacks;
         {
             std::lock_guard<std::mutex> lock_guard(mutex_);
-            std::swap(callbacks, callbacks_);
+            std::swap(callbacks, pending_callbacks_);
         }
+
         for (int i = 0; i < callbacks.size(); ++i) {
             callbacks[i]();
+        }
+
+        while (!task_queue_.empty()) {
+            task_queue_.front()();
+            task_queue_.pop_front();
         }
     }
 }
 
 void EventLoop::stop()
 {
-    is_quit_ = true;
-    wake_up();
+    running_ = false;
+    wakeup();
 }
 
-void EventLoop::wake_up()
+void EventLoop::wakeup()
 {
-    if (is_in_loop_thread())
-        return;
-
     if (eventfd_write(wakeup_fd_, 1) < 0) {
         LOG_DEBUG("eventfd_write error %d", errno);
     }
 }
 
-void EventLoop::post(const Callback& callback)
+void EventLoop::register_event(EventSource* ev)
 {
-    if (is_in_loop_thread()) {
-        callback();
+    struct epoll_event event;
+    bzero(&event, sizeof(event));
+    event.data.ptr = ev;
+    event.events = ev->interest_ops();
+
+    if (epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, ev->fd(), &event) != 0) {
+        LOG_DEBUG("epoll_ctl error %s", strerror(errno));
+    }
+}
+
+void EventLoop::unregister_event(EventSource* ev)
+{
+    struct epoll_event event;
+    bzero(&event, sizeof(event));
+    event.data.ptr = ev;
+    event.events = ev->interest_ops();
+
+    if (epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, ev->fd(), &event) != 0) {
+        LOG_DEBUG("epoll_ctl error %s", strerror(errno));
+    }
+}
+
+void EventLoop::modify_event(EventSource* ev)
+{
+    struct epoll_event event;
+    bzero(&event, sizeof(event));
+    event.data.ptr = ev;
+    event.events = ev->interest_ops();
+
+    if (epoll_ctl(epoll_fd_, EPOLL_CTL_MOD, ev->fd(), &event) != 0) {
+        LOG_DEBUG("epoll_ctl error %s", strerror(errno));
+    }
+}
+
+int EventLoop::pull_events(std::vector<EventSource*>& events)
+{
+    int n_events = ::epoll_wait(epoll_fd_, epoll_events_.data(), epoll_events_.size(), 1000);
+    if (n_events == -1) {
+        LOG_DEBUG("epoll_wait error %s", strerror(errno));
+        return n_events;
+    }
+    for (int i = 0; i < n_events; ++i) {
+        EventSource* ev = (EventSource*) epoll_events_[i].data.ptr;
+        ev->ready_ops(epoll_events_[i].events);
+        events.push_back(ev);
+    }
+    if (n_events == epoll_events_.size()) {
+        epoll_events_.resize(n_events * 2);
+    }
+    return n_events;
+}
+
+void EventLoop::post_callback(const Callback& callback)
+{
+    if (pthread_id_ == pthread_self()) {
+        task_queue_.push_back(callback);
     }
     else {
-        {
-            std::lock_guard<std::mutex> lock_guard(mutex_);
-            callbacks_.push_back(callback);
-        }
-        wake_up();
+        std::lock_guard<std::mutex> guard(mutex_);
+        pending_callbacks_.push_back(callback);
+        wakeup();
     }
 }
 
 void EventLoop::on_new_connection(ConnectionPtr& conn, uint64_t timestamp)
 {
-    conn->setup_callbacks();
+    conn->register_event();
 
     connections_[conn->fd()] = conn;
 

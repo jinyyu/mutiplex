@@ -5,21 +5,14 @@
 
 namespace ev
 {
-
-class Timestamp;
-class SelectionKey;
+class ByteBuffer;
 class InetSocketAddress;
 class Connection;
-class ByteBuffer;
-
 typedef std::shared_ptr<Connection> ConnectionPtr;
-
-typedef std::function<void(uint64_t timestamp, SelectionKey*)> SelectionCallback;
 
 typedef std::function<void()> Callback;
 
-typedef std::function<void(int fd, uint64_t timestamp, const InetSocketAddress&, const InetSocketAddress&)>
-    NewConnectionCallback;
+typedef std::function<void(int fd, uint64_t timestamp, const InetSocketAddress&, const InetSocketAddress&)> NewConnectionCallback;
 
 typedef std::function<void(ConnectionPtr conn, uint64_t timestamp)> ConnectionEstablishedCallback;
 

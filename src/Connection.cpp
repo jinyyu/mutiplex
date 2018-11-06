@@ -1,11 +1,10 @@
 #include "evcpp/Connection.h"
-#include "evcpp/Channel.h"
 #include "evcpp/EventLoop.h"
-#include "evcpp/SelectionKey.h"
 #include "evcpp/ByteBuffer.h"
 #include "evcpp/CircularBuffer.h"
 #include "evcpp/Timestamp.h"
 #include "Debug.h"
+#include "EventSource.h"
 
 #include <unistd.h>
 #include <assert.h>
@@ -17,7 +16,7 @@ Connection::Connection(int fd,
                        EventLoop* loop,
                        const InetSocketAddress& local,
                        const InetSocketAddress& peer)
-    : channel_(nullptr),
+    : event_source_(nullptr),
       fd_(fd),
       peer_(peer),
       local_(local),
@@ -31,8 +30,8 @@ Connection::Connection(int fd,
 
 Connection::~Connection()
 {
-    if (channel_) {
-        delete (channel_);
+    if (event_source_) {
+        delete (event_source_);
     }
     ::close(fd_);
 
@@ -44,11 +43,12 @@ Connection::~Connection()
 
 }
 
-void Connection::setup_callbacks()
+void Connection::register_event()
 {
-    channel_ = new Channel(loop_->selector(), fd_);
+    event_source_ = new EventSource(fd_);
 
-    SelectionCallback read_cb = [this](uint64_t timestamp, SelectionKey* key) {
+    event_source_->enable_reading();
+    event_source_->set_reading_callback([this](uint64_t timestamp) {
         ByteBuffer* buffer = loop_->recv_buffer_;
         buffer->clear();
         ssize_t n = ::read(fd_, buffer->data(), buffer->remaining());
@@ -64,7 +64,7 @@ void Connection::setup_callbacks()
         }
         else if (n == 0) {
             //peer shutdown read
-            channel_->disable_reading();
+            event_source_->disable_reading();
             close();
         }
         else {
@@ -75,19 +75,17 @@ void Connection::setup_callbacks()
                 read_message_callback_(shared_from_this(), buffer, timestamp);
             }
         }
-    };
+    });
 
-    channel_->enable_reading(read_cb);
 
-    SelectionCallback write_cb = [this](uint64_t timestamp, SelectionKey*) {
-        this->handle_write(timestamp);
-    };
-    channel_->set_writing_selection_callback(write_cb);
+    event_source_->set_writing_callback([this](uint64_t timestamp) {
+        handle_write(timestamp);
+    });
 
-    SelectionCallback error_cb = [this](uint64_t timestamp, SelectionKey*) {
-        this->force_close();
-    };
-    channel_->set_error_selection_callback(error_cb);
+    event_source_->set_error_callback([this](uint64_t timestamp) {
+        force_close();
+    });
+    loop_->register_event(event_source_);
 
     state_ = Receiving;
 
@@ -109,7 +107,7 @@ void Connection::close()
             self->state_ = Disconnecting;
         }
     };
-    loop_->post(cb);
+    loop_->post_callback(cb);
 }
 
 void Connection::force_close()
@@ -117,7 +115,8 @@ void Connection::force_close()
     auto cb = [self = shared_from_this()]() {
         self->state_ = Closed;
         self->buffer_out_->clear();
-        self->channel_->disable_all();
+        self->event_source_->interest_ops(0);
+        self->loop_->unregister_event(self->event_source_);
 
         if (self->loop_->connections_.find(self->fd_) != self->loop_->connections_.end()) {
 
@@ -130,12 +129,7 @@ void Connection::force_close()
 
     };
 
-    if (loop_->is_in_loop_thread()) {
-        cb();
-    }
-    else {
-        loop_->post(cb);
-    }
+    loop_->post_callback(cb);
 }
 
 bool Connection::write(const ByteBufferPtr& buffer)
@@ -143,17 +137,9 @@ bool Connection::write(const ByteBufferPtr& buffer)
     if (is_closed()) {
         return false;
     }
-
-    if (loop_->is_in_loop_thread()) {
-        do_write(buffer->data(), buffer->remaining());
-
-    }
-    else {
-        auto callback = [self = shared_from_this(), buffer] {
-            self->do_write(buffer->data(), buffer->remaining());
-        };
-        loop_->post(callback);
-    }
+    loop_->post_callback([self = shared_from_this(), buffer] {
+        self->do_write(buffer->data(), buffer->remaining());
+    });
     return true;
 }
 
@@ -162,20 +148,12 @@ bool Connection::write(const void* data, uint32_t len)
     if (is_closed()) {
         return false;
     }
-    if (loop_->is_in_loop_thread()) {
-        do_write(data, len);
-    }
-    else {
-        ByteBufferPtr buffer(new ByteBuffer(len));
-        buffer->put(data, len);
-        buffer->flip();
-
-        //copy buffer
-        auto callback = [this, buffer]() {
-            this->do_write(buffer->data(), static_cast<uint32_t>(buffer->remaining()));
-        };
-        loop_->post(callback);
-    }
+    ByteBufferPtr buffer(new ByteBuffer(len));
+    buffer->put(data, len);
+    buffer->flip();
+    loop_->post_callback([this, buffer]() {
+        this->do_write(buffer->data(), static_cast<uint32_t>(buffer->remaining()));
+    });
     return true;
 }
 
@@ -190,7 +168,7 @@ void Connection::do_write(const void* data, uint32_t len)
             buffer_out_ = new CircularBuffer(len);
         }
         buffer_out_->put(data, len);
-        channel_->enable_writing();
+        event_source_->enable_writing();
     }
 }
 
@@ -213,13 +191,13 @@ void Connection::handle_write(uint64_t timestamp)
     }
         //write success
     else if (state_ == Disconnecting) {
-        channel_->disable_writing();
+        event_source_->disable_writing();
         close();
         return;
     }
 
     else if (buffer_out_->empty()) {
-        channel_->disable_writing();
+        event_source_->disable_writing();
         return;
     }
 }

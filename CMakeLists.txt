@@ -16,35 +16,29 @@ set(HEARERS
     evcpp/ByteBuffer.h
     evcpp/callbacks.h
     evcpp/Acceptor.h
-    evcpp/Channel.h
     evcpp/CircularBuffer.h
     evcpp/Connection.h
     evcpp/EventLoop.h
-    evcpp/SelectionKey.h
     evcpp/ServerSocket.h
-    evcpp/Selector.h
     evcpp/Session.h
     evcpp/TcpServer.h
-    evcpp/Timer.h
     )
 
 set(SRCS
+    src/EventSource.cpp
     src/Status.cpp
     src/ByteBuffer.cpp
     src/Timestamp.cpp
     src/InetAddress.cpp
     src/InetSocketAddress.cpp
     src/CircularBuffer.cpp
-    src/SelectionKey.cpp
-    src/Selector.cpp
-    src/Channel.cpp
     src/EventLoop.cpp
     src/ServerSocket.cpp
     src/Acceptor.cpp
     src/TcpServer.cpp
     src/Connection.cpp
     src/Session.cpp
-    src/Timer.cpp)
+    )
 
 add_library(evcpp ${SRCS} ${HEARERS})
 target_link_libraries(evcpp ${LIBS})

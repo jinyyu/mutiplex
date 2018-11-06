@@ -2,15 +2,14 @@
 
 #include <boost/noncopyable.hpp>
 #include <evcpp/callbacks.h>
+#include <evcpp/ServerSocket.h>
+#include <evcpp/InetSocketAddress.h>
 
 namespace ev
 {
 
-class ServerSocket;
-class Channel;
-class Selector;
-class EventLoop;
-class InetSocketAddress;
+
+class EventSource;
 class EventLoop;
 
 class Acceptor: boost::noncopyable
@@ -24,17 +23,16 @@ public:
 
     void new_connection_callback(const NewConnectionCallback& callback)
     {
-        callback_ = callback;
+        on_new_connection_ = callback;
     }
 
 private:
     EventLoop* loop_;
-    ServerSocket* server_socket_;
-    Channel* accept_channel_;
-    InetSocketAddress* peer_addr_;
-    InetSocketAddress* local_addr_;
-    NewConnectionCallback callback_;
-
+    ServerSocket server_socket_;
+    EventSource* accept_event_;
+    InetSocketAddress peer_addr_;
+    InetSocketAddress local_addr_;
+    NewConnectionCallback on_new_connection_;
 };
 
 }
