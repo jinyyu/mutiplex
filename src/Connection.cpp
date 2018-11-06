@@ -24,8 +24,7 @@ Connection::Connection(int fd,
       loop_(loop),
       state_(New),
       buffer_size_(1024),
-      buffer_out_(nullptr),
-      ctx_(nullptr)
+      buffer_out_(nullptr)
 {
     LOG_DEBUG("new connection %d", fd_);
 }

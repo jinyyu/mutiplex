@@ -36,7 +36,9 @@ private:
     friend class ServerSocket;
     friend class Session;
     sockaddr* sockaddr_cast() const
-    { return (sockaddr*) &sockaddr6_; }
+    {
+        return (sockaddr*) &sockaddr6_;
+    }
 
     void from_address(const InetAddress& addr, int port);
 

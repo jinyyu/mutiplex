@@ -31,13 +31,19 @@ public:
     }
 
     bool v4() const
-    { return famliy_ == AF_INET; }
+    {
+        return famliy_ == AF_INET;
+    }
 
     bool v6() const
-    { return famliy_ == AF_INET6; }
+    {
+        return famliy_ == AF_INET6;
+    }
 
     int family() const
-    { return famliy_; }
+    {
+        return famliy_;
+    }
 
     std::string to_string() const;
 
@@ -52,7 +58,9 @@ public:
 private:
     explicit InetAddress(int family)
         : famliy_(family)
-    { memset(&addr6_, 0, sizeof(addr6_)); }
+    {
+        memset(&addr6_, 0, sizeof(addr6_));
+    }
 
 private:
     int famliy_;

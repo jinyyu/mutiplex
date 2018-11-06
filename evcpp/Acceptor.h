@@ -23,7 +23,9 @@ public:
     ~Acceptor();
 
     void new_connection_callback(const NewConnectionCallback& callback)
-    { callback_ = callback; }
+    {
+        callback_ = callback;
+    }
 
 private:
     EventLoop* loop_;

@@ -5,6 +5,7 @@
 
 #include <evcpp/callbacks.h>
 #include <boost/noncopyable.hpp>
+#include <mutex>
 
 namespace ev
 {
@@ -13,7 +14,6 @@ class Channel;
 class Selector;
 class SelectionKey;
 class ByteBuffer;
-class TimingWheel;
 
 class EventLoop: boost::noncopyable
 {
@@ -35,16 +35,22 @@ public:
     void stop();
 
     bool is_in_loop_thread() const
-    { return pthread_id_ == pthread_self(); }
+    {
+        return pthread_id_ == pthread_self();
+    }
 
     Selector* selector() const
-    { return selector_; }
+    {
+        return selector_;
+    }
 
 private:
     friend class Connection;
 
     void remove_connection(int fd)
-    { connections_.erase(fd); }
+    {
+        connections_.erase(fd);
+    }
 
     void wake_up();
 
@@ -60,7 +66,7 @@ private:
     int wakeup_fd_;
     Channel* wakeup_channel_;
 
-    pthread_mutex_t mutex_;
+    std::mutex mutex_;
     std::vector<Callback> callbacks_; //lock by mutex_
 
     std::unordered_map<int, ConnectionPtr> connections_;

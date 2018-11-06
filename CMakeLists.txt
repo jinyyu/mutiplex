@@ -8,7 +8,6 @@ include_directories(${CMAKE_SOURCE_DIR})
 find_package(PkgConfig REQUIRED)
 
 set(HEARERS
-    evcpp/utils.h
     evcpp/InetAddress.h
     evcpp/InetSocketAddress.h
     evcpp/Timestamp.h
@@ -20,7 +19,6 @@ set(HEARERS
     evcpp/Channel.h
     evcpp/CircularBuffer.h
     evcpp/Connection.h
-    evcpp/Context.h
     evcpp/EventLoop.h
     evcpp/SelectionKey.h
     evcpp/ServerSocket.h
@@ -31,7 +29,6 @@ set(HEARERS
     )
 
 set(SRCS
-    src/utils.cpp
     src/Status.cpp
     src/ByteBuffer.cpp
     src/Timestamp.cpp

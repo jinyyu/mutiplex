@@ -29,11 +29,15 @@ public:
 
     //Returns the channel for which this key was created
     Channel* channel() const
-    { return channel_; }
+    {
+        return channel_;
+    }
 
     //Retrieves this key's interest set
     uint32_t interest_ops() const
-    { return interest_ops_; }
+    {
+        return interest_ops_;
+    }
 
     //Sets this key's interest set to the given value
     void interest_ops(uint32_t ops)

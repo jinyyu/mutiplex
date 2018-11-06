@@ -30,7 +30,7 @@ void TcpServer::run()
     io_loops_.resize(num_io_threads_, NULL);
     auto run_cb = [this](int index) {
         EventLoop* loop = new EventLoop();
-        loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
+        loop->allocate_receive_buffer(64 * 1024);
         NewConnectionCallback cb = [this, loop](int fd,
                                                 uint64_t timestamp,
                                                 const InetSocketAddress& local,
@@ -45,7 +45,7 @@ void TcpServer::run()
         acceptor.new_connection_callback(cb);
         io_loops_[index] = loop;
         loop->run();
-        LOG_DEBUG( "loop exit %d", index);
+        LOG_DEBUG("loop exit %d", index);
 
         std::unique_lock<std::mutex> lock(mutex_);
         --count_down_;

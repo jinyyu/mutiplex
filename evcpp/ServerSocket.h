@@ -27,7 +27,9 @@ public:
     void reuse_port(bool on);
 
     int fd() const
-    { return fd_; }
+    {
+        return fd_;
+    }
 
 private:
     void listen();

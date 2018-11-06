@@ -1,5 +1,4 @@
 #include "evcpp/EventLoop.h"
-#include "evcpp/utils.h"
 #include "evcpp/Selector.h"
 #include "evcpp/Channel.h"
 #include "evcpp/SelectionKey.h"
@@ -22,8 +21,6 @@ EventLoop::EventLoop()
       wakeup_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK)),
       recv_buffer_(nullptr)
 {
-    pthread_mutex_init(&mutex_, NULL);
-
     active_keys_.reserve(128);
 
     if (wakeup_fd_ == -1) {
@@ -42,11 +39,8 @@ EventLoop::EventLoop()
 
 EventLoop::~EventLoop()
 {
-    pthread_mutex_destroy(&mutex_);
     delete (wakeup_channel_);
     ::close(wakeup_fd_);
-
-    connections_.clear();
 
     delete (selector_);
 
@@ -84,7 +78,7 @@ void EventLoop::run()
 
         std::vector<Callback> callbacks;
         {
-            MutexLockGuard lock(&mutex_);
+            std::lock_guard<std::mutex> lock_guard(mutex_);
             std::swap(callbacks, callbacks_);
         }
         for (int i = 0; i < callbacks.size(); ++i) {
@@ -116,7 +110,7 @@ void EventLoop::post(const Callback& callback)
     }
     else {
         {
-            MutexLockGuard lock(&mutex_);
+            std::lock_guard<std::mutex> lock_guard(mutex_);
             callbacks_.push_back(callback);
         }
         wake_up();

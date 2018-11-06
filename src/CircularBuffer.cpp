@@ -1,5 +1,4 @@
 #include "evcpp/CircularBuffer.h"
-#include "evcpp/utils.h"
 #include "evcpp/Connection.h"
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +10,28 @@
 
 namespace ev
 {
+
+
+static bool is_pow_of_two(uint32_t v)
+{
+    return (v != 0) && ((v & (v - 1)) == 0);
+}
+
+static uint32_t roundup_pow_of_two(uint32_t v)
+{
+    if (v < 2) {
+        return 2;
+    }
+    uint32_t ret = 0x00000001;
+    for (uint32_t i = 1; i < 32; ++i) {
+        if (ret >= v) {
+            return ret;
+        }
+        else {
+            ret <<= 1;
+        }
+    }
+}
 
 CircularBuffer::CircularBuffer(uint32_t capacity)
     : in_(0),
