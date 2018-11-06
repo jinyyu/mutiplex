@@ -1,8 +1,8 @@
-#include "libreactor/Timestamp.h"
+#include "evcpp/Timestamp.h"
 #include <sys/time.h>
 
 
-namespace reactor
+namespace ev
 {
 
 static int MICROSECONDS_PER_SECOND = 1000 * 1000;

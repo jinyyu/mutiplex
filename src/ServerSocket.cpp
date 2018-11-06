@@ -1,6 +1,6 @@
-#include "libreactor/ServerSocket.h"
-#include "libreactor/InetSocketAddress.h"
-#include "libreactor/InetAddress.h"
+#include "evcpp/ServerSocket.h"
+#include "evcpp/InetSocketAddress.h"
+#include "evcpp/InetAddress.h"
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -9,7 +9,7 @@
 #include "Debug.h"
 
 
-namespace reactor
+namespace ev
 {
 
 ServerSocket::ServerSocket()

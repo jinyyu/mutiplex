@@ -1,10 +1,10 @@
-#include "libreactor/SelectionKey.h"
-#include "libreactor/Channel.h"
+#include "evcpp/SelectionKey.h"
+#include "evcpp/Channel.h"
 
 #include <sys/epoll.h>
 #include <inttypes.h>
 
-namespace reactor
+namespace ev
 {
 
 const uint32_t SelectionKey::OP_IN = EPOLLIN; //There is data to read

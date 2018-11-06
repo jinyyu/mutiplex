@@ -1,15 +1,15 @@
-#include "libreactor/Session.h"
+#include "evcpp/Session.h"
 #include <unistd.h>
 
-#include "libreactor/Timestamp.h"
-#include "libreactor/Connection.h"
-#include "libreactor/Selector.h"
-#include "libreactor/SelectionKey.h"
-#include "libreactor/EventLoop.h"
-#include "libreactor/Channel.h"
+#include "evcpp/Timestamp.h"
+#include "evcpp/Connection.h"
+#include "evcpp/Selector.h"
+#include "evcpp/SelectionKey.h"
+#include "evcpp/EventLoop.h"
+#include "evcpp/Channel.h"
 #include "Debug.h"
 
-namespace reactor
+namespace ev
 {
 
 Session::Session(EventLoop* loop, const InetSocketAddress& local)

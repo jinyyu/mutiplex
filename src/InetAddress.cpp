@@ -1,5 +1,5 @@
-#include "libreactor/InetAddress.h"
-#include "libreactor/Status.h"
+#include "evcpp/InetAddress.h"
+#include "evcpp/Status.h"
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -8,7 +8,7 @@
 #include <assert.h>
 #include "Debug.h"
 
-namespace reactor
+namespace ev
 {
 
 InetAddress InetAddress::get_by_address(const char* addr, int family, Status& status)

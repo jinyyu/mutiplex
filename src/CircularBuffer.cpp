@@ -1,6 +1,6 @@
-#include "libreactor/CircularBuffer.h"
-#include "libreactor/utils.h"
-#include "libreactor/Connection.h"
+#include "evcpp/CircularBuffer.h"
+#include "evcpp/utils.h"
+#include "evcpp/Connection.h"
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -9,7 +9,7 @@
 #include <assert.h>
 #include "Debug.h"
 
-namespace reactor
+namespace ev
 {
 
 CircularBuffer::CircularBuffer(uint32_t capacity)

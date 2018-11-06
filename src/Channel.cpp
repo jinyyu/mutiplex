@@ -1,8 +1,8 @@
-#include "libreactor/Channel.h"
-#include "libreactor/SelectionKey.h"
-#include "libreactor/Selector.h"
+#include "evcpp/Channel.h"
+#include "evcpp/SelectionKey.h"
+#include "evcpp/Selector.h"
 
-namespace reactor
+namespace ev
 {
 
 Channel::Channel(Selector* selector, int fd)

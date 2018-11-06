@@ -1,13 +1,13 @@
-#include "libreactor/Timer.h"
+#include "evcpp/Timer.h"
 
 #include <unistd.h>
 
-#include "libreactor/EventLoop.h"
-#include "libreactor/Timestamp.h"
-#include "assert.h"
+#include "evcpp/EventLoop.h"
+#include "evcpp/Timestamp.h"
+#include <assert.h>
 #include "Debug.h"
 
-namespace reactor
+namespace ev
 {
 
 Timer::Timer(EventLoop* loop)

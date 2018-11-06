@@ -1,11 +1,11 @@
 #include <string.h>
 #include <netinet/in.h>
-#include "libreactor/ByteBuffer.h"
+#include "evcpp/ByteBuffer.h"
 #include <stdlib.h>
 #include <assert.h>
 
 
-namespace reactor
+namespace ev
 {
 
 ByteBuffer::ByteBuffer(int capacity)

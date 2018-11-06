@@ -1,5 +1,5 @@
 set(LIBS
-        ${LIBS} reactor)
+        ${LIBS} evcpp)
 
 
 add_executable(asio_echo_server echo/server.cpp)

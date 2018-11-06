@@ -1,9 +1,9 @@
-#include "libreactor/Status.h"
-#include "libreactor/InetSocketAddress.h"
+#include "evcpp/Status.h"
+#include "evcpp/InetSocketAddress.h"
 #include "Debug.h"
 
 
-namespace reactor
+namespace ev
 {
 
 InetSocketAddress::InetSocketAddress()

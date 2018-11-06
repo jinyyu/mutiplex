@@ -1,11 +1,11 @@
-#include "libreactor/Selector.h"
+#include "evcpp/Selector.h"
 #include <unistd.h>
 #include <memory.h>
-#include "libreactor/Channel.h"
-#include "libreactor/SelectionKey.h"
+#include "evcpp/Channel.h"
+#include "evcpp/SelectionKey.h"
 #include "Debug.h"
 
-namespace reactor
+namespace ev
 {
 
 Selector::Selector(pthread_t pthread_id)
