@@ -16,7 +16,6 @@ set(HEARERS
     evcpp/Status.h
     evcpp/ByteBuffer.h
     evcpp/callbacks.h
-    evcpp/SingalHandler.h
     evcpp/Acceptor.h
     evcpp/Channel.h
     evcpp/CircularBuffer.h
@@ -39,7 +38,6 @@ set(SRCS
     src/InetAddress.cpp
     src/InetSocketAddress.cpp
     src/CircularBuffer.cpp
-    src/SingalHandler.cpp
     src/SelectionKey.cpp
     src/Selector.cpp
     src/Channel.cpp

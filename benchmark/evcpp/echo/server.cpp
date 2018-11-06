@@ -2,7 +2,6 @@
 #include <evcpp/CircularBuffer.h>
 #include <evcpp/Connection.h>
 #include <evcpp/ByteBuffer.h>
-#include <evcpp/SingalHandler.h>
 
 using namespace ev;
 
@@ -23,9 +22,6 @@ public:
 
     void run()
     {
-        AddSignalHandler(SIGINT, [this]() {
-            server_.shutdown();
-        });
         server_.run();
     }
 
