@@ -15,14 +15,15 @@ EventSource::~EventSource()
 void EventSource::enable_ops(uint32_t op)
 {
     interest_ops_ |= op;
-    if (state_ == StateNew || state_ == StateDeleted) {
-        loop_->register_event(this);
-        state_ = StateExists;
+    if (interest_ops_ ) {
+        if (state_ == StateNew || state_ == StateDeleted) {
+            loop_->register_event(this);
+            state_ = StateExists;
+        }
+        else {
+            loop_->modify_event(this);
+        }
     }
-    else {
-        loop_->modify_event(this);
-    }
-
 }
 
 void EventSource::disable_ops(uint32_t op)

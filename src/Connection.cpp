@@ -85,7 +85,6 @@ void Connection::register_event()
     event_source_->set_error_callback([this](uint64_t timestamp) {
         force_close();
     });
-    loop_->register_event(event_source_);
 
     state_ = Receiving;
 
