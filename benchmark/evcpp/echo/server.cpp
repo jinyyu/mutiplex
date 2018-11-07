@@ -5,7 +5,7 @@
 
 using namespace ev;
 
-#define NUM_THREADS 4
+#define NUM_THREADS 1
 
 class EchoServer
 {
@@ -13,11 +13,11 @@ public:
     EchoServer(int port)
         : server_(port, NUM_THREADS)
     {
-        ReadMessageCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, uint64_t timestamp) {
+        ReadCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, uint64_t timestamp) {
             this->hande_read(conn, buf, timestamp);
         };
 
-        server_.read_message_callback(cb);
+        server_.set_read_callback(cb);
     }
 
     void run()
@@ -36,8 +36,8 @@ private:
 
 int main(int argc, char* argv[])
 {
-    if (argc != 3) {
-        printf("usage %s <port> <config>\n", argv[0]);
+    if (argc != 2) {
+        printf("usage %s <port>\n", argv[0]);
         return -1;
     }
 

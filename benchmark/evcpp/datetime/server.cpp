@@ -14,11 +14,11 @@ public:
     EchoServer(int port)
         : server_(port, NUM_THREADS)
     {
-        ConnectionEstablishedCallback cb = [this](ConnectionPtr conn, uint64_t timestamp) {
+        EstablishedCallback cb = [this](ConnectionPtr conn, uint64_t timestamp) {
             this->hande_conn(conn, timestamp);
         };
 
-        server_.connection_established_callback(cb);
+        server_.set_established_callback(cb);
     }
 
     void run()

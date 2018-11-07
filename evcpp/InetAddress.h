@@ -15,7 +15,7 @@ class InetAddress
 public:
     InetAddress(const InetAddress& address)
     {
-        this->famliy_ = address.famliy_;
+        this->family_ = address.family_;
         addr6_ = address.addr6_;
     }
 
@@ -25,24 +25,24 @@ public:
 
     InetAddress& operator=(const InetAddress& address)
     {
-        this->famliy_ = address.famliy_;
+        this->family_ = address.family_;
         addr6_ = address.addr6_;
         return *this;
     }
 
     bool v4() const
     {
-        return famliy_ == AF_INET;
+        return family_ == AF_INET;
     }
 
     bool v6() const
     {
-        return famliy_ == AF_INET6;
+        return family_ == AF_INET6;
     }
 
     int family() const
     {
-        return famliy_;
+        return family_;
     }
 
     std::string to_string() const;
@@ -57,13 +57,13 @@ public:
 
 private:
     explicit InetAddress(int family)
-        : famliy_(family)
+        : family_(family)
     {
         memset(&addr6_, 0, sizeof(addr6_));
     }
 
 private:
-    int famliy_;
+    int family_;
 
     union
     {

@@ -71,8 +71,8 @@ void Connection::register_event()
             buffer->position(n);
             buffer->flip();
 
-            if (read_message_callback_) {
-                read_message_callback_(shared_from_this(), buffer, timestamp);
+            if (read_callback_) {
+                read_callback_(shared_from_this(), buffer, timestamp);
             }
         }
     });
@@ -87,7 +87,6 @@ void Connection::register_event()
     });
 
     state_ = Receiving;
-
 }
 
 void Connection::close()
@@ -96,8 +95,8 @@ void Connection::close()
         if (!self->has_bytes_to_write()) {
             //closed it
             self->state_ = Closed;
-            if (self->connection_closed_callback_) {
-                self->connection_closed_callback_(self, Timestamp::current());
+            if (self->closed_callback_) {
+                self->closed_callback_(self, Timestamp::current());
             }
             self->loop_->remove_connection(self->fd_);
         }
@@ -119,8 +118,8 @@ void Connection::force_close()
 
         if (self->loop_->connections_.find(self->fd_) != self->loop_->connections_.end()) {
 
-            if (self->connection_closed_callback_) {
-                self->connection_closed_callback_(self, Timestamp::current());
+            if (self->closed_callback_) {
+                self->closed_callback_(self, Timestamp::current());
             }
 
             self->loop_->remove_connection(self->fd_);

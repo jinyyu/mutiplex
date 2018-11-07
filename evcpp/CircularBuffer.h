@@ -5,7 +5,6 @@
 
 namespace ev
 {
-class Timestamp;
 class Connection;
 
 class CircularBuffer: boost::noncopyable

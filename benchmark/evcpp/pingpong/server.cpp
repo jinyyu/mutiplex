@@ -11,11 +11,11 @@ public:
     EchoServer(int port, int threads)
         : server_(port, threads)
     {
-        ReadMessageCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, uint64_t timestamp) {
+        ReadCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, uint64_t timestamp) {
             this->hande_read(conn, buf, timestamp);
         };
 
-        server_.read_message_callback(cb);
+        server_.set_read_callback(cb);
     }
 
     void run()

@@ -74,7 +74,7 @@ std::string InetAddress::to_string() const
 
 bool InetAddress::operator==(const InetAddress& address)
 {
-    if (this->famliy_ != address.famliy_) {
+    if (this->family_ != address.family_) {
         return false;
     }
 

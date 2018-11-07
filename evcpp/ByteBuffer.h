@@ -1,7 +1,7 @@
 #pragma once
 
 #include <boost/noncopyable.hpp>
-#include <boost/asio/detail/shared_ptr.hpp>
+#include <memory>
 
 namespace ev
 {

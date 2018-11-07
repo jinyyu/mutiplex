@@ -1,24 +1,24 @@
 #include "EventSource.h"
 #include "evcpp/EventLoop.h"
+#include "Debug.h"
 
 namespace ev
 {
 
 EventSource::~EventSource()
 {
-    if (state_ == StateDeleted) {
+    if (state_ == StateRegistered) {
         loop_->unregister_event(this);
     }
 }
 
-
 void EventSource::enable_ops(uint32_t op)
 {
     interest_ops_ |= op;
-    if (interest_ops_ ) {
-        if (state_ == StateNew || state_ == StateDeleted) {
+    if (interest_ops_) {
+        if (state_ == StateNoEvent) {
+            state_ = StateRegistered;
             loop_->register_event(this);
-            state_ = StateExists;
         }
         else {
             loop_->modify_event(this);
@@ -31,7 +31,7 @@ void EventSource::disable_ops(uint32_t op)
     interest_ops_ &= ~op;
     if (interest_ops_ == 0) {
         loop_->unregister_event(this);
-        state_ = StateDeleted;
+        state_ = StateNoEvent;
     }
     else {
         loop_->modify_event(this);

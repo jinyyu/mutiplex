@@ -17,7 +17,7 @@ public:
         : ready_ops_(0),
           interest_ops_(0),
           fd_(fd),
-          state_(StateNew),
+          state_(StateNoEvent),
           loop_(loop)
     {
 
@@ -118,9 +118,8 @@ private:
 
     enum State
     {
-        StateNew = 0,
-        StateExists = 1,
-        StateDeleted = 2
+        StateNoEvent = 0,
+        StateRegistered = 1,
     };
 
     uint8_t state_;

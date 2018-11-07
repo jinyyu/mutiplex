@@ -1,5 +1,4 @@
 #include "evcpp/TcpServer.h"
-#include "evcpp/EventLoop.h"
 #include "evcpp/Acceptor.h"
 #include "evcpp/Connection.h"
 #include "evcpp/Timestamp.h"
@@ -36,9 +35,9 @@ void TcpServer::run()
                                                 const InetSocketAddress& local,
                                                 const InetSocketAddress& peer) {
             ConnectionPtr conn(new Connection(fd, loop, local, peer));
-            conn->set_established_callback(connection_established_callback_);
-            conn->read_message_callback(read_message_callback_);
-            conn->connection_closed_callback(connection_closed_callback_);
+            conn->set_established_callback(established_callback_);
+            conn->set_read_callback(read_callback_);
+            conn->set_closed_callback(closed_callback_);
             loop->on_new_connection(conn, timestamp);
         };
         Acceptor acceptor(loop, port_);

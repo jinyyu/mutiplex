@@ -8,7 +8,6 @@
 namespace ev
 {
 
-
 class EventSource;
 class EventLoop;
 

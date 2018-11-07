@@ -66,11 +66,11 @@ private:
         for (int i = 0; i < session_count_; ++i) {
             Session* session = new Session(&loop_, local);
 
-            ReadMessageCallback read_cb = [this](ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp) {
+            ReadCallback read_cb = [this](ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp) {
                 this->read_callback(conn, buffer, timestamp);
             };
             session->read_message_callback(read_cb);
-            ConnectionEstablishedCallback connect_cb = [this](ConnectionPtr conn, uint64_t timestamp) {
+            EstablishedCallback connect_cb = [this](ConnectionPtr conn, uint64_t timestamp) {
                 this->on_connect_success(conn);
             };
             session->connection_established_callback(connect_cb);

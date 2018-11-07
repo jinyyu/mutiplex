@@ -15,33 +15,29 @@ EventLoop::EventLoop()
     : pthread_id_(pthread_self()),
       running_(true),
       epoll_events_(64),
-      wakeup_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK)),
+      notify_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK)),
       recv_buffer_(nullptr),
       epoll_fd_(epoll_create1(EPOLL_CLOEXEC))
 {
-    if (wakeup_fd_ == -1) {
+    if (notify_fd_ == -1) {
         LOG_DEBUG("eventfd error %d", errno);
     }
 
-    //setup wakeup channel
-    wakeup_event_ = new EventSource(wakeup_fd_, this);
-    wakeup_event_->enable_reading();
-    wakeup_event_->set_reading_callback([this](uint64_t timestamp) {
+    notify_event_ = new EventSource(notify_fd_, this);
+    notify_event_->enable_reading();
+    notify_event_->set_reading_callback([this](uint64_t timestamp) {
         uint64_t n;
-        if (eventfd_read(wakeup_fd_, &n) < 0) {
+        if (eventfd_read(notify_fd_, &n) < 0) {
             LOG_DEBUG("eventfd_read error %d", errno);
         }
     });
-
-    register_event(wakeup_event_);
-
 }
 
 EventLoop::~EventLoop()
 {
     ::close(epoll_fd_);
-    delete (wakeup_event_);
-    ::close(wakeup_fd_);
+    delete (notify_event_);
+    ::close(notify_fd_);
 
 
     if (recv_buffer_) {
@@ -88,12 +84,12 @@ void EventLoop::run()
 void EventLoop::stop()
 {
     running_ = false;
-    wakeup();
+    notify_event();
 }
 
-void EventLoop::wakeup()
+void EventLoop::notify_event()
 {
-    if (eventfd_write(wakeup_fd_, 1) < 0) {
+    if (eventfd_write(notify_fd_, 1) < 0) {
         LOG_DEBUG("eventfd_write error %d", errno);
     }
 }
@@ -106,7 +102,7 @@ void EventLoop::register_event(EventSource* ev)
     event.events = ev->interest_ops();
 
     if (epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, ev->fd(), &event) != 0) {
-        LOG_DEBUG("epoll_ctl error %s", strerror(errno));
+        LOG_DEBUG("epoll_ctl error %s, %d", strerror(errno), ev->fd());
     }
 }
 
@@ -160,7 +156,7 @@ void EventLoop::post_callback(const Callback& callback)
     else {
         std::lock_guard<std::mutex> guard(mutex_);
         pending_callbacks_.push_back(callback);
-        wakeup();
+        notify_event();
     }
 }
 
@@ -170,8 +166,8 @@ void EventLoop::on_new_connection(ConnectionPtr& conn, uint64_t timestamp)
 
     connections_[conn->fd()] = conn;
 
-    if (conn->connection_established_callback_) {
-        conn->connection_established_callback_(conn, timestamp);
+    if (conn->established_callback_) {
+        conn->established_callback_(conn, timestamp);
     }
 }
 

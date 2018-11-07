@@ -6,12 +6,10 @@
 #include <memory>
 #include <condition_variable>
 #include <mutex>
+#include <evcpp/EventLoop.h>
 
 namespace ev
 {
-class EventLoop;
-class Timestamp;
-class InetSocketAddress;
 
 class TcpServer: boost::noncopyable
 {
@@ -20,19 +18,19 @@ public:
 
     ~TcpServer();
 
-    void connection_established_callback(const ConnectionEstablishedCallback& cb)
+    void set_established_callback(const EstablishedCallback& cb)
     {
-        connection_established_callback_ = cb;
+        established_callback_ = cb;
     }
 
-    void read_message_callback(const ReadMessageCallback& cb)
+    void set_read_callback(const ReadCallback& cb)
     {
-        read_message_callback_ = cb;
+        read_callback_ = cb;
     }
 
-    void connection_closed_callback(const ConnectionClosedCallback& cb)
+    void connection_closed_callback(const ClosedCallback& cb)
     {
-        connection_closed_callback_ = cb;
+        closed_callback_ = cb;
     }
 
     void run();
@@ -43,9 +41,9 @@ private:
     int num_io_threads_;
     std::vector<EventLoop*> io_loops_;
     std::vector<std::thread> threads_;
-    ConnectionEstablishedCallback connection_established_callback_;
-    ReadMessageCallback read_message_callback_;
-    ConnectionClosedCallback connection_closed_callback_;
+    EstablishedCallback established_callback_;
+    ReadCallback read_callback_;
+    ClosedCallback closed_callback_;
 
     std::mutex mutex_;
     std::condition_variable cv_;

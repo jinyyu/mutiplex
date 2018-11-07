@@ -34,20 +34,19 @@ public:
     void stop();
 private:
     friend class Connection;
-
+    friend class EventSource;
     void remove_connection(int fd)
     {
         connections_.erase(fd);
     }
 
-    friend class EventSource;
     void register_event(EventSource* ev);
 
     void unregister_event(EventSource* ev);
 
     void modify_event(EventSource* ev);
 
-    void wakeup();
+    void notify_event();
 
     int pull_events(std::vector<EventSource*>& events);
 
@@ -60,8 +59,8 @@ private:
 
     int epoll_fd_;
 
-    int wakeup_fd_;
-    EventSource* wakeup_event_;
+    int notify_fd_;
+    EventSource* notify_event_;
 
     std::vector<struct epoll_event> epoll_events_;
 

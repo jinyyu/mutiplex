@@ -1,7 +1,6 @@
 #pragma once
 #include <boost/noncopyable.hpp>
 #include <memory>
-
 #include <evcpp/InetSocketAddress.h>
 #include <evcpp/InetAddress.h>
 #include <evcpp/callbacks.h>
@@ -67,19 +66,19 @@ public:
         return fd_;
     }
 
-    void set_established_callback(const ConnectionEstablishedCallback& cb)
+    void set_established_callback(const EstablishedCallback& cb)
     {
-        connection_established_callback_ = cb;
+        established_callback_ = cb;
     }
 
-    void read_message_callback(const ReadMessageCallback& cb)
+    void set_read_callback(const ReadCallback& cb)
     {
-        read_message_callback_ = cb;
+        read_callback_ = cb;
     }
 
-    void connection_closed_callback(const ConnectionClosedCallback& cb)
+    void set_closed_callback(const ClosedCallback& cb)
     {
-        connection_closed_callback_ = cb;
+        closed_callback_ = cb;
     }
 
     void error_callback(const ErrorCallback& cb)
@@ -132,9 +131,9 @@ private:
     InetSocketAddress local_;
     InetSocketAddress peer_;
 
-    ConnectionEstablishedCallback connection_established_callback_;
-    ReadMessageCallback read_message_callback_;
-    ConnectionClosedCallback connection_closed_callback_;
+    EstablishedCallback established_callback_;
+    ReadCallback read_callback_;
+    ClosedCallback closed_callback_;
     ErrorCallback error_callback_;
 
     friend class CircularBuffer;

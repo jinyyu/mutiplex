@@ -2,11 +2,10 @@
 
 #include <evcpp/Status.h>
 #include <boost/noncopyable.hpp>
+#include <evcpp/InetSocketAddress.h>
 
 namespace ev
 {
-
-class InetSocketAddress;
 
 class ServerSocket: boost::noncopyable
 {

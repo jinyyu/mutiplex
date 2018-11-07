@@ -52,9 +52,7 @@ void Session::connect(const InetSocketAddress& peer)
 
 void Session::handle_connected(uint64_t timestamp)
 {
-    event_source_->interest_ops(0);
-    loop_->unregister_event(event_source_);
-
+    event_source_->disable_writing();
 
     int err;
     socklen_t len = sizeof(err);
@@ -72,8 +70,8 @@ void Session::handle_connected(uint64_t timestamp)
     ConnectionPtr conn(new Connection(fd_, loop_, local_, peer_));
 
     conn->set_established_callback(connection_established_callback_);
-    conn->read_message_callback(read_message_callback_);
-    conn->connection_closed_callback(connection_closed_callback_);
+    conn->set_read_callback(read_message_callback_);
+    conn->set_closed_callback(connection_closed_callback_);
 
     loop_->on_new_connection(conn, timestamp);
 }

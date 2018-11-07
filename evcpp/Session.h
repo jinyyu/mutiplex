@@ -22,16 +22,20 @@ public:
         connect_error_callback_ = cb;
     }
 
-    void connection_established_callback(const ConnectionEstablishedCallback& cb)
+    void connection_established_callback(const EstablishedCallback& cb)
     {
         connection_established_callback_ = cb;
     }
 
-    void read_message_callback(const ReadMessageCallback& cb)
-    { read_message_callback_ = cb; }
+    void read_message_callback(const ReadCallback& cb)
+    {
+        read_message_callback_ = cb;
+    }
 
-    void connection_closed_callback(const ConnectionClosedCallback& cb)
-    { connection_closed_callback_ = cb; }
+    void connection_closed_callback(const ClosedCallback& cb)
+    {
+        connection_closed_callback_ = cb;
+    }
 
     void connect(const InetSocketAddress& peer);
 
@@ -50,9 +54,9 @@ private:
     EventSource* event_source_;
 
     ConnectErrorCallback connect_error_callback_;
-    ConnectionEstablishedCallback connection_established_callback_;
-    ReadMessageCallback read_message_callback_;
-    ConnectionClosedCallback connection_closed_callback_;
+    EstablishedCallback connection_established_callback_;
+    ReadCallback read_message_callback_;
+    ClosedCallback connection_closed_callback_;
 };
 
 }
