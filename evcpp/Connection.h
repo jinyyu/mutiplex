@@ -43,12 +43,12 @@ public:
 
     int local_port() const
     {
-        return local_.port();
+        return local_.host_port();
     }
 
     int peer_port() const
     {
-        return peer_.port();
+        return peer_.host_port();
     }
 
     int fd() const

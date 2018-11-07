@@ -17,6 +17,9 @@ public:
             this->hande_read(conn, buf, timestamp);
         };
 
+        server_.set_established_callback([](ConnectionPtr conn, uint64_t timestamp){
+           fprintf(stderr, "new connection %s -> %s\n", conn->peer_address().to_string().c_str(), conn->local_address().to_string().c_str());
+        });
         server_.set_read_callback(cb);
     }
 

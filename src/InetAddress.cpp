@@ -37,7 +37,7 @@ std::string InetAddress::to_string() const
     char str[32];
     char ipStr[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &ip_, ipStr, INET_ADDRSTRLEN);
-    snprintf(str, sizeof(32), "%s:%d", ipStr, host_port());
+    snprintf(str, 32, "%s:%d", ipStr, host_port());
     return str;
 }
 
