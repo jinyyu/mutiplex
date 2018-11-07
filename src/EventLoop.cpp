@@ -35,16 +35,18 @@ EventLoop::EventLoop()
 
 EventLoop::~EventLoop()
 {
-    ::close(epoll_fd_);
-    delete (notify_event_);
-    ::close(notify_fd_);
-
 
     if (recv_buffer_) {
         delete (recv_buffer_);
     }
-    LOG_DEBUG("loop delete %d", pthread_id_);
+    connections_.clear();
 
+    delete (notify_event_);
+    ::close(notify_fd_);
+
+    LOG_DEBUG("loop delete %lu", pthread_id_);
+
+    ::close(epoll_fd_);
 }
 
 void EventLoop::run()
@@ -114,7 +116,7 @@ void EventLoop::unregister_event(EventSource* ev)
     event.events = ev->interest_ops();
 
     if (epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, ev->fd(), &event) != 0) {
-        LOG_DEBUG("epoll_ctl error %s", strerror(errno));
+        LOG_DEBUG("epoll_ctl error %d %s", ev->fd(), strerror(errno));
     }
 }
 

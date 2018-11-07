@@ -114,7 +114,6 @@ void Connection::force_close()
         self->state_ = Closed;
         self->buffer_out_->clear();
         self->event_source_->interest_ops(0);
-        self->loop_->unregister_event(self->event_source_);
 
         if (self->loop_->connections_.find(self->fd_) != self->loop_->connections_.end()) {
 

@@ -7,9 +7,7 @@ namespace muti
 
 EventSource::~EventSource()
 {
-    if (state_ == StateRegistered) {
-        loop_->unregister_event(this);
-    }
+    disable_all();
 }
 
 void EventSource::enable_ops(uint32_t op)
@@ -41,8 +39,10 @@ void EventSource::disable_ops(uint32_t op)
 void EventSource::disable_all()
 {
     interest_ops_ = 0;
-    loop_->unregister_event(this);
-    state_ = StateNoEvent;
+    if (state_ == StateRegistered) {
+        loop_->unregister_event(this);
+        state_ = StateNoEvent;
+    }
 }
 
 }
