@@ -1,4 +1,4 @@
-#include <mutiplex/Session.h>
+#include <mutiplex/Connector.h>
 #include <mutiplex/EventLoop.h>
 #include <mutiplex/InetAddress.h>
 #include <sys/timerfd.h>
@@ -34,7 +34,7 @@ public:
 
     ~Client()
     {
-        for (Session* session : sessions_) {
+        for (Connector* session : sessions_) {
             delete (session);
         }
 
@@ -63,20 +63,19 @@ private:
 
     void setup_sessions()
     {
-        InetAddress local;
         for (int i = 0; i < session_count_; ++i) {
-            Session* session = new Session(&loop_, local);
+            Connector* session = new Connector(&loop_, server_addr_);
 
             ReadCallback read_cb = [this](ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp) {
                 this->read_callback(conn, buffer, timestamp);
             };
-            session->read_message_callback(read_cb);
+            session->set_read_callback(read_cb);
             EstablishedCallback connect_cb = [this](ConnectionPtr conn, uint64_t timestamp) {
                 this->on_connect_success(conn);
             };
-            session->connection_established_callback(connect_cb);
+            session->established_callback(connect_cb);
 
-            session->connect(server_addr_);
+            session->start_connect();
             sessions_.push_back(session);
         }
     }
@@ -102,7 +101,7 @@ private:
     int block_size_;
     InetAddress server_addr_;
 
-    std::vector<Session*> sessions_;
+    std::vector<Connector*> sessions_;
 
     void* buffer_;
 

@@ -1,4 +1,4 @@
-#include <mutiplex/Session.h>
+#include <mutiplex/Connector.h>
 #include <mutiplex/EventLoop.h>
 #include <mutiplex/ByteBuffer.h>
 #include <mutiplex/Timestamp.h>
@@ -9,11 +9,7 @@ using namespace muti;
 void read_cb(ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp)
 {
     std::string str((char*) buffer->data(), buffer->remaining());
-    printf("%s\n", str.c_str());
-}
-
-void close_cb(ConnectionPtr conn, uint64_t timestamp)
-{
+    printf("%s", str.c_str());
     conn->loop()->stop();
 }
 
@@ -25,11 +21,10 @@ public:
     {
         loop.allocate_receive_buffer(10240);
 
-        InetAddress local;
-        session = new Session(&loop, local);
+        InetAddress inet_addr(addr_);
+        session = new Connector(&loop, inet_addr);
 
-        session->read_message_callback(read_cb);
-        session->connection_closed_callback(close_cb);
+        session->set_read_callback(read_cb);
 
     }
 
@@ -40,8 +35,7 @@ public:
 
     void run()
     {
-        InetAddress peer(addr_);
-        session->connect(peer);
+        session->start_connect();
 
         loop.run();
     };
@@ -49,7 +43,7 @@ public:
 private:
     EventLoop loop;
 
-    Session* session;
+    Connector* session;
     const char* addr_;
 };
 

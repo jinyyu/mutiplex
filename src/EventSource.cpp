@@ -38,4 +38,11 @@ void EventSource::disable_ops(uint32_t op)
     }
 }
 
+void EventSource::disable_all()
+{
+    interest_ops_ = 0;
+    loop_->unregister_event(this);
+    state_ = StateNoEvent;
+}
+
 }

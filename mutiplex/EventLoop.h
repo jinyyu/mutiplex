@@ -55,7 +55,7 @@ private:
     volatile bool running_;
 
     friend class Acceptor;
-    friend class Session;
+    friend class Connector;
 
     int epoll_fd_;
 

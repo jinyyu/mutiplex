@@ -30,6 +30,8 @@ public:
         return fd_;
     }
 
+    void disable_all();
+
     void enable_reading()
     {
         enable_ops(EPOLLIN);
@@ -74,11 +76,13 @@ public:
     {
         if (ready_ops_ & EPOLLERR && error_callback_) {
             error_callback_(timestamp);
+            disable_all();
             return;
         }
 
         if (ready_ops_ & EPOLLHUP && close_callback_) {
             close_callback_(timestamp);
+            disable_all();
             return;
         }
 

@@ -18,7 +18,7 @@ set(HEARERS
     mutiplex/Connection.h
     mutiplex/EventLoop.h
     mutiplex/ServerSocket.h
-    mutiplex/Session.h
+    mutiplex/Connector.h
     mutiplex/TcpServer.h
     )
 
@@ -33,7 +33,7 @@ set(SRCS
     src/Acceptor.cpp
     src/TcpServer.cpp
     src/Connection.cpp
-    src/Session.cpp
+    src/Connector.cpp
     )
 
 add_library(mutiplex ${SRCS} ${HEARERS})

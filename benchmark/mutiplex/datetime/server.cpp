@@ -15,7 +15,7 @@ public:
         : server_(addr, NUM_THREADS)
     {
         EstablishedCallback cb = [this](ConnectionPtr conn, uint64_t timestamp) {
-            this->hande_conn(conn, timestamp);
+            this->on_new_connection(conn, timestamp);
         };
 
         server_.set_established_callback(cb);
@@ -27,7 +27,7 @@ public:
     }
 
 private:
-    void hande_conn(ConnectionPtr conn, uint64_t timestamp)
+    void on_new_connection(ConnectionPtr conn, uint64_t timestamp)
     {
         std::string str = muti::Timestamp::to_string(timestamp);
         str.push_back('\n');
