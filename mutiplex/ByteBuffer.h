@@ -3,7 +3,7 @@
 #include <boost/noncopyable.hpp>
 #include <memory>
 
-namespace ev
+namespace muti
 {
 
 class ByteBuffer: boost::noncopyable

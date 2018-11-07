@@ -1,5 +1,5 @@
 set(LIBS
-        ${LIBS} evcpp)
+        ${LIBS} mutiplex)
 
 
 add_executable(asio_echo_server echo/server.cpp)

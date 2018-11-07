@@ -3,7 +3,7 @@
 #include <boost/noncopyable.hpp>
 #include <inttypes.h>
 
-namespace ev
+namespace muti
 {
 class Connection;
 

@@ -3,7 +3,7 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 
-#include <evcpp/Timestamp.h>
+#include <mutiplex/Timestamp.h>
 
 using boost::asio::ip::tcp;
 
@@ -22,9 +22,9 @@ public:
 
     void start()
     {
-        uint64_t tm = ev::Timestamp::current();
+        uint64_t tm = muti::Timestamp::current();
 
-        std::string timestamp = ev::Timestamp::to_string(tm);
+        std::string timestamp = muti::Timestamp::to_string(tm);
         timestamp.push_back('\n');
 
         socket_.async_write_some(boost::asio::buffer(timestamp.c_str(), timestamp.size()),

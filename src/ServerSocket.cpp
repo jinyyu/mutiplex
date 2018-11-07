@@ -1,5 +1,5 @@
-#include "evcpp/ServerSocket.h"
-#include "evcpp/InetAddress.h"
+#include "mutiplex/ServerSocket.h"
+#include "mutiplex/InetAddress.h"
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -9,7 +9,7 @@
 #include "Debug.h"
 
 
-namespace ev
+namespace muti
 {
 
 ServerSocket::ServerSocket()

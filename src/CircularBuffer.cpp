@@ -1,5 +1,5 @@
-#include "evcpp/CircularBuffer.h"
-#include "evcpp/Connection.h"
+#include "mutiplex/CircularBuffer.h"
+#include "mutiplex/Connection.h"
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -9,7 +9,7 @@
 #include <assert.h>
 #include "Debug.h"
 
-namespace ev
+namespace muti
 {
 
 

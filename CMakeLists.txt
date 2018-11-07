@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(evcpp-distribution)
+project(mutiplex-distribution)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -8,19 +8,19 @@ include_directories(${CMAKE_SOURCE_DIR})
 find_package(PkgConfig REQUIRED)
 
 set(HEARERS
-    evcpp/InetAddress.h
-    evcpp/Timestamp.h
-    evcpp/Slice.h
-    evcpp/Status.h
-    evcpp/ByteBuffer.h
-    evcpp/callbacks.h
-    evcpp/Acceptor.h
-    evcpp/CircularBuffer.h
-    evcpp/Connection.h
-    evcpp/EventLoop.h
-    evcpp/ServerSocket.h
-    evcpp/Session.h
-    evcpp/TcpServer.h
+    mutiplex/InetAddress.h
+    mutiplex/Timestamp.h
+    mutiplex/Slice.h
+    mutiplex/Status.h
+    mutiplex/ByteBuffer.h
+    mutiplex/callbacks.h
+    mutiplex/Acceptor.h
+    mutiplex/CircularBuffer.h
+    mutiplex/Connection.h
+    mutiplex/EventLoop.h
+    mutiplex/ServerSocket.h
+    mutiplex/Session.h
+    mutiplex/TcpServer.h
     )
 
 set(SRCS
@@ -38,8 +38,8 @@ set(SRCS
     src/Session.cpp
     )
 
-add_library(evcpp ${SRCS} ${HEARERS})
-target_link_libraries(evcpp ${LIBS})
+add_library(mutiplex ${SRCS} ${HEARERS})
+target_link_libraries(mutiplex ${LIBS})
 
 pkg_check_modules(GoogleTest gtest gtest_main)
 if (GoogleTest_FOUND)
@@ -57,10 +57,10 @@ if (Boost_FOUND)
     add_subdirectory(benchmark/asio)
 endif (Boost_FOUND)
 
-add_subdirectory(benchmark/evcpp)
+add_subdirectory(benchmark/mutiplex)
 
 
-install(TARGETS evcpp
+install(TARGETS mutiplex
         ARCHIVE DESTINATION lib)
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/evcpp

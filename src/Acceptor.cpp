@@ -1,9 +1,9 @@
-#include "evcpp/Acceptor.h"
-#include "evcpp/EventLoop.h"
-#include "evcpp/Connection.h"
+#include "mutiplex/Acceptor.h"
+#include "mutiplex/EventLoop.h"
+#include "mutiplex/Connection.h"
 #include "EventSource.h"
 
-namespace ev
+namespace muti
 {
 
 Acceptor::Acceptor(EventLoop* loop, const std::string& addr_str)

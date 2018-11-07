@@ -1,12 +1,12 @@
 #include <string.h>
 #include <netinet/in.h>
-#include "evcpp/ByteBuffer.h"
+#include "mutiplex/ByteBuffer.h"
 #include "Debug.h"
 #include <stdlib.h>
 #include <assert.h>
 
 
-namespace ev
+namespace muti
 {
 
 ByteBuffer::ByteBuffer(int capacity)

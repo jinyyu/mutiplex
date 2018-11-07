@@ -1,5 +1,5 @@
-#include "evcpp/InetAddress.h"
-#include "evcpp/Status.h"
+#include "mutiplex/InetAddress.h"
+#include "mutiplex/Status.h"
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <stdlib.h>
@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include "Debug.h"
 
-namespace ev
+namespace muti
 {
 
 InetAddress::InetAddress(const std::string& addr)
