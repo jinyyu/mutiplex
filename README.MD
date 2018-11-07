@@ -1,10 +1,10 @@
-muti
+mutiplex
 =======
 
 #### build
 
-    git clone git@github.com:jinyyu/libreactor.git
-    cd libreactor
+    git clone https://github.com/jinyyu/mutiplex.git
+    cd mutiplex
     mkdir build
     cd build
     cmake ..
