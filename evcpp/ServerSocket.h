@@ -2,7 +2,7 @@
 
 #include <evcpp/Status.h>
 #include <boost/noncopyable.hpp>
-#include <evcpp/InetSocketAddress.h>
+#include <evcpp/InetAddress.h>
 
 namespace ev
 {
@@ -16,9 +16,9 @@ public:
     ~ServerSocket();
 
     //Binds the ServerSocket to a specific address (IP address and port number)
-    Status bind(const InetSocketAddress& addr);
+    void bind(const InetAddress& addr);
 
-    int accept(InetSocketAddress& addr);
+    int accept(InetAddress& addr);
 
     //Enable/disable the SO_REUSEADDR socket option
     void reuse_address(bool on);

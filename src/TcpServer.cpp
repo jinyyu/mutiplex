@@ -8,8 +8,8 @@ namespace ev
 {
 
 
-TcpServer::TcpServer(int port, int num_io_threads)
-    : port_(port),
+TcpServer::TcpServer(const std::string& addr, int num_io_threads)
+    : addr_(addr),
       num_io_threads_(num_io_threads)
 {
 }
@@ -32,15 +32,15 @@ void TcpServer::run()
         loop->allocate_receive_buffer(64 * 1024);
         NewConnectionCallback cb = [this, loop](int fd,
                                                 uint64_t timestamp,
-                                                const InetSocketAddress& local,
-                                                const InetSocketAddress& peer) {
+                                                const InetAddress& local,
+                                                const InetAddress& peer) {
             ConnectionPtr conn(new Connection(fd, loop, local, peer));
             conn->set_established_callback(established_callback_);
             conn->set_read_callback(read_callback_);
             conn->set_closed_callback(closed_callback_);
             loop->on_new_connection(conn, timestamp);
         };
-        Acceptor acceptor(loop, port_);
+        Acceptor acceptor(loop, addr_);
         acceptor.new_connection_callback(cb);
         io_loops_[index] = loop;
         loop->run();

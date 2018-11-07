@@ -6,13 +6,13 @@
 namespace ev
 {
 class ByteBuffer;
-class InetSocketAddress;
+class InetAddress;
 class Connection;
 typedef std::shared_ptr<Connection> ConnectionPtr;
 
 typedef std::function<void()> Callback;
 
-typedef std::function<void(int fd, uint64_t timestamp, const InetSocketAddress&, const InetSocketAddress&)> NewConnectionCallback;
+typedef std::function<void(int fd, uint64_t timestamp, const InetAddress&, const InetAddress&)> NewConnectionCallback;
 
 typedef std::function<void(ConnectionPtr conn, uint64_t timestamp)> EstablishedCallback;
 

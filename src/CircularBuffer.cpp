@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <sys/uio.h>
 #include <algorithm>
 #include <unistd.h>
 #include <assert.h>

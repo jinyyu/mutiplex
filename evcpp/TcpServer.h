@@ -7,6 +7,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <evcpp/EventLoop.h>
+#include <evcpp/InetAddress.h>
 
 namespace ev
 {
@@ -14,7 +15,7 @@ namespace ev
 class TcpServer: boost::noncopyable
 {
 public:
-    explicit TcpServer(int port, int num_io_threads);
+    explicit TcpServer(const std::string& addr, int num_io_threads);
 
     ~TcpServer();
 
@@ -37,7 +38,7 @@ public:
 
     void shutdown();
 private:
-    int port_;
+    InetAddress addr_;
     int num_io_threads_;
     std::vector<EventLoop*> io_loops_;
     std::vector<std::thread> threads_;

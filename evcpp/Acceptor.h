@@ -3,7 +3,7 @@
 #include <boost/noncopyable.hpp>
 #include <evcpp/callbacks.h>
 #include <evcpp/ServerSocket.h>
-#include <evcpp/InetSocketAddress.h>
+#include <evcpp/InetAddress.h>
 
 namespace ev
 {
@@ -14,9 +14,9 @@ class EventLoop;
 class Acceptor: boost::noncopyable
 {
 public:
-    Acceptor(EventLoop* loop, int port);
+    Acceptor(EventLoop* loop, const std::string& addr_str);
 
-    Acceptor(EventLoop* loop, const InetSocketAddress& addr);
+    Acceptor(EventLoop* loop, const InetAddress& addr);
 
     ~Acceptor();
 
@@ -29,8 +29,8 @@ private:
     EventLoop* loop_;
     ServerSocket server_socket_;
     EventSource* accept_event_;
-    InetSocketAddress peer_addr_;
-    InetSocketAddress local_addr_;
+    InetAddress peer_addr_;
+    InetAddress local_addr_;
     NewConnectionCallback on_new_connection_;
 };
 

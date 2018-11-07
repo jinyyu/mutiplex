@@ -1,6 +1,6 @@
 #include <evcpp/Session.h>
 #include <evcpp/EventLoop.h>
-#include <evcpp/InetSocketAddress.h>
+#include <evcpp/InetAddress.h>
 #include <sys/timerfd.h>
 #include <evcpp/Timestamp.h>
 #include <sys/time.h>
@@ -8,6 +8,7 @@
 #include <evcpp/Connection.h>
 #include <unistd.h>
 #include <thread>
+#include <evcpp/InetAddress.h>
 
 using namespace ev;
 
@@ -16,7 +17,7 @@ std::vector<uint64_t> totals;
 class Client
 {
 public:
-    Client(const InetSocketAddress& addr, int session_count, int timeout, int block_size, int index)
+    Client(const InetAddress& addr, int session_count, int timeout, int block_size, int index)
         : server_addr_(addr),
           session_count_(session_count),
           timeout_(timeout),
@@ -62,7 +63,7 @@ private:
 
     void setup_sessions()
     {
-        InetSocketAddress local;
+        InetAddress local;
         for (int i = 0; i < session_count_; ++i) {
             Session* session = new Session(&loop_, local);
 
@@ -99,7 +100,7 @@ private:
     int session_count_;
     int timeout_;
     int block_size_;
-    InetSocketAddress server_addr_;
+    InetAddress server_addr_;
 
     std::vector<Session*> sessions_;
 
@@ -112,22 +113,20 @@ private:
 
 int main(int argc, char* argv[])
 {
-    if (argc != 7) {
-        printf("usage %s <ip> <port> <session_count> <timeout> <block_size> <threads>\n", argv[0]);
+    if (argc != 6) {
+        printf("usage %s <addr>  <session_count> <timeout> <block_size> <threads>\n", argv[0]);
         return -1;
     }
-    const char* ip = argv[1];
-    int port = std::atoi(argv[2]);
-    int session_count = std::atoi(argv[3]);
-    int timeout = std::atoi(argv[4]);
-    int block_size = std::atoi(argv[5]);
-    int threads = std::atoi(argv[6]);
+    const char* addr = argv[1];
+    int session_count = std::atoi(argv[2]);
+    int timeout = std::atoi(argv[3]);
+    int block_size = std::atoi(argv[4]);
+    int threads = std::atoi(argv[5]);
 
-    InetSocketAddress address(ip, port);
+    InetAddress address(addr);
 
-    printf("ip = %s, port = %d, session_count = %d, timeout = %d, block_size = %d, threads = %d\n",
-           ip,
-           port,
+    printf("addr = %s, session_count = %d, timeout = %d, block_size = %d, threads = %d\n",
+           addr,
            session_count,
            timeout,
            block_size,

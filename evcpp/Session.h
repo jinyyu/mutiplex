@@ -1,7 +1,7 @@
 #pragma once
 
 #include <evcpp/callbacks.h>
-#include <evcpp/InetSocketAddress.h>
+#include <evcpp/InetAddress.h>
 
 namespace ev
 {
@@ -13,7 +13,7 @@ class EventSource;
 class Session
 {
 public:
-    explicit Session(EventLoop* loop, const InetSocketAddress& local);
+    explicit Session(EventLoop* loop, const InetAddress& local);
 
     ~Session();
 
@@ -37,20 +37,20 @@ public:
         connection_closed_callback_ = cb;
     }
 
-    void connect(const InetSocketAddress& peer);
+    void connect(const InetAddress& peer);
 
 private:
     void handle_connected(uint64_t timestamp);
 
-    bool do_connect(const InetSocketAddress& addr);
+    bool do_connect(const InetAddress& addr);
 
     void handle_error(uint64_t timestamp);
 
 private:
     int fd_;
     EventLoop* loop_;
-    InetSocketAddress local_;
-    InetSocketAddress peer_;
+    InetAddress local_;
+    InetAddress peer_;
     EventSource* event_source_;
 
     ConnectErrorCallback connect_error_callback_;

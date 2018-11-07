@@ -9,7 +9,6 @@ find_package(PkgConfig REQUIRED)
 
 set(HEARERS
     evcpp/InetAddress.h
-    evcpp/InetSocketAddress.h
     evcpp/Timestamp.h
     evcpp/Slice.h
     evcpp/Status.h
@@ -30,7 +29,6 @@ set(SRCS
     src/ByteBuffer.cpp
     src/Timestamp.cpp
     src/InetAddress.cpp
-    src/InetSocketAddress.cpp
     src/CircularBuffer.cpp
     src/EventLoop.cpp
     src/ServerSocket.cpp

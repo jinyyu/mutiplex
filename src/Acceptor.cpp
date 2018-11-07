@@ -6,21 +6,18 @@
 namespace ev
 {
 
-Acceptor::Acceptor(EventLoop* loop, int port)
-    : Acceptor(loop, InetSocketAddress(port))
+Acceptor::Acceptor(EventLoop* loop, const std::string& addr_str)
+    : Acceptor(loop, InetAddress(addr_str))
 {
 }
 
-Acceptor::Acceptor(EventLoop* loop, const InetSocketAddress& addr)
+Acceptor::Acceptor(EventLoop* loop, const InetAddress& addr)
     : loop_(loop),
       local_addr_(addr)
 {
     server_socket_.reuse_port(true);
 
-    Status status = server_socket_.bind(addr);
-    if (!status.is_ok()) {
-        throw std::runtime_error(status.to_string());
-    }
+    server_socket_.bind(addr);
 
     accept_event_ = new EventSource(server_socket_.fd(), loop_);
 

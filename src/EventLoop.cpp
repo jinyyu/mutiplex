@@ -1,5 +1,5 @@
 #include "evcpp/EventLoop.h"
-#include "evcpp/InetSocketAddress.h"
+#include "evcpp/InetAddress.h"
 #include "evcpp/Connection.h"
 #include "evcpp/ByteBuffer.h"
 #include "EventSource.h"

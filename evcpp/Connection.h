@@ -1,7 +1,6 @@
 #pragma once
 #include <boost/noncopyable.hpp>
 #include <memory>
-#include <evcpp/InetSocketAddress.h>
 #include <evcpp/InetAddress.h>
 #include <evcpp/callbacks.h>
 
@@ -21,8 +20,8 @@ class Connection: public std::enable_shared_from_this<Connection>, boost::noncop
 public:
     explicit Connection(int fd,
                         EventLoop* loop,
-                        const InetSocketAddress& local,
-                        const InetSocketAddress& peer);
+                        const InetAddress& local,
+                        const InetAddress& peer);
 
     ~Connection();
 
@@ -31,24 +30,15 @@ public:
         buffer_size_ = size;
     }
 
-    const InetSocketAddress& local_socket_address() const
+
+    InetAddress local_address() const
     {
         return local_;
     }
 
-    const InetSocketAddress& peer_socket_address() const
-    {
-        return peer_;
-    }
-
-    InetAddress local_address() const
-    {
-        return local_.get_address();
-    }
-
     InetAddress peer_address() const
     {
-        return peer_.get_address();
+        return peer_;
     }
 
     int local_port() const
@@ -128,8 +118,8 @@ private:
     uint32_t buffer_size_;
     EventLoop* loop_;
     EventSource* event_source_;
-    InetSocketAddress local_;
-    InetSocketAddress peer_;
+    InetAddress local_;
+    InetAddress peer_;
 
     EstablishedCallback established_callback_;
     ReadCallback read_callback_;

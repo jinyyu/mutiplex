@@ -8,8 +8,8 @@ using namespace ev;
 class EchoServer
 {
 public:
-    EchoServer(int port, int threads)
-        : server_(port, threads)
+    EchoServer(const std::string& addr, int threads)
+        : server_(addr, threads)
     {
         ReadCallback cb = [this](ConnectionPtr conn, ByteBuffer* buf, uint64_t timestamp) {
             this->hande_read(conn, buf, timestamp);
@@ -35,14 +35,13 @@ private:
 int main(int argc, char* argv[])
 {
     if (argc != 3) {
-        printf("usage %s <port> <threads>\n", argv[0]);
+        printf("usage %s <addr> <threads>\n", argv[0]);
         return -1;
     }
     //set_log_level(Logger::ERROR);
 
-    int port = atoi(argv[1]);
     int threads = atoi(argv[2]);
 
-    EchoServer server(port, threads);
+    EchoServer server(argv[1], threads);
     server.run();
 }

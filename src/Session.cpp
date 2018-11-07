@@ -1,5 +1,8 @@
 #include "evcpp/Session.h"
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include "EventSource.h"
 #include "evcpp/Timestamp.h"
 #include "evcpp/Connection.h"
@@ -9,12 +12,12 @@
 namespace ev
 {
 
-Session::Session(EventLoop* loop, const InetSocketAddress& local)
+Session::Session(EventLoop* loop, const InetAddress& local)
     : loop_(loop),
       local_(local),
       event_source_(nullptr)
 {
-    fd_ = ::socket(local.family(), SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
+    fd_ = ::socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
     if (fd_ < 0) {
         LOG_DEBUG("socket error %d", errno);
     }
@@ -27,7 +30,7 @@ Session::~Session()
     }
 }
 
-void Session::connect(const InetSocketAddress& peer)
+void Session::connect(const InetAddress& peer)
 {
     peer_ = peer;
     event_source_ = new EventSource(fd_, loop_);
@@ -76,10 +79,16 @@ void Session::handle_connected(uint64_t timestamp)
     loop_->on_new_connection(conn, timestamp);
 }
 
-bool Session::do_connect(const InetSocketAddress& addr)
+bool Session::do_connect(const InetAddress& addr)
 {
-    int len = addr.family() == AF_INET ? sizeof(addr.sockaddr_) : sizeof(addr.sockaddr6_);
-    int ret = ::connect(fd_, addr.sockaddr_cast(), len);
+    struct sockaddr_in in_addr;
+    socklen_t len = sizeof(in_addr);
+    memset(&in_addr, 0, len);
+    in_addr.sin_addr.s_addr = addr.ip();
+    in_addr.sin_port = addr.port();
+    in_addr.sin_family = AF_INET;
+
+    int ret = ::connect(fd_, (sockaddr*)&in_addr, len);
     int err = errno;
 
     if (ret < 0 && err != EINPROGRESS) {

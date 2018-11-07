@@ -14,8 +14,8 @@ namespace ev
 
 Connection::Connection(int fd,
                        EventLoop* loop,
-                       const InetSocketAddress& local,
-                       const InetSocketAddress& peer)
+                       const InetAddress& local,
+                       const InetAddress& peer)
     : event_source_(nullptr),
       fd_(fd),
       peer_(peer),
