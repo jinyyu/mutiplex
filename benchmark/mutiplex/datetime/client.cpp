@@ -8,9 +8,10 @@ using namespace muti;
 
 void read_cb(ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp)
 {
+    printf("%s->%s\n", conn->local_address().to_string().c_str(), conn->peer_address().to_string().c_str());
     std::string str((char*) buffer->data(), buffer->remaining());
     printf("%s", str.c_str());
-    conn->loop()->stop();
+    conn->close();
 }
 
 class DatetimeClient
@@ -24,7 +25,12 @@ public:
         InetAddress inet_addr(addr_);
         session = new Connector(&loop, inet_addr);
 
-        session->set_read_callback(read_cb);
+        session->established_callback([](ConnectionPtr conn, uint64_t timestamp){
+            conn->set_read_callback(read_cb);
+            conn->set_closed_callback([conn](ConnectionPtr conn, uint64_t timestamp){
+                conn->loop()->stop();
+            });
+        });
 
     }
 
