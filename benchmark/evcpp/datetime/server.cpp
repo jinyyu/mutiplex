@@ -11,14 +11,14 @@ using namespace ev;
 class EchoServer
 {
 public:
-    EchoServer(int port)
-        : server_(port, NUM_THREADS)
+    EchoServer(const std::string& addr)
+        : server_(addr, NUM_THREADS)
     {
-        ConnectionEstablishedCallback cb = [this](ConnectionPtr conn, uint64_t timestamp) {
+        EstablishedCallback cb = [this](ConnectionPtr conn, uint64_t timestamp) {
             this->hande_conn(conn, timestamp);
         };
 
-        server_.connection_established_callback(cb);
+        server_.set_established_callback(cb);
     }
 
     void run()
@@ -42,12 +42,11 @@ private:
 int main(int argc, char* argv[])
 {
     if (argc != 2) {
-        printf("usage %s <port>\n", argv[0]);
+        printf("usage %s <addr>\n", argv[0]);
         return -1;
     }
 
-    int port = atoi(argv[1]);
 
-    EchoServer server(port);
+    EchoServer server(argv[1]);
     server.run();
 }

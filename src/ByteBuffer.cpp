@@ -1,6 +1,7 @@
 #include <string.h>
 #include <netinet/in.h>
 #include "evcpp/ByteBuffer.h"
+#include "Debug.h"
 #include <stdlib.h>
 #include <assert.h>
 
@@ -43,7 +44,6 @@ void ByteBuffer::position(int p)
 void ByteBuffer::limit(int limit)
 {
     assert(limit <= capacity() && limit >= 0);
-
     limit_ = limit;
     if (position_ > limit_) {
         position_ = limit_;
@@ -82,7 +82,7 @@ void ByteBuffer::rewind()
 
 void ByteBuffer::put(const void* data, int len)
 {
-    assert(len > remaining());
+    assert(len <= remaining());
 
     memcpy(this->data(), data, len);
     position_ += len;

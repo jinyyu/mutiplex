@@ -1,11 +1,11 @@
 #include "evcpp/ServerSocket.h"
-#include "evcpp/InetSocketAddress.h"
 #include "evcpp/InetAddress.h"
 
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <stdexcept>
 #include "Debug.h"
 
 
@@ -25,15 +25,20 @@ ServerSocket::~ServerSocket()
     ::close(fd_);
 }
 
-Status ServerSocket::bind(const InetSocketAddress& addr)
+void ServerSocket::bind(const InetAddress& addr)
 {
-    int ret = ::bind(fd_, addr.sockaddr_cast(), sizeof(sockaddr_in6));
+    struct sockaddr_in in_addr;
+    in_addr.sin_family = AF_INET;
+    in_addr.sin_port = addr.port();
+    uint32_t ip = addr.ip();
+    memcpy(&in_addr.sin_addr.s_addr, &ip, sizeof(ip));
+
+    int ret = ::bind(fd_, (const sockaddr*) &in_addr, sizeof(in_addr));
     if (ret < 0) {
-        LOG_DEBUG("bind error %s", errno);
+        LOG_DEBUG("bind error %s", strerror(errno));
+        throw std::runtime_error("invalid addr " + addr.to_string());
     }
     listen();
-
-    return ret < 0 ? Status::invalid_argument("invalid address") : Status::ok();
 }
 
 void ServerSocket::listen()
@@ -43,13 +48,17 @@ void ServerSocket::listen()
     }
 }
 
-int ServerSocket::accept(InetSocketAddress& addr)
+int ServerSocket::accept(InetAddress& addr)
 {
-    uint32_t len = sizeof(addr.sockaddr6_);
-    int fd = ::accept4(fd_, addr.sockaddr_cast(), &len, SOCK_NONBLOCK | SOCK_CLOEXEC);
+    struct sockaddr_in in_addr;
+    socklen_t len = sizeof(in_addr);
+    memset(&in_addr, 0, len);
+
+    int fd = ::accept4(fd_, (struct sockaddr*) &in_addr, &len, SOCK_NONBLOCK | SOCK_CLOEXEC);
     if (fd < 0) {
         LOG_DEBUG("accept4 error %d", errno);
     }
+    addr = InetAddress(in_addr.sin_addr.s_addr, in_addr.sin_port);
 
     return fd;
 

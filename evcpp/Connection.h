@@ -1,21 +1,17 @@
 #pragma once
 #include <boost/noncopyable.hpp>
 #include <memory>
-
-#include <evcpp/InetSocketAddress.h>
 #include <evcpp/InetAddress.h>
 #include <evcpp/callbacks.h>
-#include <evcpp/Context.h>
-
 
 #include <deque>
-#include "evcpp/ByteBuffer.h"
+#include <evcpp/ByteBuffer.h>
 
 namespace ev
 {
+
+class EventSource;
 class EventLoop;
-class Selector;
-class Channel;
 class CircularBuffer;
 class ByteBuffer;
 
@@ -24,70 +20,83 @@ class Connection: public std::enable_shared_from_this<Connection>, boost::noncop
 public:
     explicit Connection(int fd,
                         EventLoop* loop,
-                        const InetSocketAddress& local,
-                        const InetSocketAddress& peer);
+                        const InetAddress& local,
+                        const InetAddress& peer);
 
     ~Connection();
 
     void set_buffer_size(uint32_t size)
-    { buffer_size_ = size; }
+    {
+        buffer_size_ = size;
+    }
 
-    const InetSocketAddress& local_socket_address() const
-    { return local_; }
-
-    const InetSocketAddress& peer_socket_address() const
-    { return peer_; }
 
     InetAddress local_address() const
-    { return local_.get_address(); }
+    {
+        return local_;
+    }
 
     InetAddress peer_address() const
-    { return peer_.get_address(); }
+    {
+        return peer_;
+    }
 
     int local_port() const
-    { return local_.port(); }
+    {
+        return local_.host_port();
+    }
 
     int peer_port() const
-    { return peer_.port(); }
+    {
+        return peer_.host_port();
+    }
 
     int fd() const
-    { return fd_; }
+    {
+        return fd_;
+    }
 
-    void connection_established_callback(const ConnectionEstablishedCallback& cb)
-    { connection_established_callback_ = cb; }
+    void set_established_callback(const EstablishedCallback& cb)
+    {
+        established_callback_ = cb;
+    }
 
-    void read_message_callback(const ReadMessageCallback& cb)
-    { read_message_callback_ = cb; }
+    void set_read_callback(const ReadCallback& cb)
+    {
+        read_callback_ = cb;
+    }
 
-    void connection_closed_callback(const ConnectionClosedCallback& cb)
-    { connection_closed_callback_ = cb; }
+    void set_closed_callback(const ClosedCallback& cb)
+    {
+        closed_callback_ = cb;
+    }
 
     void error_callback(const ErrorCallback& cb)
-    { error_callback_ = cb; }
+    {
+        error_callback_ = cb;
+    }
 
     void close();
 
     void force_close();
 
     bool is_closed()
-    { return state_ == Closed || state_ == Disconnecting; }
+    {
+        return state_ == Closed || state_ == Disconnecting;
+    }
 
     bool write(const void* data, uint32_t len);
 
     bool write(const ByteBufferPtr& buffer);
 
     EventLoop* loop() const
-    { return loop_; }
-
-    ContextPtr& context()
-    { return ctx_; }
-
-    void context(ContextPtr& ctx)
-    { ctx_ = std::move(ctx); }
+    {
+        return loop_;
+    }
 
 private:
     friend class EventLoop;
-    void setup_callbacks();
+    void register_event();
 
     void do_write(const void* data, uint32_t len);
 
@@ -108,18 +117,17 @@ private:
     uint8_t state_;
     uint32_t buffer_size_;
     EventLoop* loop_;
-    Channel* channel_;
-    InetSocketAddress local_;
-    InetSocketAddress peer_;
+    EventSource* event_source_;
+    InetAddress local_;
+    InetAddress peer_;
 
-    ConnectionEstablishedCallback connection_established_callback_;
-    ReadMessageCallback read_message_callback_;
-    ConnectionClosedCallback connection_closed_callback_;
+    EstablishedCallback established_callback_;
+    ReadCallback read_callback_;
+    ClosedCallback closed_callback_;
     ErrorCallback error_callback_;
 
     friend class CircularBuffer;
     CircularBuffer* buffer_out_;
-    ContextPtr ctx_;
 };
 
 }

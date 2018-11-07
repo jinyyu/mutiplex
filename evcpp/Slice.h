@@ -33,15 +33,21 @@ public:
 
     // Return a pointer to the beginning of the referenced data
     const char* data() const
-    { return data_; }
+    {
+        return data_;
+    }
 
     // Return the length (in bytes) of the referenced data
     size_t size() const
-    { return size_; }
+    {
+        return size_;
+    }
 
     // Return true iff the length of the referenced data is zero
     bool empty() const
-    { return size_ == 0; }
+    {
+        return size_ == 0;
+    }
 
     // Return the ith byte in the referenced data.
     // REQUIRES: n < size()

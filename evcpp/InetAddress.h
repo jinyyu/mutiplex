@@ -1,70 +1,54 @@
 #pragma once
-#include <stdlib.h>
-#include <string.h>
-#include <arpa/inet.h>
+#include <stdint.h>
 #include <string>
 
 namespace ev
 {
 
-class Status;
-
 class InetAddress
 {
-
 public:
-    InetAddress(const InetAddress& address)
+    explicit InetAddress()
+        : ip_(0),
+          port_(0)
     {
-        this->famliy_ = address.famliy_;
-        addr6_ = address.addr6_;
+
     }
 
-    bool operator==(const InetAddress& address);
-
-    bool operator!=(const InetAddress& address);
-
-    InetAddress& operator=(const InetAddress& address)
+    explicit InetAddress(uint32_t ip, uint16_t port)
+        : ip_(ip),
+          port_(port)
     {
-        this->famliy_ = address.famliy_;
-        addr6_ = address.addr6_;
-        return *this;
+
     }
 
-    bool v4() const
-    { return famliy_ == AF_INET; }
+    // 127.0.0.1:8080
+    explicit InetAddress(const std::string& addr);
 
-    bool v6() const
-    { return famliy_ == AF_INET6; }
+    InetAddress(const InetAddress& b) = default;
 
-    int family() const
-    { return famliy_; }
+    uint32_t ip() const
+    {
+        return ip_;
+    }
+
+    uint16_t port() const
+    {
+        return port_;
+    }
+
+    // Host Endian
+    uint16_t host_port() const;
+
+    std::string ip_str() const;
 
     std::string to_string() const;
 
-    //No name service is checked for the validity of the address
-    static InetAddress get_by_address(const char* addr, int family, Status& status);
-
-    static InetAddress any(int family);
-
-    //Determines the IP address of a host, given the host's name
-    static InetAddress get_by_host(const char* hostname, Status& status);
-
 private:
-    explicit InetAddress(int family)
-        : famliy_(family)
-    { memset(&addr6_, 0, sizeof(addr6_)); }
 
-private:
-    int famliy_;
-
-    union
-    {
-        struct in_addr addr_;
-        struct in6_addr addr6_;
-    };
-
-    friend class InetSocketAddress;
-
+    // Net Endian
+    uint16_t port_;
+    uint32_t ip_;
 };
 
 }

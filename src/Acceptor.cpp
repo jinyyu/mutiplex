@@ -1,52 +1,39 @@
 #include "evcpp/Acceptor.h"
-#include "evcpp/ServerSocket.h"
-#include "evcpp/InetSocketAddress.h"
-#include "evcpp/Channel.h"
 #include "evcpp/EventLoop.h"
-#include "evcpp/Timestamp.h"
 #include "evcpp/Connection.h"
+#include "EventSource.h"
 
 namespace ev
 {
 
-Acceptor::Acceptor(EventLoop* loop, int port)
-    : Acceptor(loop, InetSocketAddress(port))
+Acceptor::Acceptor(EventLoop* loop, const std::string& addr_str)
+    : Acceptor(loop, InetAddress(addr_str))
 {
 }
 
-Acceptor::Acceptor(EventLoop* loop, const InetSocketAddress& addr)
+Acceptor::Acceptor(EventLoop* loop, const InetAddress& addr)
     : loop_(loop),
-      local_addr_(new InetSocketAddress(addr))
+      local_addr_(addr)
 {
-    peer_addr_ = new InetSocketAddress();
-    server_socket_ = new ServerSocket();
-    server_socket_->reuse_port(true);
+    server_socket_.reuse_port(true);
 
-    Status status = server_socket_->bind(addr);
-    if (!status.is_ok()) {
-        exit(EXIT_FAILURE);
-    }
+    server_socket_.bind(addr);
 
-    accept_channel_ = new Channel(loop->selector_, server_socket_->fd());
+    accept_event_ = new EventSource(server_socket_.fd(), loop_);
 
-    SelectionCallback cb = [this](uint64_t timestamp, SelectionKey* key) {
-        int fd = server_socket_->accept(*this->peer_addr_);
+    accept_event_->enable_reading();
+    accept_event_->set_reading_callback([this](uint64_t timestamp){
+        int fd = server_socket_.accept(peer_addr_);
 
-        if (this->callback_) {
-            this->callback_(fd, timestamp, *local_addr_, *this->peer_addr_);
+        if (this->on_new_connection_) {
+            this->on_new_connection_(fd, timestamp, local_addr_, this->peer_addr_);
         }
-    };
-
-    accept_channel_->enable_reading(cb);
-
+    });
 }
 
 Acceptor::~Acceptor()
 {
-    delete (server_socket_);
-    delete (accept_channel_);
-    delete (peer_addr_);
-    delete (local_addr_);
+    delete (accept_event_);
 }
 
 }

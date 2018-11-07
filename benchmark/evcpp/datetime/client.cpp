@@ -20,12 +20,12 @@ void close_cb(ConnectionPtr conn, uint64_t timestamp)
 class DatetimeClient
 {
 public:
-    DatetimeClient(const char* ip, int port)
-        : ip_(ip), port_(port)
+    DatetimeClient(const char* addr)
+        : addr_(addr)
     {
         loop.allocate_receive_buffer(10240);
 
-        InetSocketAddress local = InetSocketAddress();
+        InetAddress local;
         session = new Session(&loop, local);
 
         session->read_message_callback(read_cb);
@@ -40,7 +40,7 @@ public:
 
     void run()
     {
-        InetSocketAddress peer(ip_, port_);
+        InetAddress peer(addr_);
         session->connect(peer);
 
         loop.run();
@@ -50,17 +50,17 @@ private:
     EventLoop loop;
 
     Session* session;
-    const char* ip_;
-    int port_;
+    const char* addr_;
 };
+
 
 int main(int argc, char* argv[])
 {
-    if (argc != 3) {
-        printf("usage %s <ip> <port>\n", argv[0]);
+    if (argc != 2) {
+        printf("usage %s <addr>\n", argv[0]);
         return -1;
     }
 
-    DatetimeClient client(argv[1], atoi(argv[2]));
+    DatetimeClient client(argv[1]);
     client.run();
 }

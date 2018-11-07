@@ -1,5 +1,4 @@
 #include "evcpp/TcpServer.h"
-#include "evcpp/EventLoop.h"
 #include "evcpp/Acceptor.h"
 #include "evcpp/Connection.h"
 #include "evcpp/Timestamp.h"
@@ -9,8 +8,8 @@ namespace ev
 {
 
 
-TcpServer::TcpServer(int port, int num_io_threads)
-    : port_(port),
+TcpServer::TcpServer(const std::string& addr, int num_io_threads)
+    : addr_(addr),
       num_io_threads_(num_io_threads)
 {
 }
@@ -30,22 +29,22 @@ void TcpServer::run()
     io_loops_.resize(num_io_threads_, NULL);
     auto run_cb = [this](int index) {
         EventLoop* loop = new EventLoop();
-        loop->allocate_receive_buffer(6 * 1024 * 1024); //6M
+        loop->allocate_receive_buffer(64 * 1024);
         NewConnectionCallback cb = [this, loop](int fd,
                                                 uint64_t timestamp,
-                                                const InetSocketAddress& local,
-                                                const InetSocketAddress& peer) {
+                                                const InetAddress& local,
+                                                const InetAddress& peer) {
             ConnectionPtr conn(new Connection(fd, loop, local, peer));
-            conn->connection_established_callback(connection_established_callback_);
-            conn->read_message_callback(read_message_callback_);
-            conn->connection_closed_callback(connection_closed_callback_);
+            conn->set_established_callback(established_callback_);
+            conn->set_read_callback(read_callback_);
+            conn->set_closed_callback(closed_callback_);
             loop->on_new_connection(conn, timestamp);
         };
-        Acceptor acceptor(loop, port_);
+        Acceptor acceptor(loop, addr_);
         acceptor.new_connection_callback(cb);
         io_loops_[index] = loop;
         loop->run();
-        LOG_DEBUG( "loop exit %d", index);
+        LOG_DEBUG("loop exit %d", index);
 
         std::unique_lock<std::mutex> lock(mutex_);
         --count_down_;

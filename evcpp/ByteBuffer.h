@@ -1,7 +1,7 @@
 #pragma once
 
 #include <boost/noncopyable.hpp>
-#include <boost/asio/detail/shared_ptr.hpp>
+#include <memory>
 
 namespace ev
 {
@@ -18,21 +18,27 @@ public:
 
     //Returns this buffer's position
     int position() const
-    { return position_; }
+    {
+        return position_;
+    }
 
     //Sets this buffer's position
     void position(int p);
 
     //Returns this buffer's limit
     int limit() const
-    { return limit_; }
+    {
+        return limit_;
+    }
 
     //Sets this buffer's limit
     void limit(int limit);
 
     //Sets this buffer's mark at its position
     void mark()
-    { mark_ = position_; }
+    {
+        mark_ = position_;
+    }
 
     //Resets this buffer's position to the previously-marked position
     //Invoking this method neither changes nor discards the mark's value
@@ -52,17 +58,25 @@ public:
 
     //Returns the number of elements between the current position and the limit
     int remaining() const
-    { return limit_ - position_; }
+    {
+        return limit_ - position_;
+    }
 
     //Tells whether there are any elements between the current position and the limit
     bool has_remaining() const
-    { return position_ < limit_; }
+    {
+        return position_ < limit_;
+    }
 
     const void* data() const
-    { return data_ + sizeof(int) + position_; }
+    {
+        return data_ + sizeof(int) + position_;
+    }
 
     void* data()
-    { return data_ + sizeof(int) + position_; }
+    {
+        return data_ + sizeof(int) + position_;
+    }
 
     //bulk get method
     int get(void* buffer, int len);

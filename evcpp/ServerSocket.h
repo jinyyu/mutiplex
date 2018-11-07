@@ -2,11 +2,10 @@
 
 #include <evcpp/Status.h>
 #include <boost/noncopyable.hpp>
+#include <evcpp/InetAddress.h>
 
 namespace ev
 {
-
-class InetSocketAddress;
 
 class ServerSocket: boost::noncopyable
 {
@@ -17,9 +16,9 @@ public:
     ~ServerSocket();
 
     //Binds the ServerSocket to a specific address (IP address and port number)
-    Status bind(const InetSocketAddress& addr);
+    void bind(const InetAddress& addr);
 
-    int accept(InetSocketAddress& addr);
+    int accept(InetAddress& addr);
 
     //Enable/disable the SO_REUSEADDR socket option
     void reuse_address(bool on);
@@ -27,7 +26,9 @@ public:
     void reuse_port(bool on);
 
     int fd() const
-    { return fd_; }
+    {
+        return fd_;
+    }
 
 private:
     void listen();

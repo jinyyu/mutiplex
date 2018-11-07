@@ -6,40 +6,45 @@
 #include <memory>
 #include <condition_variable>
 #include <mutex>
+#include <evcpp/EventLoop.h>
+#include <evcpp/InetAddress.h>
 
 namespace ev
 {
-class EventLoop;
-class Timestamp;
-class InetSocketAddress;
 
 class TcpServer: boost::noncopyable
 {
 public:
-    explicit TcpServer(int port, int num_io_threads);
+    explicit TcpServer(const std::string& addr, int num_io_threads);
 
     ~TcpServer();
 
-    void connection_established_callback(const ConnectionEstablishedCallback& cb)
-    { connection_established_callback_ = cb; }
+    void set_established_callback(const EstablishedCallback& cb)
+    {
+        established_callback_ = cb;
+    }
 
-    void read_message_callback(const ReadMessageCallback& cb)
-    { read_message_callback_ = cb; }
+    void set_read_callback(const ReadCallback& cb)
+    {
+        read_callback_ = cb;
+    }
 
-    void connection_closed_callback(const ConnectionClosedCallback& cb)
-    { connection_closed_callback_ = cb; }
+    void connection_closed_callback(const ClosedCallback& cb)
+    {
+        closed_callback_ = cb;
+    }
 
     void run();
 
     void shutdown();
 private:
-    int port_;
+    InetAddress addr_;
     int num_io_threads_;
     std::vector<EventLoop*> io_loops_;
     std::vector<std::thread> threads_;
-    ConnectionEstablishedCallback connection_established_callback_;
-    ReadMessageCallback read_message_callback_;
-    ConnectionClosedCallback connection_closed_callback_;
+    EstablishedCallback established_callback_;
+    ReadCallback read_callback_;
+    ClosedCallback closed_callback_;
 
     std::mutex mutex_;
     std::condition_variable cv_;
