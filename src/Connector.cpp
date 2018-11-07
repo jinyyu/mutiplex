@@ -81,6 +81,8 @@ void Connector::handle_connected(uint64_t timestamp)
     ConnectionPtr conn(new Connection(fd_, loop_, local_, peer_));
 
     conn->set_established_callback(established_callback_);
+    conn->set_read_callback(read_callback_);
+    conn->set_closed_callback(closed_callback_);
     loop_->on_new_connection(conn, timestamp);
 }
 

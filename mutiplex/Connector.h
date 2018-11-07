@@ -26,6 +26,16 @@ public:
         established_callback_ = cb;
     }
 
+    void set_read_callback(const ReadCallback& cb)
+    {
+        read_callback_ = cb;
+    }
+
+    void closed_callback(const ClosedCallback& cb)
+    {
+        closed_callback_ = cb;
+    }
+
     void start_connect();
 
 private:
@@ -44,6 +54,8 @@ private:
 
     ConnectErrorCallback connect_error_callback_;
     EstablishedCallback established_callback_;
+    ReadCallback read_callback_;
+    ClosedCallback closed_callback_;
 };
 
 }
