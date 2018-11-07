@@ -1,6 +1,4 @@
 #pragma once
-
-#include <mutiplex/Status.h>
 #include <boost/noncopyable.hpp>
 #include <mutiplex/InetAddress.h>
 

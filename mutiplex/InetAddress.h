@@ -27,6 +27,8 @@ public:
 
     InetAddress(const InetAddress& b) = default;
 
+    static bool resolve(const char* name, const char* service, InetAddress& addr);
+
     uint32_t ip() const
     {
         return ip_;

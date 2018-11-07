@@ -1,49 +1,27 @@
 #include <gtest/gtest.h>
-#include <libreactor/InetAddress.h>
-#include <libreactor/Status.h>
+#include <mutiplex/InetAddress.h>
 
-using namespace reactor;
+using namespace muti;
 
 TEST(test_addr, test_addr)
 {
-    Status status;
-    InetAddress addr4 = InetAddress::get_by_address("127.0.0.1", AF_INET, status);
-    printf("ip = %s\n", addr4.to_string().c_str());
-    ASSERT_TRUE(addr4 == addr4);
-    ASSERT_TRUE(addr4.family() == AF_INET);
-    ASSERT_TRUE(addr4.v4());
-
-    InetAddress addr5 = InetAddress::get_by_address("10.12.23.1", AF_INET, status);
-    ASSERT_FALSE(addr4 == addr5);
-    ASSERT_TRUE(addr4 != addr5);
-
-    ASSERT_TRUE(addr4.v4());
-    InetAddress addr6 = InetAddress::get_by_address("0:0:0:0:0:FFFF:204.152.189.116", AF_INET6, status);
-    ASSERT_TRUE(addr6.v6());
-    printf("ip = %s\n", addr6.to_string().c_str());
-
-    InetAddress::get_by_address("1279.0.0.1", AF_INET, status);
-    ASSERT_TRUE(!status.is_ok());
-
-    InetAddress addr = InetAddress::any(AF_INET);
-    ASSERT_TRUE(addr.family() == AF_INET);
-    addr = InetAddress::any(AF_INET6);
-    ASSERT_TRUE(addr.family() == AF_INET6);
+    InetAddress addr1("127.0.0.1:443");
+    ASSERT_TRUE(addr1.to_string() == "127.0.0.1:443");
+    ASSERT_TRUE(addr1.ip_str() == "127.0.0.1");
+    ASSERT_TRUE(addr1.host_port() == 443);
 }
 
 TEST(test_resolve, test_addr)
 {
+    InetAddress addr;
+    bool ok = InetAddress::resolve("wwww.baidu.com", "http", addr);
+    ASSERT_TRUE(ok);
+    ASSERT_TRUE(addr.host_port() == 80);
 
-    Status status = Status::invalid_argument("aaa");
-    InetAddress a = InetAddress::get_by_host("www.baidu.com", status);
-    ASSERT_TRUE(status.is_ok());
-    printf("ip = %s\n", a.to_string().c_str());
+    fprintf(stderr, "ip = %s, port = %d\n", addr.ip_str().c_str(), addr.host_port());
+    fprintf(stderr, "str = %s\n", addr.to_string().c_str());
 
-    InetAddress::get_by_host("localhost", status);
-    ASSERT_TRUE(status.is_ok());
-
-    InetAddress::get_by_host("www.baidu.comppDDDp", status);
-    ASSERT_TRUE(!status.is_ok());
+    ASSERT_FALSE(InetAddress::resolve("wwww.google.com", "http", addr));
 
 }
 

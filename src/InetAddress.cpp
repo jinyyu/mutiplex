@@ -1,5 +1,4 @@
 #include "mutiplex/InetAddress.h"
-#include "mutiplex/Status.h"
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <stdlib.h>
@@ -50,6 +49,48 @@ std::string InetAddress::ip_str() const
 uint16_t InetAddress::host_port() const
 {
     return ntohs(port_);
+}
+
+bool InetAddress::resolve(const char* name, const char* service, InetAddress& addr)
+{
+    struct addrinfo hints;
+    struct addrinfo* result;
+    struct addrinfo* rp;
+    bool success = false;
+
+    memset(&hints, 0, sizeof(struct addrinfo));
+    hints.ai_family = AF_INET;    /* Allow IPv4 */
+    hints.ai_socktype = SOCK_STREAM; /* tcp */
+    hints.ai_flags = 0;
+    hints.ai_protocol = 0;
+
+    int ret = getaddrinfo(name, service, &hints, &result);
+    if (ret != 0) {
+        return false;
+    }
+
+    for (rp = result; rp != NULL; rp = rp->ai_next) {
+        int fd = ::socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+        if (fd == -1) {
+            continue;
+        }
+
+        if (connect(fd, rp->ai_addr, rp->ai_addrlen) != -1) {
+            ::close(fd);
+            break;                  /* Success */
+        }
+
+        ::close(fd);
+    }
+
+    if (rp && rp->ai_family == AF_INET) {
+        success = true;
+        struct sockaddr_in* in_addr = (struct sockaddr_in*) rp->ai_addr;
+        addr = InetAddress(in_addr->sin_addr.s_addr, in_addr->sin_port);
+    }
+
+    freeaddrinfo(result);
+    return success;
 }
 
 }

@@ -11,7 +11,6 @@ set(HEARERS
     mutiplex/InetAddress.h
     mutiplex/Timestamp.h
     mutiplex/Slice.h
-    mutiplex/Status.h
     mutiplex/ByteBuffer.h
     mutiplex/callbacks.h
     mutiplex/Acceptor.h
@@ -25,7 +24,6 @@ set(HEARERS
 
 set(SRCS
     src/EventSource.cpp
-    src/Status.cpp
     src/ByteBuffer.cpp
     src/Timestamp.cpp
     src/InetAddress.cpp
