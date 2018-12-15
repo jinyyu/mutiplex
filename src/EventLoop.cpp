@@ -14,10 +14,10 @@ namespace muti
 EventLoop::EventLoop()
     : pthread_id_(pthread_self()),
       running_(true),
-      epoll_events_(64),
+      epoll_fd_(epoll_create1(EPOLL_CLOEXEC)),
       notify_fd_(eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK)),
-      recv_buffer_(nullptr),
-      epoll_fd_(epoll_create1(EPOLL_CLOEXEC))
+      epoll_events_(64),
+      recv_buffer_(nullptr)
 {
     if (notify_fd_ == -1) {
         LOG_DEBUG("eventfd error %d", errno);
@@ -62,7 +62,7 @@ void EventLoop::run()
         }
         uint64_t now = Timestamp::current();
 
-        for (int i = 0; i < active_events.size(); ++i) {
+        for (size_t i = 0; i < active_events.size(); ++i) {
             active_events[i]->handle_events(now);
         }
 
@@ -72,7 +72,7 @@ void EventLoop::run()
             std::swap(callbacks, pending_callbacks_);
         }
 
-        for (int i = 0; i < callbacks.size(); ++i) {
+        for (size_t i = 0; i < callbacks.size(); ++i) {
             callbacks[i]();
         }
 
@@ -144,7 +144,7 @@ int EventLoop::pull_events(std::vector<EventSource*>& events)
         ev->ready_ops(epoll_events_[i].events);
         events.push_back(ev);
     }
-    if (n_events == epoll_events_.size()) {
+    if (n_events == (int)epoll_events_.size()) {
         epoll_events_.resize(n_events * 2);
     }
     return n_events;

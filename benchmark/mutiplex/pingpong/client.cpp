@@ -18,10 +18,10 @@ class Client
 {
 public:
     Client(const InetAddress& addr, int session_count, int timeout, int block_size, int index)
-        : server_addr_(addr),
-          session_count_(session_count),
+        : session_count_(session_count),
           timeout_(timeout),
           block_size_(block_size),
+          server_addr_(addr),
           total_(0),
           index_(index)
     {
@@ -66,11 +66,13 @@ private:
         for (int i = 0; i < session_count_; ++i) {
             Connector* session = new Connector(&loop_, server_addr_);
 
-            EstablishedCallback connect_cb = [this](ConnectionPtr conn, uint64_t timestamp) {
+            EstablishedCallback connect_cb = [this](ConnectionPtr conn, uint64_t timestamp)
+            {
                 this->on_connect_success(conn);
-                conn->set_read_callback([this](ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp){
-                    this->read_callback(conn, buffer, timestamp);
-                });
+                conn->set_read_callback([this](ConnectionPtr conn, ByteBuffer* buffer, uint64_t timestamp)
+                                        {
+                                            this->read_callback(conn, buffer, timestamp);
+                                        });
             };
             session->established_callback(connect_cb);
 
@@ -138,7 +140,8 @@ int main(int argc, char* argv[])
     for (int i = 0; i < threads; ++i) {
         totals[i] = 0;
 
-        auto cb = [address, per_thread, timeout, block_size, i]() {
+        auto cb = [address, per_thread, timeout, block_size, i]()
+        {
 
             Client client(address, per_thread, timeout, block_size, i);
             client.run();
@@ -153,7 +156,7 @@ int main(int argc, char* argv[])
     }
 
     uint64_t total = 0;
-    for (int i = 0; i < totals.size(); ++i) {
+    for (size_t i = 0; i < totals.size(); ++i) {
         total += totals[i];
     }
 

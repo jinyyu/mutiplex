@@ -16,7 +16,7 @@ TcpServer::TcpServer(const std::string& addr, int num_io_threads)
 
 TcpServer::~TcpServer()
 {
-    for (auto i = 0; i < threads_.size(); ++i) {
+    for (size_t i = 0; i < threads_.size(); ++i) {
         threads_[i].join();
     }
     for (auto it = io_loops_.begin(); it < io_loops_.end(); ++it) {

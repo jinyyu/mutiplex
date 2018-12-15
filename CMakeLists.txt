@@ -3,6 +3,8 @@ project(mutiplex-distribution)
 
 set(CMAKE_CXX_STANDARD 11)
 
+add_definitions(-Wall)
+
 include_directories(${CMAKE_SOURCE_DIR})
 
 find_package(PkgConfig REQUIRED)

@@ -14,8 +14,8 @@ namespace muti
 
 Connector::Connector(EventLoop* loop, const InetAddress& peer)
     : loop_(loop),
-      event_source_(nullptr),
-      peer_(peer)
+      peer_(peer),
+      event_source_(nullptr)
 {
     fd_ = ::socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
     if (fd_ < 0) {
@@ -34,13 +34,15 @@ Connector::~Connector()
 void Connector::start_connect()
 {
     event_source_ = new EventSource(fd_, loop_);
-    event_source_->set_writing_callback([this](uint64_t timestamp) {
-        handle_connected(timestamp);
-    });
+    event_source_->set_writing_callback([this](uint64_t timestamp)
+                                        {
+                                            handle_connected(timestamp);
+                                        });
 
-    event_source_->set_error_callback([this](uint64_t timestamp) {
-        handle_error(timestamp);
-    });
+    event_source_->set_error_callback([this](uint64_t timestamp)
+                                      {
+                                          handle_error(timestamp);
+                                      });
 
 
     if (!do_connect()) {

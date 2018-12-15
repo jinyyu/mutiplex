@@ -16,8 +16,8 @@ TEST(test_cirularbuffer, test_cirularbuffer)
 
     for (int j = 0; j < 10000; ++j) {
 
-        for (int i = 0; i < sizeof(buf_src); ++i) {
-            buf_src[i] = static_cast<char>((i * 10 - 9) ^ i - 1);
+        for (size_t i = 0; i < sizeof(buf_src); ++i) {
+            buf_src[i] = static_cast<char>((i * 10 - 9) ^ (i - 1));
         }
 
         buffer.put(buf_src, 40);
@@ -37,7 +37,7 @@ TEST(resize_0, test_circularbuffer)
     char buf_src[100];
     char buf_dest[100];
     for (int i = 0; i < 100; ++i) {
-        buf_src[i] = static_cast<char>((i * 10 - 9) ^ i - 1);
+        buf_src[i] = static_cast<char>((i * 10 - 9) ^ (i - 1));
     }
     CircularBuffer buffer(2);
 
@@ -55,7 +55,7 @@ TEST(resize_1, test_circularbuffer)
     char buf_src[128];
     char buf_dest[128];
     for (int i = 0; i < 128; ++i) {
-        buf_src[i] = static_cast<char>((i * 10 - 9) ^ i - 1);
+        buf_src[i] = static_cast<char>((i * 10 - 9) ^ (i - 1));
     }
     CircularBuffer buffer(128);
 
@@ -71,7 +71,7 @@ TEST(resize_2, test_circularbuffer)
 {
     char buf_src[26];
     for (int i = 0; i < 26; ++i) {
-        buf_src[i] = static_cast<char>('a' + i*8 & i);
+        buf_src[i] = static_cast<char>('a' + ((i*8) & i));
     }
 
     CircularBuffer buffer(1);

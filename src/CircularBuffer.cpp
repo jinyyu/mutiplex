@@ -32,6 +32,7 @@ static uint32_t roundup_pow_of_two(uint32_t v)
             ret <<= 1;
         }
     }
+    return ret;
 }
 
 CircularBuffer::CircularBuffer(uint32_t capacity)

@@ -14,11 +14,11 @@ class EventSource
 {
 public:
     explicit EventSource(int fd, EventLoop* loop)
-        : ready_ops_(0),
-          interest_ops_(0),
+        : state_(StateNoEvent),
+          loop_(loop),
           fd_(fd),
-          state_(StateNoEvent),
-          loop_(loop)
+          interest_ops_(0),
+          ready_ops_(0)
     {
 
     }

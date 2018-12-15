@@ -10,9 +10,9 @@ namespace muti
 {
 
 ByteBuffer::ByteBuffer(int capacity)
-    : position_(0),
-      limit_(capacity),
-      mark_(-1)
+    : limit_(capacity),
+      mark_(-1),
+      position_(0)
 {
     assert(capacity > 0);
     int cap = htonl(capacity);

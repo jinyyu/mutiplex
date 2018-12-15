@@ -9,15 +9,15 @@ class InetAddress
 {
 public:
     explicit InetAddress()
-        : ip_(0),
-          port_(0)
+        : port_(0),
+          ip_(0)
     {
 
     }
 
     explicit InetAddress(uint32_t ip, uint16_t port)
-        : ip_(ip),
-          port_(port)
+        : port_(port),
+          ip_(ip)
     {
 
     }
